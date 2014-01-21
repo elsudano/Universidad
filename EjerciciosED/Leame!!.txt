@@ -1,0 +1,13 @@
+ 
+Comentarios:
+------------
+Aunque el directorio de los ejercicios de Arboles esta creado
+todavía no tengo los ejercicios realizados, así que esa funcionalidad
+no esta implementada aun.
+Para crear el ejecutable pertinente basta con poner: "make"
+en el directorio donde se descompriman los fuentes.
+El ejecutable se creara en la carpeta /bin y habrá que 
+ejecutarlo desde dentro de dicha carpeta para que los 
+ejercicios del laberintos funcionen.
+
+Un Saludo
