@@ -25,4 +25,4 @@ public:
 	 */
 	void ejecutar();
 };
-#endif /* EJERCICIO1_ATBOLES_H_ */
+#endif /* EJERCICIO1_ARBOLES_H_ */

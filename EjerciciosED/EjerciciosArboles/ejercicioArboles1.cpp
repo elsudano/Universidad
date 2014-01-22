@@ -14,5 +14,5 @@ void ejercicioArboles1::mostrar(const list<T> l){
 }
 
 void ejercicioArboles1::ejecutar(){
-
+	cout << "se ha ejecutado el Arbol1\n";
 }

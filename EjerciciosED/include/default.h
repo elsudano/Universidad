@@ -15,5 +15,6 @@
 #include <string>
 #include <cstdlib>
 #include <list>
+#include <vector>
 
 #endif /* DEFAULT_H_ */

@@ -324,6 +324,13 @@ int main(int argc, char *argv[]) {
 			ejercicioListas12().ejecutar();
 			cout << endl;
 			break;
+		case 26:
+			cout
+				<< "Este es el ejercicio 1 de arboles"
+				<< endl << endl;
+			ejercicioArboles1().ejecutar();
+			cout << endl;
+			break;
 		default:
 			exit(1);
 		}
