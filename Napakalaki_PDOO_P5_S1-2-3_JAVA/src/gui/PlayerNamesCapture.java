@@ -33,7 +33,7 @@ public class PlayerNamesCapture extends JDialog {
 	private JTextField CampoJugador1;
 	private JTextField CampoJugador2;
 	private JTextField CampoJugador3;
-
+	
 	/**
 	 * @param owner
 	 * @param modal

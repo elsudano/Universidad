@@ -43,7 +43,6 @@ public class NapakalakiView extends JFrame{
 	 * Numero de Serie por defecto
 	 */
 	private static final long serialVersionUID = 1L;
-	private JFrame VentanaPrincipal;
 	@SuppressWarnings("unused")
 	private Napakalaki NapakalakiModel;
 
@@ -65,23 +64,12 @@ public class NapakalakiView extends JFrame{
 	 * Create the application.
 	 */
 	public NapakalakiView() {
-		//initialize();
 		initComponents();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
-		VentanaPrincipal = new JFrame();
-		VentanaPrincipal.setBounds(100, 100, 450, 300);
-		VentanaPrincipal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		
-	}
-	
-	
-	
 	private void initComponents() {
 
         jP_monstruos = new javax.swing.JPanel();

@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Random;
 
 public class CardDealer {
 	private static final CardDealer mInstance = new CardDealer();
@@ -18,8 +17,7 @@ public class CardDealer {
 	public ArrayList<Treasure> mUnusedTreasures;
 	public ArrayList<Cultist> mUsedCultists;
 	public ArrayList<Cultist> mUnusedCultists;
-	private Random aleatorio;
-
+    
 	private CardDealer() {
 		this.mUnusedMonsters = new ArrayList<Monster>();
 		this.mUsedMonsters = new ArrayList<Monster>();
@@ -33,7 +31,7 @@ public class CardDealer {
 		try {
 		// Apertura del fichero y creacion de BufferedReader para poder
 		// hacer una lectura comoda (disponer del metodo readLine()).
-		fr = new FileReader("../resources/base_datos_tesoros.txt");
+		fr = new FileReader(getClass().getResource("/resources/base_datos_tesoros.txt").getPath());
 		br = new BufferedReader(fr);
 		while((fila=br.readLine())!=null){
 			columnas = fila.split(",");
@@ -52,7 +50,7 @@ public class CardDealer {
 		// Apertura del fichero y creacion de BufferedReader para poder
 		// hacer una lectura comoda (disponer del metodo readLine()).
 		
-		fr = new FileReader("base_datos_monstruos.txt");
+		fr = new FileReader(getClass().getResource("/resources/base_datos_monstruos.txt").getPath());
 		br = new BufferedReader(fr);
 		while((fila=br.readLine())!=null){
 			columnas = fila.split(",");
@@ -84,7 +82,8 @@ public class CardDealer {
 		try {
 		// Apertura del fichero y creacion de BufferedReader para poder
 		// hacer una lectura comoda (disponer del metodo readLine()).
-		fr = new FileReader("../resources/base_datos_sectarios.txt");
+
+		fr = new FileReader(getClass().getResource("/resources/base_datos_sectarios.txt").getPath());
 		br = new BufferedReader(fr);
 		while((fila=br.readLine())!=null){
 			columnas = fila.split(",");
@@ -123,7 +122,7 @@ public class CardDealer {
 	 * de los Tesoros
 	 */
 	private void shuffleTreasures() {
-		Collections.shuffle(mUnusedTreasures, aleatorio);
+		Collections.shuffle(mUnusedTreasures);
 	}
 
 	/**
@@ -131,7 +130,7 @@ public class CardDealer {
 	 * de los monstruos
 	 */
 	private void shuffleMonsters() {
-		Collections.shuffle(mUnusedMonsters, aleatorio);
+		Collections.shuffle(mUnusedMonsters);
 	}
 	
 	/**
@@ -139,7 +138,7 @@ public class CardDealer {
 	 * de los Sectarios
 	 */
 	private void shuffleCultists() {
-		Collections.shuffle(mUnusedCultists, aleatorio);
+		Collections.shuffle(mUnusedCultists);
 	}
 	/**
 	 * @return la instancia del CardDealer
