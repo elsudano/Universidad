@@ -462,4 +462,11 @@ public class Player {
 	public String getName() {
 		return mName;
 	}
+
+	/**
+	 * @return el parametro mPendingBadStuff
+	 */
+	public BadStuff getPendingBadStuff() {
+		return mPendingBadStuff;
+	}
 }

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class CultistPlayer extends Player{
 	private static int totalCultistPlayers = 0;
-	@SuppressWarnings("unused")
 	private Cultist myCultistCard;
 	
 	/**
@@ -89,5 +88,12 @@ public class CultistPlayer extends Player{
 	 */
 	public static int getTotalCultistPlayers() {
 		return totalCultistPlayers;
+	}
+
+	/**
+	 * @return el parametro myCultistCard
+	 */
+	public Cultist getMyCultistCard() {
+		return myCultistCard;
 	}
 }

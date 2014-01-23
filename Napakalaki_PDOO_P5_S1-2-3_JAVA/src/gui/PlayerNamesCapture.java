@@ -1,44 +1,22 @@
 package gui;
-
-import java.awt.FlowLayout;
-import java.awt.Frame;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-
-import java.awt.Toolkit;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.Component;
-
-import javax.swing.Box;
-import javax.swing.UIManager;
-import javax.swing.JTextPane;
-
-import java.awt.SystemColor;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-
-public class PlayerNamesCapture extends JDialog {
+public class PlayerNamesCapture extends javax.swing.JDialog {
 
 	/**
 	 * Numero de Serie Predeterminado
 	 */
 	private static final long serialVersionUID = 1L;
 	private ArrayList<String> names = new ArrayList<String>();
-	private JTextField CampoJugador1;
-	private JTextField CampoJugador2;
-	private JTextField CampoJugador3;
+	private javax.swing.JTextField CampoJugador1;
+	private javax.swing.JTextField CampoJugador2;
+	private javax.swing.JTextField CampoJugador3;
 	
 	/**
 	 * @param owner
 	 * @param modal
 	 */
-	public PlayerNamesCapture(Frame parent, boolean modal) {
+	public PlayerNamesCapture(java.awt.Frame parent, boolean modal) {
 		super(parent, modal);
 		initComponets();
 		this.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -63,40 +41,40 @@ public class PlayerNamesCapture extends JDialog {
 	 */
 	private void initComponets() {
 		setTitle("Quien Juega...");
-		setIconImage(Toolkit
+		setIconImage(java.awt.Toolkit
 				.getDefaultToolkit()
 				.getImage(
 						PlayerNamesCapture.class
 								.getResource("/javax/swing/plaf/basic/icons/JavaCup16.png")));
 		setBounds(100, 100, 230, 216);
-		getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		getContentPane().setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 5));
 		{
-			JTextPane TextoDescripcion = new JTextPane();
-			TextoDescripcion.setBackground(SystemColor.controlHighlight);
+			javax.swing.JTextPane TextoDescripcion = new javax.swing.JTextPane();
+			TextoDescripcion.setBackground(java.awt.SystemColor.controlHighlight);
 			TextoDescripcion.setEditable(false);
 			TextoDescripcion.setText("Por favor introduzca aquí\nlos nombres de los jugadores");
 			getContentPane().add(TextoDescripcion);
 		}
 		{
-			Box verticalBox = Box.createVerticalBox();
-			verticalBox.setBorder(UIManager.getBorder("Menu.border"));
+			javax.swing.Box verticalBox = javax.swing.Box.createVerticalBox();
+			verticalBox.setBorder(javax.swing.UIManager.getBorder("Menu.border"));
 			getContentPane().add(verticalBox);
 			{
-				Box horizontalBox = Box.createHorizontalBox();
+				javax.swing.Box horizontalBox = javax.swing.Box.createHorizontalBox();
 				verticalBox.add(horizontalBox);
 				{
-					JLabel LabelJugador1 = new JLabel("Jugador 1");
+					javax.swing.JLabel LabelJugador1 = new javax.swing.JLabel("Jugador 1");
 					horizontalBox.add(LabelJugador1);
 				}
 				{
-					Component horizontalStrut = Box.createHorizontalStrut(5);
+					java.awt.Component horizontalStrut = javax.swing.Box.createHorizontalStrut(5);
 					horizontalBox.add(horizontalStrut);
 				}
 				{
-					CampoJugador1 = new JTextField();
-					CampoJugador1.addFocusListener(new FocusAdapter() {
+					CampoJugador1 = new javax.swing.JTextField();
+					CampoJugador1.addFocusListener(new java.awt.event.FocusAdapter() {
 						@Override
-						public void focusGained(FocusEvent e) {
+						public void focusGained(java.awt.event.FocusEvent e) {
 							CampoJugador1.setText(null);
 						}
 					});
@@ -106,21 +84,21 @@ public class PlayerNamesCapture extends JDialog {
 				}
 			}
 			{
-				Box horizontalBox = Box.createHorizontalBox();
+				javax.swing.Box horizontalBox = javax.swing.Box.createHorizontalBox();
 				verticalBox.add(horizontalBox);
 				{
-					JLabel LabelJugador2 = new JLabel("Jugador 2");
+					javax.swing.JLabel LabelJugador2 = new javax.swing.JLabel("Jugador 2");
 					horizontalBox.add(LabelJugador2);
 				}
 				{
-					Component horizontalStrut = Box.createHorizontalStrut(5);
+					java.awt.Component horizontalStrut = javax.swing.Box.createHorizontalStrut(5);
 					horizontalBox.add(horizontalStrut);
 				}
 				{
-					CampoJugador2 = new JTextField();
-					CampoJugador2.addFocusListener(new FocusAdapter() {
+					CampoJugador2 = new javax.swing.JTextField();
+					CampoJugador2.addFocusListener(new java.awt.event.FocusAdapter() {
 						@Override
-						public void focusGained(FocusEvent e) {
+						public void focusGained(java.awt.event.FocusEvent e) {
 							CampoJugador2.setText(null);
 						}
 					});
@@ -130,21 +108,21 @@ public class PlayerNamesCapture extends JDialog {
 				}
 			}
 			{
-				Box horizontalBox = Box.createHorizontalBox();
+				javax.swing.Box horizontalBox = javax.swing.Box.createHorizontalBox();
 				verticalBox.add(horizontalBox);
 				{
-					JLabel LabelJugador3 = new JLabel("Jugador 3");
+					javax.swing.JLabel LabelJugador3 = new javax.swing.JLabel("Jugador 3");
 					horizontalBox.add(LabelJugador3);
 				}
 				{
-					Component horizontalStrut = Box.createHorizontalStrut(5);
+					java.awt.Component horizontalStrut = javax.swing.Box.createHorizontalStrut(5);
 					horizontalBox.add(horizontalStrut);
 				}
 				{
-					CampoJugador3 = new JTextField();
-					CampoJugador3.addFocusListener(new FocusAdapter() {
+					CampoJugador3 = new javax.swing.JTextField();
+					CampoJugador3.addFocusListener(new java.awt.event.FocusAdapter() {
 						@Override
-						public void focusGained(FocusEvent e) {
+						public void focusGained(java.awt.event.FocusEvent e) {
 							CampoJugador3.setText(null);
 						}
 					});
@@ -155,17 +133,17 @@ public class PlayerNamesCapture extends JDialog {
 			}
 		}
 		{
-			Component verticalStrut = Box.createVerticalStrut(100);
+			java.awt.Component verticalStrut = javax.swing.Box.createVerticalStrut(100);
 			getContentPane().add(verticalStrut);
 		}
 		{
-			JPanel buttonPanel = new JPanel();
-			buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+			javax.swing.JPanel buttonPanel = new javax.swing.JPanel();
+			buttonPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 			getContentPane().add(buttonPanel);
 			{
-				JButton PlayButton = new JButton("Play");
-				PlayButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
+				javax.swing.JButton PlayButton = new javax.swing.JButton("Play");
+				PlayButton.addActionListener(new java.awt.event.ActionListener() {
+					public void actionPerformed(java.awt.event.ActionEvent e) {
 						names.add(CampoJugador1.getText());
 						names.add(CampoJugador2.getText());
 						names.add(CampoJugador3.getText());
@@ -177,9 +155,9 @@ public class PlayerNamesCapture extends JDialog {
 				getRootPane().setDefaultButton(PlayButton);
 			}
 			{
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
+				javax.swing.JButton cancelButton = new javax.swing.JButton("Cancel");
+				cancelButton.addActionListener(new java.awt.event.ActionListener() {
+					public void actionPerformed(java.awt.event.ActionEvent e) {
 						System.exit(0);
 					}
 				});

@@ -1,11 +1,17 @@
 package gui;
 
-import javax.swing.JFrame;
-
+import NapakalakiGame.CultistPlayer;
+import NapakalakiGame.Monster;
 import NapakalakiGame.Napakalaki;
+import NapakalakiGame.Player;
+import NapakalakiGame.Treasure;
+import NapakalakiGame.TreasureKind;
 
-public class NapakalakiView extends JFrame{
-
+public class NapakalakiView extends javax.swing.JFrame{
+	/**
+	 * Numero de Serie por defecto
+	 */
+	private static final long serialVersionUID = 1L;
 	private javax.swing.JButton jB_combatir;
     private javax.swing.JButton jB_comprarNivel;
     private javax.swing.JButton jB_descartarseTesoros;
@@ -38,19 +44,15 @@ public class NapakalakiView extends JFrame{
     private javax.swing.JPanel jP_tesorosVisibles;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    
-	/**
-	 * Numero de Serie por defecto
-	 */
-	private static final long serialVersionUID = 1L;
-	@SuppressWarnings("unused")
-	private Napakalaki NapakalakiModel;
 
+	private Napakalaki NapakalakiModel;
+	private Player elJugadorActual;
+	private Monster elMonstruoActual;
 	/**
 	 * @param Model se le asigna a NapakalakiModel
 	 */
 	public void setModel(Napakalaki Model) {
-		NapakalakiModel = Model;
+		this.NapakalakiModel = Model;
 	}
 	
 	/**
@@ -58,6 +60,8 @@ public class NapakalakiView extends JFrame{
 	 */
 	public void Show() {
 		this.setVisible(true);
+		actualizarJugador();
+		actualizarMonstruo();
 	}
 
 	/**
@@ -359,7 +363,10 @@ public class NapakalakiView extends JFrame{
         jB_combatir.setText("¡COMBATIR!");
         jB_combatir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                
+            	Treasure miTesoro = NapakalakiModel.getCurrentPlayer().getHiddenTreasures().get(0);
+            	TreasureView miVistaTesoro = new TreasureView();
+        		miVistaTesoro.setTreasure(miTesoro);
+        		miVistaTesoro.Show();
             }
         });
 
@@ -370,7 +377,7 @@ public class NapakalakiView extends JFrame{
                 
             }
         });
-
+        
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -410,10 +417,96 @@ public class NapakalakiView extends JFrame{
                     .addComponent(jB_equiparse))
                 .addContainerGap(13, Short.MAX_VALUE))
         );
-
+        repaint();
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }
+
+	private void actualizarJugador(){
+        //TreasureView miUITesoro;
+        elJugadorActual = NapakalakiModel.getCurrentPlayer();
+
+        jL_nombreJugador.setText("" + elJugadorActual.getName());
+        jL_nivelBasico.setText("Nivel Básico: " + elJugadorActual.getLevels());
+        jL_nivelCombate.setText("Nivel de combate: " + elJugadorActual.getCombatLevel());
 
 
+        if (elJugadorActual instanceof CultistPlayer){
+            jL_esSectario.setText("Sectario");
+            jL_bonusSectario.setText("+" + ((CultistPlayer)elJugadorActual).getMyCultistCard().getBasicValue()
+                                      + " por cada Sectario en juego -> " + CultistPlayer.getTotalCultistPlayers());
+        }else{
+            jL_esSectario.setText("Humano");
+            jL_bonusSectario.setText("");
+        }
+
+//        for (TreasureView tg : tesorosVisiblesAlimpiar)
+//            jP_tesorosVisibles.remove(tg);
+//        tesorosVisiblesAlimpiar.clear();
+
+//        for (Tesoro t : jugadorActivo.obtenerTesorosVisibles()){
+//            unTesoroGrafico = new TesoroGraficoVisible(t);
+//            jP_tesorosVisibles.add (unTesoroGrafico);
+//            tesorosVisiblesAlimpiar.add(unTesoroGrafico);
+//        }
+//        for (TesoroGrafico tg : tesorosOcultosAlimpiar)
+//            jP_tesorosOcultos.remove(tg);
+//        tesorosOcultosAlimpiar.clear();
+//
+//        for (Tesoro t : jugadorActivo.obtenerTesorosOcultos()){
+//            unTesoroGrafico = new TesoroGraficoOculto(t);
+//            jP_tesorosOcultos.add(unTesoroGrafico);
+//            tesorosOcultosAlimpiar.add(unTesoroGrafico);
+//        }
+
+//        tesorosVisiblesSeleccionados.clear();
+//        tesorosOcultosSeleccionados.clear();
+
+        
+     // Actualizamos malRolloPendiente
+        if(elJugadorActual.getPendingBadStuff().getNHiddenTreasures()==0 && elJugadorActual.getPendingBadStuff().mSpecificHiddenTreasures.isEmpty()){
+            jL_ocultosPerdidos.setText("");
+            jL_tipoOcultosPerdidos.setText("");
+        }else{
+            jL_ocultosPerdidos.setText("Nº ocultos perdidos: " + elJugadorActual.getPendingBadStuff().getNHiddenTreasures());
+            String f = new String();
+            f += "Tipos: ";
+            for (TreasureKind t: elJugadorActual.getPendingBadStuff().mSpecificHiddenTreasures)
+                f += t + " | ";
+            jL_tipoOcultosPerdidos.setText(f);
+        }
+        
+        if(elJugadorActual.getPendingBadStuff().getNVisibleTreasures()==0 && elJugadorActual.getPendingBadStuff().mSpecificVisibleTreasures.isEmpty()){
+            jL_visiblesPerdidos.setText("");
+            jL_tipoVisiblesPerdidos.setText("");
+
+        }else{
+            jL_visiblesPerdidos.setText("Nº visibles perdidos: " + elJugadorActual.getPendingBadStuff().getNVisibleTreasures());
+            String f = "Tipos: ";
+            for (TreasureKind t: elJugadorActual.getPendingBadStuff().mSpecificVisibleTreasures)
+                f += t + " | ";
+            jL_tipoVisiblesPerdidos.setText(f);
+        }
+        repaint();
+        pack();
+    }
+	
+	private void actualizarMonstruo(){
+		// if (imagenMonstruo != null)
+		// jP_imgMonstruo.remove(imagenMonstruo);
+		elMonstruoActual = NapakalakiModel.getCurrentMonster();
+		// imagenMonstruo = new MonstruoGrafico(monstruoEnJuego);
+		jL_nombreMonstruo.setText(elMonstruoActual.getName());
+		jL_nivelesGanados.setText("Niveles Ganados: " + elMonstruoActual.getPrize().getLevels());
+		jL_tesorosGanados.setText("Tesoros Ganados: " + elMonstruoActual.getPrize().getTreasures());
+		jL_nivel.setText("Nivel: " + elMonstruoActual.getBasicValue());
+		jL_nivelContraSectarios.setText("Nivel contra Sectarios: " + elMonstruoActual.getSpecialValue());
+		jL_nivelesPerdidos.setText("Niveles perdidos: " + elMonstruoActual.getLevel());
+		jL_resultadoCombate.setText("");
+		jL_malRollo.setText(elMonstruoActual.getBadStuff().getText());
+
+		// jP_imgMonstruo.add(imagenMonstruo);
+		pack();
+		repaint();
+	}
 
 }
