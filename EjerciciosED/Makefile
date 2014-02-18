@@ -1,5 +1,5 @@
 SHELL   = /bin/bash
-DIRS    = EjerciciosPilas EjerciciosListas EjerciciosArboles
+DIRS    = EjerciciosPilas EjerciciosListas EjerciciosArboles Examen2014
 SRCS    = $(foreach dir,$(DIRS),$(wildcard $(dir)/*.cpp))
 OBJS    = $(SRCS:.cpp=.o)
 OBJ_DIR = obj
