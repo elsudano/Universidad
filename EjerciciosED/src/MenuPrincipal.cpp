@@ -90,8 +90,9 @@ int main(int argc, char *argv[]) {
 	misMenus.addSubMenu("Ejercicios de Arboles", "Ejercicio 23", 48);
 	misMenus.addSubMenu("Ejercicios de Arboles", "Ejercicio 24", 49);
 	misMenus.addSubMenu("Ejercicios de Arboles", "Ejercicio 25", 50);
-	misMenus.addMenu("Ejercicios del Examen de Febrero2014", 4);
-	misMenus.addSubMenu("Ejercicios del Examen de Febrero2014", "Ejercicio 1", 51);
+//	misMenus.addMenu("Examen de Febrero", 4);
+//	misMenus.addSubMenu("Examen de Febrero", "Ejercicio 1", 51);
+//	misMenus.addSubMenu("Examen de Febrero", "Ejercicio 2", 52);
 
 	int opcion=-1;
 	do {
@@ -334,7 +335,7 @@ int main(int argc, char *argv[]) {
 			ejercicioArboles1().ejecutar();
 			cout << endl;
 			break;
-		case 51:
+		case 27:
 			cout
 				<< "Ejercicio Nº 1 de Examen Febrero 2014" << endl
 				<< "Dado un montón de cartas de la baraja española decír la" << endl

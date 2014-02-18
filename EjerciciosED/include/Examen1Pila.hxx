@@ -1,15 +1,15 @@
 /*
- * Examen1Vector.hxx
+ * Examen1Pila.hxx
  *
  *  Created on: 17/02/2014
  *      Author: Carlos de la Torre
  */
 
-#ifndef EXAMEN1LISTA_HXX_
-#define EXAMEN1LISTA_HXX_
+#ifndef EXAMEN1PILA_HXX_
+#define EXAMEN1PILA_HXX_
 
 /**
- * @brief
+ * @brief Constructor por defecto
  */
 template<typename T>
 MontonCartas<T>::MontonCartas() {
@@ -29,7 +29,8 @@ void MontonCartas<T>::Barajar() {
  */
 template<typename T>
 Carta MontonCartas<T>::CogerCarta() {
-
+	Carta laCarta = this->miContenedor.top();
+	return laCarta;
 }
 
 /**
@@ -37,7 +38,8 @@ Carta MontonCartas<T>::CogerCarta() {
  */
 template<typename T>
 void MontonCartas<T>::EliminarCarta() {
-
+	this->miContenedor.pop();
+	this->tam -= 1;
 }
 
 /**
@@ -45,7 +47,16 @@ void MontonCartas<T>::EliminarCarta() {
  */
 template<typename T>
 void MontonCartas<T>::InsertarCarta(Carta c) {
-
+	this->miContenedor.push(c);
+	this->tam += 1;
 }
 
-#endif /* EXAMEN1LISTA_HXX_ */
+/**
+* @brief devuelve el tamaño del montón de cartas
+*/
+template<typename T>
+int MontonCartas<T>::Size() {
+	return this->tam;
+}
+
+#endif /* EXAMEN1PILA_HXX_ */

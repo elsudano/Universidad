@@ -26,8 +26,10 @@ template <typename T>
 class MontonCartas {
 private:
 	T miContenedor;
+	int tam;
 
 public:
+	MontonCartas();
 	void Barajar();
 	Carta CogerCarta();
 	void EliminarCarta();
@@ -56,9 +58,11 @@ private:
 	/**
 	 * @brief Contenedor de Monton de Cartas de diferentes tipos para el ejercicio
 	 */
-	MontonCartas<vector<Carta> > miMontonDeCartas;
+	MontonCartas<stack<Carta> > miMontonDeCartas;
 
 public:
+
+
 	/**
 	 * @brief Esta es la ejecucion del programa
 	 */

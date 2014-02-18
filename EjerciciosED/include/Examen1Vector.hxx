@@ -8,6 +8,16 @@
 #ifndef EXAMEN1VECTOR_HXX_
 #define EXAMEN1VECTOR_HXX_
 #include <vector>
+
+/**
+ * @brief
+ */
+template<typename T>
+MontonCartas<T>::MontonCartas() {
+	this->miContenedor = T();
+	this->tam = 0;
+}
+
 /**
  * @brief
  */

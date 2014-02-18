@@ -11,15 +11,16 @@
 //int main(int argc,char *argv[]){
 void Examen1::ejecutar(){
 	srand(time(0));
-	Carta miCarta;
-	for (int j = 0; j < 10; j++){
-		miCarta.num = rand()%11;
-		miCarta.palo = rand()%3;
-		miMontonDeCartas.InsertarCarta(miCarta);
+	Carta estaCarta;
+	for (int j = 0; j < 30; j++){
+		estaCarta.num = rand()%11;
+		estaCarta.palo = rand()%3;
+		miMontonDeCartas.InsertarCarta(estaCarta);
 	}
 	cout << "Se ha llenado el Montón de Cartas y ahora se va a barajar" << endl << endl;
-	for (int z = 0; z < miMontonDeCartas.Size(); z++){
+	while (miMontonDeCartas.Size() != 0){
 		cout << "Carta " << miMontonDeCartas.CogerCarta().num << " de " << miMontonDeCartas.CogerCarta().palo << endl;
+		miMontonDeCartas.EliminarCarta();
 	}
 	miMontonDeCartas.Barajar();
 	cout << "Se ha barajado el Montón de Cartas y ahora se va a coger la de arriba" << endl << endl;
