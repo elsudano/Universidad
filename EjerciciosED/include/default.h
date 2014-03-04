@@ -16,5 +16,7 @@
 #include <cstdlib>
 #include <list>
 #include <vector>
+#include <set>
+#include <map>
 
 #endif /* DEFAULT_H_ */

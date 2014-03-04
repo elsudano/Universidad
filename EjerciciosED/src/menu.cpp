@@ -126,7 +126,7 @@ void menuTexto::mostrarMenus(){
 /*
  * @brief Muesta todos los submenu de un menu dado.
  */
-void menuTexto::mostrarSubMenus(itemMenu pMenu){
+void menuTexto::mostrarSubMenus(itemMenu &pMenu){
 	listaItems::iterator it;
 	if (!pMenu.getOpciones().empty())
 		for (it=pMenu.getOpciones().begin();it != pMenu.getOpciones().end();it++)
@@ -142,7 +142,7 @@ int menuTexto::seleccionar() {
 	cin >> opcion;
 	if (!this->miBarraMenu[opcion].getOpciones().empty()) {
 		cout << "Por favor elija: " << endl;
-		this->mostrarSubMenus(this->miBarraMenu[opcion]);
+		mostrarSubMenus(miBarraMenu[opcion]);
 		cin >> opcion;
 	}else
 		opcion = this->miBarraMenu[opcion].getValor();

@@ -2,16 +2,21 @@ package gui;
 
 import NapakalakiGame.Treasure;
 
+import java.awt.FlowLayout;
+import javax.swing.JPanel;
+
 @SuppressWarnings("serial")
-public class TreasureView extends javax.swing.JPanel {
-	/* asociación con el tesoro que representa */
-	private Treasure treasureModel;
+public class TreasureView extends JPanel {
     private javax.swing.JTextArea jL_nombre = new javax.swing.JTextArea();
     private javax.swing.JLabel jL_bonus = new javax.swing.JLabel();
     private javax.swing.JLabel jL_piezasOro = new javax.swing.JLabel();
     private javax.swing.JLabel jL_tipo = new javax.swing.JLabel();
+    
+    /* asociación con el tesoro que representa */
+    Treasure treasureModel;
+    boolean seleccionado = false;
 
-	public TreasureView()  {
+    public TreasureView()  {
 		initComponets();
 	}
 	
@@ -20,7 +25,6 @@ public class TreasureView extends javax.swing.JPanel {
 	 */
 	public void initComponets(){
 		this.setPreferredSize(new java.awt.Dimension(120, 150));
-		this.setLayout(new java.awt.GridLayout());
 		this.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.BLACK));
                    
         jL_nombre.setFocusable(false);
@@ -38,10 +42,11 @@ public class TreasureView extends javax.swing.JPanel {
         jL_bonus.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         
         this.setOpaque(false);
-        this.add(jL_nombre, new java.awt.GridLayout(5, 5, 110, -1));
-        this.add(jL_tipo, new java.awt.GridLayout(5, 120, 90, -1));
-        this.add(jL_piezasOro, new java.awt.GridLayout(5, 132, 90, -1));
-        this.add(jL_bonus, new java.awt.GridLayout(20, 132, 90, -1));
+        setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+        this.add(jL_nombre);
+        this.add(jL_tipo);
+        this.add(jL_piezasOro);
+        this.add(jL_bonus);
 	}
 	
 	/**
@@ -61,5 +66,12 @@ public class TreasureView extends javax.swing.JPanel {
 
 	public void Show() {
 		this.setVisible(true);
+	}
+	
+	/**
+	 * @return el parametro seleccionado
+	 */
+	public boolean isSeleccionado() {
+		return seleccionado;
 	}
 }

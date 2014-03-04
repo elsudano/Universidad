@@ -84,7 +84,7 @@ class menuTexto{
 		/*
 		 * @brief Muesta todos los submenu de un menu dado.
 		 */
-		void mostrarSubMenus(itemMenu pMenu);
+		void mostrarSubMenus(itemMenu &pMenu);
 
 	public:
 

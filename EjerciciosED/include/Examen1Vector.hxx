@@ -23,8 +23,8 @@ MontonCartas<T>::MontonCartas() {
  */
 template<typename T>
 void MontonCartas<T>::Barajar() {
-	int tam = this->miContenedor.size();
-	T cont_tmp(tam);
+	int tam_tmp = this->miContenedor.size();
+	T cont_tmp(tam_tmp);
 	int pos;
 	Carta carta_tmp;
 

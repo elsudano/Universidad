@@ -15,7 +15,7 @@ BINFLAG = -m32 -g3 -L$(LIB) -I$(INC) -Wall
 
 .SECONDARY:
 
-all: MenuPrincipal
+all: cuenta multi MenuPrincipal
 
 %.o: %.cpp
 	$(GCC) $(OBJFLAG) $^ -o $@
@@ -28,6 +28,12 @@ MenuPrincipal: $(SRC_DIR)/MenuPrincipal.o $(SRC_DIR)/menu.o $(LIB)/LibreriaPrinc
 	$(GCC) $(BINFLAG) $^ -o $(BIN)/$@
 	mv $(SRC_DIR)/MenuPrincipal.o $(SRC_DIR)/menu.o $(OBJ_DIR)
 
+cuenta: $(SRC_DIR)/CuentaCaminos.o
+	$(GCC) $(BINFLAG) $^ -o $(BIN)/$@
+
+multi: $(SRC_DIR)/Multi_Interseccion.o
+	$(GCC) $(BINFLAG) $^ -o $(BIN)/$@
+	
 clean:
 	$(RM) $(BIN)/* $(SRC_DIR)/*.o $(OBJ_DIR)/*.o $(LIB)/*.a
 

@@ -162,27 +162,6 @@ public class Player {
 	}
 	
 	/**
-	 * Método que modifica la vida del jugador a muerte
-	 */
-	private void die() {
-		this.mLevel = 1;
-		Treasure treasure;
-		CardDealer dealer = CardDealer.getInstance();
-		for (int i=0;i<this.mVisibleTreasures.size();i++){
-			treasure = mVisibleTreasures.get(i);
-			dealer.giveTreasureBack(treasure);
-		}
-		mVisibleTreasures.clear();
-		
-		for (int i=0;i<this.mVisibleTreasures.size();i++){
-			treasure = mHiddenTreasures.get(i);
-			dealer.giveTreasureBack(treasure);
-		}
-		mHiddenTreasures.clear();
-		this.dieIfNoTreasures();
-	}
-	
-	/**
 	 * Método que sirve para descartar el collar que da puntos extras
 	 */
 	private void discardNecklaceIfVisible() {
@@ -234,6 +213,27 @@ public class Player {
 		return valor;
 	}
 	
+	/**
+	 * Método que modifica la vida del jugador a muerte
+	 */
+	public void die() {
+		this.mLevel = 1;
+		Treasure treasure;
+		CardDealer dealer = CardDealer.getInstance();
+		for (int i=0;i<this.mVisibleTreasures.size();i++){
+			treasure = mVisibleTreasures.get(i);
+			dealer.giveTreasureBack(treasure);
+		}
+		mVisibleTreasures.clear();
+		
+		for (int i=0;i<this.mVisibleTreasures.size();i++){
+			treasure = mHiddenTreasures.get(i);
+			dealer.giveTreasureBack(treasure);
+		}
+		mHiddenTreasures.clear();
+		this.dieIfNoTreasures();
+	}
+
 	/**
 	 * 
 	 * @param pM

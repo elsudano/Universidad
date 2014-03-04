@@ -6,6 +6,8 @@
  */
 
 #include "menu.h"
+#include "examen1.h"
+#include "examen2.h"
 #include "ejercicioPilas1.h"
 #include "ejercicioPilas2.h"
 #include "ejercicioPilas3.h"
@@ -33,7 +35,6 @@
 #include "ejercicioListas12.h"
 #include "ejercicioArboles1.h"
 #include "ejercicioArboles10.h"
-#include "Examen1.h"
 
 int main(int argc, char *argv[]) {
 	menuTexto misMenus;
@@ -90,9 +91,8 @@ int main(int argc, char *argv[]) {
 	misMenus.addSubMenu("Ejercicios de Arboles", "Ejercicio 23", 48);
 	misMenus.addSubMenu("Ejercicios de Arboles", "Ejercicio 24", 49);
 	misMenus.addSubMenu("Ejercicios de Arboles", "Ejercicio 25", 50);
-//	misMenus.addMenu("Examen de Febrero", 4);
-//	misMenus.addSubMenu("Examen de Febrero", "Ejercicio 1", 51);
-//	misMenus.addSubMenu("Examen de Febrero", "Ejercicio 2", 52);
+	misMenus.addMenu("Examen", 4);
+	misMenus.addSubMenu("Examen", "Ejercicio 1", 51);
 
 	int opcion=-1;
 	do {
@@ -335,22 +335,14 @@ int main(int argc, char *argv[]) {
 			ejercicioArboles1().ejecutar();
 			cout << endl;
 			break;
-		case 27:
-			cout
-				<< "Ejercicio Nº 1 de Examen Febrero 2014" << endl
-				<< "Dado un montón de cartas de la baraja española decír la" << endl
-				<< "eficiencía de los 4 algorítmos que vienen a continuación:" << endl
-				<< "BarajarCartas: Dispone las N Cartas en un orden Aleatorio" << endl
-				<< "CogerCarta: Coge la carta que esta en el tope del montón" << endl
-				<< "EliminarCarta: Elimina la carta que se encuentra en el tope del montón" << endl
-				<< "InsertarCarta: Inserta una carta al final del montón"
-				<< endl << endl
-				<< "a) Di cual es la eficiencia de cada uno de los metodos anteriores teniendo en cuenta que el TDA" << endl
-				<< "a utilizar serán 1:Vector, 2:Lista, 3:Pila y 4:Cola."
-				<< endl << endl
-				<< "b) Implementar la función Barajar teneiendo en cuenta que el contenedor sera una pila"
-				<< endl << endl;
-			Examen1().ejecutar();
+		case 51:
+			cout << "Ejercicio Nº 1 de Examen Febrero 2014:" << endl;
+			examen1().ejecutar();
+			cout << endl;
+			break;
+		case 52:
+			cout << "Ejercicio Nº 2 de Examen Febrero 2014: " << endl;
+			examen2().ejecutar();
 			cout << endl;
 			break;
 		default:
