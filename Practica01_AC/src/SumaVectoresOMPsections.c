@@ -12,8 +12,6 @@
 #else
 	#define omp_get_thread_num() 0
 	#define omp_get_num_threads() 1
-	#define VECTOR_GLOBAL
-//variables globales (su longitud no estará limitada por el tamaño de la pila del programa)
 #endif
 
 #define MAX 33554432 //=2^25
@@ -21,7 +19,6 @@
 // Ponemos que los elementos minimos para que se
 // impriman todas las sumas sea 24 por que atcgrid
 // tiene 24 hebras
-double v1[MAX], v2[MAX], v3[MAX];
 
 int main(int argc, char* argv[]) {
 	int i;
@@ -32,7 +29,7 @@ int main(int argc, char* argv[]) {
 	struct timespec cgt1, cgt2;
 #endif
 
-	double ncgt; //para tiempo de ejecución
+	double ncgt, *v1, *v2, *v3;; //para tiempo de ejecución
 	unsigned int N, TIME;
 	// la variable TIME se usa para imprimir solo el valor
 	// del tiempo asi es mas facil copiar desde la consola
@@ -57,22 +54,23 @@ int main(int argc, char* argv[]) {
 			break;
 	}
 
-
-#ifdef VECTOR_GLOBAL
-	if (N>MAX) N=MAX;
-#endif
+	v1 = (double*) malloc(N * sizeof(double)); // malloc necesita el tamaño en bytes
+	v2 = (double*) malloc(N * sizeof(double)); //si no hay espacio suficiente malloc devuelve NULL
+	v3 = (double*) malloc(N * sizeof(double));
+	if ((v1 == NULL) || (v2 == NULL) || (v3 == NULL)) {
+		printf("Error en la reserva de espacio para los vectores\n");
+		exit(-2);
+	}
 
 #ifdef _OPENMP
   #pragma omp parallel sections
-#else
-	for (i = 0; i < N; i++)
 #endif
 {//Inicializar vectores
 #ifdef _OPENMP
 	#pragma omp section
 #endif
-	{
-		if (TIME!=1){
+	for (i = 0; i < N; i++){
+		if (TIME==2){
 			printf("thread %d de %d ejecuta la iteración %d del bucle\n",omp_get_thread_num(),omp_get_num_threads(),i);
 			printf("V1[%d] = %d * 0.1 + %d * 0.1\n",i,N,i);
 		}
@@ -81,8 +79,8 @@ int main(int argc, char* argv[]) {
 #ifdef _OPENMP
 	#pragma omp section
 #endif
-	{
-		if (TIME!=1){
+	for (i = 0; i < N; i++){
+		if (TIME==2){
 			printf("thread %d de %d ejecuta la iteración %d del bucle\n",omp_get_thread_num(),omp_get_num_threads(),i);
 			printf("V2[%d] = %d * 0.1 - %d * 0.1\n",i,N,i);
 		}
@@ -96,12 +94,34 @@ int main(int argc, char* argv[]) {
 	clock_gettime(CLOCK_REALTIME, &cgt1);
 #endif
 
+//----------------------------------------------------------------------------
 #ifdef _OPENMP
-	#pragma omp parallel for
+	#pragma omp parallel sections
+#endif
+{
+#ifdef _OPENMP
+	#pragma omp section
 #endif
 //Calcular suma de vectores
-	for (i = 0; i < N; i++)
+	for (i = 0; i < 1*(N/4); i++)
 		v3[i] = v1[i] + v2[i];
+#ifdef _OPENMP
+	#pragma omp section
+#endif
+	for (i = 1*(N/4); i < 2*(N/4); i++)
+		v3[i] = v1[i] + v2[i];
+#ifdef _OPENMP
+	#pragma omp section
+#endif
+	for (i = 2*(N/4); i < 3*(N/4); i++)
+		v3[i] = v1[i] + v2[i];
+#ifdef _OPENMP
+	#pragma omp section
+#endif
+	for (i = 3*(N/4); i < N; i++)
+		v3[i] = v1[i] + v2[i];
+}
+//----------------------------------------------------------------------------
 
 #ifdef _OPENMP
 	cgt2 = omp_get_wtime();
@@ -123,11 +143,14 @@ int main(int argc, char* argv[]) {
 
 		for(i=0; i<N; i++)
 			printf("V1[%d]+V2[%d]=V3[%d](%8.6f+%8.6f=%8.6f)\n",i,i,i,v1[i],v2[i],v3[i]);
-	}else{
-		if (TIME==1)
-			printf("%11.9f\n",ncgt);
-		else
-			printf("Tiempo(seg.):%11.9f\nTamaño Vectores:%u\nV1[0]+V2[0]=V3[0](%8.6f+%8.6f=%8.6f)\nV1[%d]+V2[%d]=V3[%d](%8.6f+%8.6f=%8.6f)\n", ncgt,N,v1[0],v2[0],v3[0],N-1,N-1,N-1,v1[N-1],v2[N-1],v3[N-1]);
 	}
+	if (TIME==1)
+		printf("%11.9f\n",ncgt);
+	else
+		printf("Tiempo(seg.):%11.9f\nTamaño Vectores:%u\nV1[0]+V2[0]=V3[0](%8.6f+%8.6f=%8.6f)\nV1[%d]+V2[%d]=V3[%d](%8.6f+%8.6f=%8.6f)\n", ncgt,N,v1[0],v2[0],v3[0],N-1,N-1,N-1,v1[N-1],v2[N-1],v3[N-1]);
+
+	free(v1); // libera el espacio reservado para v1
+	free(v2); // libera el espacio reservado para v2
+	free(v3); // libera el espacio reservado para v3
 	return 0;
 }
