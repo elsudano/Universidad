@@ -16,7 +16,7 @@
 
 #define MAX 33554432 //=2^25
 #define PRINT_ALL_MIN 24
-// Ponemos que los elementos minimos para que se
+// Ponemos que los elementos mínimos para que se
 // impriman todas las sumas sea 24 por que atcgrid
 // tiene 24 hebras
 
@@ -32,8 +32,8 @@ int main(int argc, char* argv[]) {
 	double ncgt, *v1, *v2, *v3;; //para tiempo de ejecución
 	unsigned int N, TIME;
 	// la variable TIME se usa para imprimir solo el valor
-	// del tiempo asi es mas facil copiar desde la consola
-	// para realizar las graficas
+	// del tiempo así es mas fácil copiar desde la consola
+	// para realizar las gráficas
 	switch (argc){
 		case 1:
 			printf("Faltan nº componentes del vector\n");
@@ -49,7 +49,7 @@ int main(int argc, char* argv[]) {
 			TIME = atoi(argv[2]);
 			break;
 		default:
-			printf("La cantidad de parametros es incorrecta\n");
+			printf("La cantidad de parámetros es incorrecta\n");
 			exit(-1);
 			break;
 	}
@@ -130,7 +130,7 @@ int main(int argc, char* argv[]) {
 #endif
 
 #ifdef _OPENMP
-	ncgt = cgt2 - cgt1 + ((cgt2 - cgt1) / (1.e+9));
+	ncgt = cgt2 - cgt1;
 #else
 	ncgt = (double) (cgt2.tv_sec - cgt1.tv_sec) + (double) ((cgt2.tv_nsec - cgt1.tv_nsec) / (1.e+9));
 #endif

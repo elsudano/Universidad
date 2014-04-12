@@ -16,7 +16,7 @@
 
 #define MAX 33554432 //=2^25
 #define PRINT_ALL_MIN 24
-// Ponemos que los elementos minimos para que se
+// Ponemos que los elementos mínimos para que se
 // impriman todas las sumas sea 24 por que atcgrid
 // tiene 24 hebras
 
@@ -96,7 +96,7 @@ int main(int argc, char* argv[]) {
 #endif
 
 #ifdef _OPENMP
-	ncgt = cgt2 - cgt1 + ((cgt2 - cgt1) / (1.e+9));
+	ncgt = cgt2 - cgt1;
 #else
 	ncgt = (double) (cgt2.tv_sec - cgt1.tv_sec) + (double) ((cgt2.tv_nsec - cgt1.tv_nsec) / (1.e+9));
 #endif
