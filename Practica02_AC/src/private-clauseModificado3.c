@@ -20,7 +20,7 @@ int main() {
 	suma = 0;
 	#pragma omp for
 		for (i = 0; i < n; i++) {
-			suma = suma + a[i];
+			suma += a[i];
 			printf("thread %d suma a[%d] / ", omp_get_thread_num(), i);
 		}
 		printf("\n* thread %d suma= %d", omp_get_thread_num(), suma);

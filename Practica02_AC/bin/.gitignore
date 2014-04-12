@@ -1,3 +1,13 @@
 /shared-clause
 /private-clause
 /firstlastprivate
+/copyprivate-clause
+/copyprivate-clauseModificado
+/pmv-secuencial
+/private-clauseModificado2
+/private-clauseModificado3
+/reduction-clause
+/reduction-clauseModificado2
+/reduction-clauseModificado3
+/shared-clauseModificado
+/pmv-OpenMP-a

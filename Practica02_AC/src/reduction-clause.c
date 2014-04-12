@@ -5,8 +5,8 @@
  *      Author: Carlos de la Torre
  */
 
-#include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
 #ifdef _OPENMP
 	#include <omp.h>
 #else
@@ -15,7 +15,7 @@
 int main(int argc, char **argv) {
 	int i, n = 20, a[n], suma = 0;
 	if (argc < 2) {
-		fprintf(std:stderr,"Falta iteraciones\n");
+		fprintf(stderr,"Falta iteraciones\n");
 		exit(-1);
 	}
 	n = atoi(argv[1]);
