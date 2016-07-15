@@ -1,0 +1,22 @@
+fase,tarea,inicio,fin,completado,detalles
+Análisis,Viabilidad,07/03/2016,09/03/2016,100,Realizamos una primera aproximación de la funcionalidad de la app
+Análisis,Diagrama,09/03/2016,10/03/2016,100,Diseñamos una pagina web para que el diagrama del proyecto sea interactivo
+Análisis,Mercadotecnia,10/03/2016,12/03/2016,100,Estudio de mercado para la APP
+Análisis,Encuestas,12/03/2016,13/03/2016,100,Preguntamos a personas de diferentes entornos por la utilidad de la app
+Análisis,Entrevistas,13/03/2016,14/03/2016,80,Mediante EMAIL nos ponernos en contacto con movilidadgranada.com
+Análisis,Consulta,14/03/2016,16/03/2016,80,Explicamos en persona al profesor la idea y consultamos su viabilidad
+Análisis,Requerimientos,16/03/2016,23/03/2016,50,Análisis de requerimientos para la aplicación completa
+Análisis,JSON,23/03/2016,30/03/2016,20,Análisis de requerimientos para el fichero JSON exportado desde la Web
+Aprendizaje,IDE Android,06/04/2016,16/04/2016,100,Empezamos a hacernos con el entorno de desarrollo
+Aprendizaje,ARToolkit,16/04/2016,26/04/2016,40,Comenzamos el aprendizaje de la herramienta de realidad aumentada
+Aprendizaje,Cámara,19/04/2016,21/04/2016,30,Clases de acceso y gestión de la cámara del teléfono
+Aprendizaje,Gmaps,21/04/2016,23/04/2016,0,Clases para la gestión de la API de google con sus mapas
+Aprendizaje,Tienda,23/04/2016,24/04/2016,0,Formas y maneras de incluir la aplicación en la tienda de Google
+Desarrollo,GitHub,21/04/2016,22/04/2016,45,Creación del proyecto en la plataforma github (privado)
+Desarrollo,Prototipo,28/04/2016,13/05/2016,40,Creación del primer prototipo de la aplicación sin funcionalidad
+Desarrollo,Parsing,22/04/2016,24/04/2016,0,Creación de las clases de parseo para los datos KLM
+Desarrollo,Cámara,24/04/2016,29/04/2016,30,Clases de la cámara del teléfono
+Desarrollo,Gmaps,29/04/2016,03/05/2016,0,Clases de google con sus mapas
+Otros,Leyes,30/05/2016,01/06/2016,0,Comprobar la legalidad de la aplicación con respecto a datos sensibles
+Otros,Licencias,01/06/2016,02/06/2016,5,Búsqueda de licencias compatibles con el software de desarrollo
+Otros,Documentación,02/06/2016,09/06/2016,5,Preparando la documentación del proyecto para entregarlo

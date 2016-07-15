@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="230.0" prefWidth="424.0" styleClass="theme" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TextArea editable="false" focusTraversable="false" layoutX="14.0" layoutY="14.0" prefHeight="203.0" prefWidth="397.0" text="Desarrollador:&#10;    Carlos de la Torre&#10;Email:&#10;    cdelatorre@correo.ugr.es&#10;Asignatura:&#10;    Sistemas Multimedia&#10;Blog Personal:&#10;    https://www.sudano.net&#10;Perfil Profecional:&#10;    https://es.linkedin.com/in/soycarlosdelatorre" wrapText="true">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font></TextArea>
+      <ImageView fitHeight="167.0" fitWidth="117.0" layoutX="293.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resources/foto.jpg" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

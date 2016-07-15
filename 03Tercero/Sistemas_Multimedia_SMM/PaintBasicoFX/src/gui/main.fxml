@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.input.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.effect.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="mainWindow" prefHeight="600.0" prefWidth="800.0" stylesheets="@../styles/lighted.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controler.MainController">
+   <center>
+      <SplitPane dividerPositions="0.10526315789473684" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" BorderPane.alignment="CENTER">
+        <items>
+            <FlowPane id="panelLateral" fx:id="panelLateral" hgap="5.0" maxWidth="-Infinity" prefWidth="150.0" vgap="5.0">
+               <children>
+                  <Button id="buttonRojo" fx:id="buttonRojo" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#OnActionButtonRojo" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: red;" styleClass="color-button" />
+                  <Button id="buttonVerde" fx:id="buttonVerde" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#OnActionButtonVerde" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: green;" styleClass="color-button" />
+                  <Button id="buttonAzul" fx:id="buttonAzul" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#OnActionButtonAzul" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: blue;" styleClass="color-button" />
+                  <Button id="buttonBlanco" fx:id="buttonBlanco" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#OnActionButtonNegro" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: black;" styleClass="color-button" />
+                  <Button id="buttonNegro" fx:id="buttonNegro" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#OnActionButtonBlanco" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: white;" styleClass="color-button" />
+                  <Button id="buttonAmarillo" fx:id="buttonAmarillo" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#OnActionButtonAmarillo" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: yellow;" styleClass="color-button" />
+               </children>
+               <padding>
+                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+               </padding>
+            </FlowPane>
+            <Pane fx:id="contentLienzo" onMouseDragged="#OnMouseDraggedPaneLienzo" onMousePressed="#OnMousePressedPaneLienzo" onMouseReleased="#OnMouseReleasedPaneLienzo" />
+        </items>
+      </SplitPane>
+   </center>
+   <bottom>
+      <TextFlow fx:id="statusBar" prefHeight="20.0" textAlignment="CENTER" BorderPane.alignment="CENTER" />
+   </bottom>
+   <top>
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="66.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+         <children>
+            <MenuBar fx:id="menuBar">
+              <menus>
+                <Menu fx:id="menuArchivo" mnemonicParsing="false" text="Archivo">
+                  <items>
+                        <MenuItem id="MenuItemNuevo" fx:id="menuItemNuevo" mnemonicParsing="false" onAction="#OnActionMenuItemNuevo" text="Nuevo">
+                           <graphic>
+                              <ImageView pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../resources/nuevo.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
+                        <MenuItem id="MenuItemAbrir" fx:id="menuItemAbrir" mnemonicParsing="false" onAction="#OnActionMenuItemAbrir" text="Abrir...">
+                           <graphic>
+                              <ImageView pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../resources/abrir.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
+                        <MenuItem id="MenuItemGuardar" fx:id="menuItemGuardar" mnemonicParsing="false" onAction="#OnActionMenuItemGuardar" text="Guardar...">
+                           <graphic>
+                              <ImageView pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../resources/guardar.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                    <MenuItem id="MenuItemSalir" fx:id="menuItemSalir" mnemonicParsing="false" onAction="#OnActionMenuItemSalir" text="Salir">
+                           <graphic>
+                              <ImageView pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../resources/salir.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="Q" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                  </items>
+                </Menu>
+                <Menu fx:id="menuEditar" mnemonicParsing="false" text="Editar">
+                  <items>
+                    <MenuItem id="MenuItemCortar" fx:id="menuItemCortar" mnemonicParsing="false" text="Cortar">
+                           <graphic>
+                              <ImageView fx:id="imageCortar" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../resources/cortar.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="X" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                        <MenuItem id="MenuItemCopiar" fx:id="menuItemCopiar" mnemonicParsing="false" text="Copiar">
+                           <graphic>
+                              <ImageView fx:id="imageCopiar" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../resources/copiar.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="C" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
+                        <MenuItem id="MenuItemPegar" fx:id="menuItemPegar" mnemonicParsing="false" text="Pegar">
+                           <graphic>
+                              <ImageView fx:id="imagePegar" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../resources/pegar.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="V" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
+                  </items>
+                </Menu>
+                  <Menu fx:id="menuVer" mnemonicParsing="false" text="Ver">
+                     <items>
+                        <CheckMenuItem id="MenuItemPantallaCompleta" fx:id="checkMenuItemPantallaCompleta" mnemonicParsing="false" onAction="#OnActionMenuItemPantallaCompleta" text="Pantalla Completa">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="F" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator>
+                        </CheckMenuItem>
+                     </items>
+                  </Menu>
+                <Menu fx:id="menuAyuda" mnemonicParsing="false" text="Ayuda">
+                  <items>
+                    <MenuItem id="MenuItemAcerca" fx:id="menuItemAcerca" mnemonicParsing="false" onAction="#OnActionMenuItemAcerca" text="Acerca de...">
+                           <graphic>
+                              <ImageView fx:id="imagenAcerca" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../resources/acerca.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="H" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+            <ToolBar fx:id="toolBarUp">
+              <items>
+                  <ToggleButton id="buttonPunto" fx:id="buttonPunto" mnemonicParsing="false" onAction="#OnActionToggleButtonPunto">
+                     <graphic>
+                        <ImageView fx:id="imagePunto" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../resources/punto.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <toggleGroup>
+                        <ToggleGroup fx:id="buttonGroup" />
+                     </toggleGroup>
+                  </ToggleButton>
+                  <ToggleButton id="buttonLinea" fx:id="buttonLinea" mnemonicParsing="false" onAction="#OnActionToggleButtonLinea" toggleGroup="$buttonGroup">
+                     <graphic>
+                        <ImageView id="imageRectangulo" fx:id="imageLinea" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../resources/linea.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </ToggleButton>
+                  <ToggleButton id="buttonRectangulo" fx:id="buttonRectangulo" mnemonicParsing="false" onAction="#OnActionToggleButtonRectangulo" toggleGroup="$buttonGroup">
+                     <graphic>
+                        <ImageView id="imageRectangulo" fx:id="imageRectangulo" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../resources/rectangulo.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </ToggleButton>
+                  <ToggleButton id="buttonOval" fx:id="buttonOval" mnemonicParsing="false" onAction="#OnActionToggleButtonOval" toggleGroup="$buttonGroup">
+                     <graphic>
+                        <ImageView id="imageOval" fx:id="imageOval" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../resources/circulo.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </ToggleButton>
+                  <Separator prefWidth="100.0" />
+                  <Label fx:id="labelTamano" text="Tamaño" />
+                  <Slider fx:id="sliderTamano" blockIncrement="0.1" majorTickUnit="1.0" min="4.0" minorTickCount="1" onScroll="#OnScrollSliderTamano" snapToTicks="true" value="4.0" />
+                  <Separator prefWidth="100.0" />
+                  <CheckBox fx:id="checkboxRelleno" mnemonicParsing="false" onAction="#OnActionCheckBoxRelleno" text="Relleno" />
+              </items>
+            </ToolBar>
+         </children>
+      </VBox>
+   </top>
+</BorderPane>

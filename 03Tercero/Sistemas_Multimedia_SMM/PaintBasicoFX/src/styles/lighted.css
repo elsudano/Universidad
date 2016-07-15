@@ -1,0 +1,85 @@
+/* 
+    Created on : 06-mar-2016, 13:10:37
+    Author     : Carlos de al Torre
+*/
+
+.theme {
+    -fx-background-color: derive(grey, 70%);
+    -fx-font-size: 14px;
+}
+
+/*
+ * This is a especial style for the button of colors in the application
+ */
+.color-button {
+    -fx-background-radius: 30;
+    -fx-background-insets: 0, 1, 1;
+    -fx-padding: 3 11 3 11;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 );
+}
+
+.color-button:pressed {
+    -fx-effect: dropshadow( three-pass-box , white , 1, 0.0 , 0 , 1 );
+}
+
+.toggle-button {
+    -fx-background-color:
+        linear-gradient(
+            derive(-fx-base, 120%), 
+            derive(-fx-base, 90%)
+        ),
+        radial-gradient(
+            center 50% -40%, 
+            radius 180%, 
+            derive(-fx-base, 95%) 55%, 
+            derive(-fx-base, 75%) 55%
+        );
+    -fx-background-radius: 4, 3;
+    -fx-background-insets: 0, 1;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 );
+    -fx-padding: 3 11 3 11;
+}
+
+.toggle-button:selected {
+    -fx-background-color:
+        linear-gradient(
+            derive(-fx-base, 90%), 
+            derive(-fx-base, 60%)
+        ),
+        radial-gradient(
+            center 50% -40%, 
+            radius 180%, 
+            derive(-fx-base, 35%) 10%, 
+            derive(-fx-base, 15%) 10%
+        );
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.9) , 1, 0.0 , 0 , 1 );
+}
+
+.text-flow{
+    -fx-background-color: derive(grey, 70%);
+    -fx-font-smoothing-type: lcd;
+    -fx-alignment: left;
+}
+
+.text-area {
+    -fx-background-insets: 0;
+    -fx-background-color: transparent, white, transparent, white;
+}
+
+.text-area .content {
+    -fx-background-color: derive(grey, 70%);
+}
+
+.text-area:focused .content {
+    -fx-background-color: derive(grey, 70%);
+}
+
+.text-area:focused {
+    -fx-highlight-fill: #7ecfff;
+}
+
+.text-area .content {
+    -fx-padding: 10px;
+    -fx-text-fill: white;
+    -fx-highlight-fill: #7ecfff;
+}

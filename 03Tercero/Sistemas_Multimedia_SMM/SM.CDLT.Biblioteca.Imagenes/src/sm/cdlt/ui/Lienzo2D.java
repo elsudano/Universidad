@@ -1,0 +1,800 @@
+package sm.cdlt.ui;
+
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.ListIterator;
+import sm.cdlt.graphics.*;
+
+/**
+ * Esta clase se encarga de gestionar todo lo referente a la zona de dibujado de
+ * formas y sus diferentes características, así pues, se encargara de los
+ * colores de las lineas y su discontinuidad, del movimiento y la modificación
+ * de las diferentes formas que se pinten encima de esta.
+ *
+ * Básicamente será un Lienzo virtual, en el cual se podrán dibujar formas
+ * sencillas
+ *
+ * This class For contact with me visit https://www.sudano.net or send me a
+ * email
+ * <a href="mailto:cdelatorre@correo.ugr.es">Carlos de la Torre</a>
+ *
+ * @author <a href="mailto:cdelatorre@correo.ugr.es">Carlos de la Torre</a>
+ * created on 13-abr-2016
+ */
+public class Lienzo2D extends javax.swing.JPanel {
+
+    /**
+     * Variable que almacena el componente donde vamos a pintar.
+     */
+    protected Graphics2D g2d;
+    /**
+     * Esta variable la ponemos para cuando tenemos que utilizar nuestras clases
+     * propias.
+     */
+    protected final ArrayList<myShape> myShapes = new ArrayList<>();
+    /**
+     * Este será el punto desde donde empezamos a pintar las diferentes formas
+     */
+    protected geoPoint point_to_paint;
+    /**
+     * Variable que almacena si pintamos el borde del clip que muestra solo una
+     * parte de la imagen
+     */
+    protected boolean clip_border;
+    /**
+     * Variable que almacena cual será el área de la imagen que se puede ver
+     */
+    protected myShape myVisiblePart;
+    /**
+     * Variable que indica si tenemos que pintar, mover o borrar las formas por
+     * defecto esta en pintar.
+     */
+    private String option;
+    /**
+     * Grosor de la linea para algunas formas ó tamaño del punto si es lo que
+     * pintamos.
+     */
+    private BasicStroke myStroke;
+    /**
+     * Variable que se encarga de almacenar cual será el tipo de discontinuidad
+     * que tendrá la forma que pintemos en el lienzo
+     */
+    private myDiscontinuity discontinuity_type;
+    /**
+     * Variable que almacena el color que tiene almacenado el lienzo
+     * actualmente.
+     */
+    private Color border_color;
+    /**
+     * Variable que controla el tipo de relleno que tenemos en el lienzo y con
+     * el cual pintaremos las figuras actuales, los posibles valores son: 0 Sin
+     * degradado; 1 Color solido; 2 Degradado Lineal; 3 Degradado Radial;
+     */
+    private int option_fill;
+    /**
+     * Variable que contempla la posibilidad de que tengamos degradado en el
+     * relleno,también podrá tener solo un color en el relleno de la forma.
+     */
+    private Color[] myFillColors;
+    /**
+     * Variable que guarda los espacios que hay entre los colores de relleno
+     * cuando tenemos un degradado de varios colores.
+     */
+    private float[] mySpacesColors;
+    /**
+     * Variable que indica cual es el nivel de alfa que le daremos a las formas.
+     */
+    private int myAlpha;
+    /**
+     * Variable que indica si tenemos que aplicar el Antialising a las formas.
+     */
+    private boolean myFlatten;
+    /**
+     * Variable que almacena que tipo de herramienta esta usando el lienzo.
+     */
+    private String myTool;
+    /**
+     * Variable de almacenamiento temporal, como todas las formas extienden de
+     * esta, podemos usarla para meter las formas y luego hacer un casting.
+     */
+    private myShape newShape;
+    /**
+     * Estas son las distancias de diferencia entre el punto donde pulso en la
+     * forma y el punto principal de la forma, con esa distancia luego genero un
+     * punto nuevo que sera el punto que sustituirá el punto principal de la
+     * forma.
+     */
+    private double distx, disty;
+    /**
+     * Variables que sirven de banderas para saber en que situación se encuentra
+     * el usuario a la hora de dibujar una forma especifica, que conlleva varios
+     * pasos para su dibujado.
+     */
+    private boolean FIRST = true;
+    /**
+     * Variable que se encarga de guardar un iterator para poder recorrer el
+     * vector de formas.
+     */
+    private ListIterator<myShape> it;
+
+    /**
+     * Creates new form Lienzo2D
+     */
+    public Lienzo2D() {
+        initComponents();
+        this.option = "paint";
+        this.border_color = Color.BLACK;
+        this.myTool = "point";
+        this.myAlpha = 99;
+        this.myFillColors = new Color[2];
+        this.mySpacesColors = new float[2];
+        this.clip_border = false;
+        this.myFlatten = false;
+        this.myStroke = new BasicStroke(4F);
+        this.point_to_paint = new geoPoint(0, 0);
+        this.discontinuity_type = myDiscontinuity.NO_DISC;
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                formMouseDragged(evt);
+            }
+        });
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                formMousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                formMouseReleased(evt);
+            }
+        });
+        setLayout(null);
+    }// </editor-fold>//GEN-END:initComponents
+
+    /**
+     * Sobreescribimos el método de pintado para poder realizar las formas que
+     * nosotros queremos en este panel en concreto que será el que consideramos
+     * un lienzo donde pintar.
+     *
+     * @param g este es un objeto de gráficos que será el que contenga las
+     * formas.
+     *
+     */
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+        this.g2d = (Graphics2D) g;
+        this.g2d.translate(this.point_to_paint.getPosX(), this.point_to_paint.getPosY());
+        if (this.myVisiblePart != null && this.myVisiblePart instanceof myRectangleShape) {
+            // si no queremos pintar el borde de la imagen
+            if (this.clip_border) {
+                this.myVisiblePart.drawShapeIn((Graphics2D) g);
+            }
+            myRectangle aux = (myRectangle) this.myVisiblePart;
+            this.g2d.clip(aux.getBounds());
+        } else {
+            // @TODO  poner una exception para cuando no tenga que dibujar
+        }
+        this.it = this.myShapes.listIterator(this.myShapes.size());
+        while (it.hasPrevious()) {
+            it.previous().drawShapeIn(g2d);
+        }
+    }
+
+    /**
+     * Con este método estamos indicando que queremos pintar en el lienzo.
+     */
+    public void setPaint() {
+        this.option = "paint";
+    }
+
+    /**
+     * Con este método estamos indicando que queremos mover formas del lienzo.
+     */
+    public void setMove() {
+        this.option = "move";
+    }
+
+    /**
+     * Con este método estamos indicando que queremos borrar las formas del
+     * lienzo.
+     */
+    public void setDelete() {
+        this.option = "delete";
+    }
+
+    /**
+     * Con este método preguntamos si podemos pintar en el lienzo, o esta la
+     * opción de mover o la de borrado.
+     *
+     * @return Devuelve una cadena de texto con la opción elegida.
+     */
+    public String whatOptionSelected() {
+        return this.option;
+    }
+
+    /**
+     * Con este método asignamos el tamaño que tendrá la forma ya sea el ancho
+     * de la linea o el tamaño del punto.
+     *
+     * @param s [in] numero entero que indica el tamaño que tendrá la forma.
+     */
+    public void setStroke(float s) {
+        this.myStroke = new BasicStroke(s);
+    }
+
+    /**
+     * Con este método nos devuelve el tamaño que tiene el stroke con el que
+     * dibujamos en el lienzo.
+     *
+     * @return Devuelve un float con el el tamaño del stroke.
+     */
+    public float getStroke() {
+        return myStroke.getLineWidth();
+    }
+
+    /**
+     * Con este método asignamos cual será el tipo de discontinuidad que tendrá
+     * el contorno de las formas que pintemos en el lienzo.
+     *
+     * @param dt [in] de tipo myDiscotinuity será el tipo de discontinuidad.
+     */
+    public void setDiscontinuity(myDiscontinuity dt) {
+        this.discontinuity_type = dt;
+    }
+
+    /**
+     * Con este método podemos saber que tipo de discontinuidad tiene asignado
+     * el lienzo.
+     *
+     * @return objeto de tipo myDiscontinuity con el tipo que corresponde.
+     */
+    public myDiscontinuity getDiscontinuity() {
+        return discontinuity_type;
+    }
+
+    /**
+     * Con este método asignamos el color que queremos para el contorno de la
+     * forma.
+     *
+     * @param c [in] el color especificado para la linea de la forma.
+     */
+    public void setColor(Color c) {
+        this.border_color = c;
+    }
+
+    /**
+     * Con este método conseguimos saber cual es el color que tiene asignado el
+     * lienzo para las lineas y contornos.
+     *
+     * @return Devuelve un objeto Color con el color que tiene asignado el
+     * contorno de las formas
+     */
+    public Color getColor() {
+        return this.border_color;
+    }
+
+    /**
+     * Con este método asignamos un degradado de relleno a la forma que vamos a
+     * dibujar, 0 Sin degradado; 1 Color solido; 2 Degradado Lineal; 3 Degradado
+     * Radial;
+     *
+     * @param t [in] Valor entero del tipo de degradado que vamos a usar.
+     * @param f [in] Conjunto de fracciones para la composición del degradado.
+     * @param c [in] Conjunto de colores para la composición del degradado.
+     */
+    public void setFill(int t, float[] f, Color[] c) {
+        this.option_fill = t;
+        this.myFillColors = c;
+        this.mySpacesColors = f;
+    }
+
+    /**
+     * Con este método lo que hacemos es devolver el array con todos los colores
+     * que están asignados al lienzo, así de esa manera si tenemos que consultar
+     * cualquiera de los colores que tenemos en el lienzo usaremos este método.
+     *
+     * @return Array que contiene todos los colores de fondo del lienzo.
+     */
+    public Color[] getFill() {
+        return this.myFillColors;
+    }
+
+    /**
+     * Con este método conseguimos añadir un color de fondo sin tener que crear
+     * el array que contenga todos los colores para los degradados.
+     *
+     * @param c [in] De tipo color será el primer color de los posibles para los
+     * degradados.
+     */
+    public void setFillColor(Color c) {
+        this.option_fill = 1;
+        this.myFillColors = new Color[1];
+        this.myFillColors[0] = c;
+        this.mySpacesColors = null;
+    }
+
+    /**
+     * Con este método podemos devolver el primer color de los que tenemos
+     * almacenados en el lienzo, osea que si tenemos colores para un degradado,
+     * solamente devolvemos el primero puesto que solo queremos usar un color
+     * esto nos viene bien para cuando tenemos que conseguir un color de fondo
+     * del lienzo.
+     *
+     * @return Color de fondo del lienzo, solo uno.
+     */
+    public Color getFillColor() {
+        Color aux = null;
+        if (this.myFillColors.length >= 1) {
+            aux = this.myFillColors[0];
+        }
+        return aux;
+    }
+
+    /**
+     * En este caso solo podemos comprobar si el lienzo pintará con relleno o
+     * sin el, en siguientes versiones se hará que se pueda comprobar que
+     * relleno es el que tiene el lienzo.
+     *
+     * @return verdadero si el lienzo tiene relleno, falso en caso contrario.
+     */
+    public boolean withFill() {
+        boolean aux = false;
+        if (this.option_fill > 0) {
+            aux = true;
+        }
+        return aux;
+    }
+
+    /**
+     * Con este método indicamos el nivel de transparencia del lienzo.
+     *
+     * @param a [in] Valor float entre 0.0 y 1.0 que indica la transparencia.
+     */
+    public void setAlpha(int a) {
+        this.myAlpha = a;
+    }
+
+    /**
+     * Con este método podemos saber cuanta es la transparencia del lienzo.
+     *
+     * @return devuelve un valor float entre 0.0 y 1.0.
+     */
+    public int getAlpha() {
+        return myAlpha;
+    }
+
+    /**
+     * Con este método asignamos el alisado de formas al lienzo.
+     *
+     * @param f Si ponemos verdadero se utilizara el alisado, en caso contrario,
+     * no se usara el alisado.
+     */
+    public void setFlatten(boolean f) {
+        this.myFlatten = f;
+    }
+
+    /**
+     * Con este método podemos saber si el alisado se esta aplicando a las
+     * formas
+     *
+     * @return Verdadero si se esta aplicando alisado, falso en caso contrario.
+     */
+    public boolean getFlatten() {
+        return myFlatten;
+    }
+
+    /**
+     * Con este método asignamos la herramienta al Lienzo.
+     *
+     * @param t [in] String con el que asignamos la herramienta al lienzo.
+     */
+    public void setTool(String t) {
+        this.myTool = t;
+    }
+
+    /**
+     * Nos muestra cuál es la herramienta que tenemos elegida en el lienzo.
+     *
+     * @return devuelve un string con el tipo de herramienta.
+     */
+    public String getTool() {
+        return this.myTool;
+    }
+
+    /**
+     * Con este método podemos asignar una forma a nuestro lienzo para que solo
+     * se vea esa parte de la imagen o de las formas dibujadas en el, por
+     * defecto esto esta a null.
+     *
+     * @param vp [in] Será un objeto de tipo myShape el cual solo dejara ver la
+     * imagen que haya en su parte interior
+     */
+    public void setVisiblePart(myShape vp) {
+        this.myVisiblePart = vp;
+    }
+
+    /**
+     * Con este método podemos ver cual es la forma que se encarga de dejar ver
+     * la parte visible del lienzo.
+     *
+     * @return Un objeto de tipo myShape, el cual si queremos ver sus atributos
+     * tendremos que hacer un casting.
+     */
+    public myShape getVisiblePart() {
+        return myVisiblePart;
+    }
+
+    /**
+     * Con este método asignamos cual va a ser el punto donde se comienzan a
+     * dibujar las formas.
+     *
+     * @return Objeto tipo geoPoint con la posición X, Y, Z, desde donde empieza
+     * a dibujarse las formas.
+     */
+    public geoPoint getPointToPaint() {
+        return point_to_paint;
+    }
+
+    /**
+     * Será el punto desde donde se comienzan a dibujar las formas en el lienzo.
+     *
+     * @param ptp [in] Será el punto de comienzo de dibujado.
+     */
+    public void setPointToPaint(geoPoint ptp) {
+        this.point_to_paint = ptp;
+    }
+
+    /**
+     * Con este método podemos borrar la forma que se pasa por parámetros.
+     *
+     * @param s [in] de tipo myShape sera la forma que vamos a borrar
+     */
+    private void deleteShape(myShape s) {
+        this.it = this.myShapes.listIterator(this.myShapes.size());
+        while (this.it.hasPrevious()) {
+            if (this.it.previous().equals(s)) {
+                this.it.remove();
+            }
+        }
+    }
+
+    /**
+     * Con este método seleccionamos la forma que pertenece al punto que le
+     * pasamos por parámetros.
+     *
+     * @param p [in] Point que indica la posición en la que esta el ratón
+     * @return devuelve la forma que contiene el punto p
+     */
+    private myShape getSelectedShape(Point2D p) {
+        geoPoint aux_point = new geoPoint(p.getX() - this.point_to_paint.getPosX(), p.getY() - this.point_to_paint.getPosY());
+        this.it = this.myShapes.listIterator(this.myShapes.size());
+        while (this.it.hasPrevious()) {
+            myShape s = this.it.previous();
+            if (s.contains(aux_point)) {
+                return s;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Con este método conseguimos crear la forma dentro del lienzo.
+     *
+     * @param ini [in] Punto en donde se crea la forma
+     * @return Devuelve verdadero si se ha podido añadir la forma
+     */
+    private boolean createShape(Point2D ini) {
+        boolean ret = false;
+        // Lo que hago es convertir el punto de java a uno de los mios, y lo posiciono en el sitio correcto
+        geoPoint aux = new geoPoint(ini.getX() - this.point_to_paint.getPosX(), ini.getY() - this.point_to_paint.getPosY());
+        // asigno el grosor de la linea
+        int aux_stroke = (int) this.myStroke.getLineWidth();
+        switch (myTool) {
+            case "point":
+                // creamos el punto
+                myPoint aux_point = new myPoint(this.border_color, aux);
+                // le pongo las propiedades que quiero al punto
+                aux_point.setAlpha(this.myAlpha);
+                aux_point.setFlatten(this.myFlatten);
+                // guardo el pùnto actual en una variable de clase para poder
+                // manipularlo desde otros métodos y no tener que buscar en el array
+                this.newShape = aux_point;
+                // la meto en el array especifico que uso para mis propias clases
+                this.myShapes.add(this.newShape);
+                break;
+            case "line":
+                // creo la linea de mi propia clase
+                myLine aux_line = new myLine(aux, aux);
+                // le pongo las propiedades que quiero a la linea
+                aux_line.setAlpha(this.myAlpha);
+                aux_line.setBorderColor(this.border_color);
+                aux_line.setFlatten(this.myFlatten);
+                aux_line.setLineWidth(aux_stroke);
+                aux_line.setDiscontinuityType(this.discontinuity_type);
+                // guardo la linea actual en una variable de clase para poder
+                // manipularla desde otros metodos y no tener que buscar en el array
+                this.newShape = aux_line;
+                // la meto en el array especifico que uso para mis propias clases
+                this.myShapes.add(this.newShape);
+                break;
+            case "quad":
+                // creo la curva de mi propia clase
+                myQuadCurve aux_quad = new myQuadCurve(aux);
+                // le pongo las propiedades que quiero a la linea
+                aux_quad.setAlpha(this.myAlpha);
+                aux_quad.setBorderColor(this.border_color);
+                aux_quad.setFlatten(this.myFlatten);
+                aux_quad.setLineWidth(aux_stroke);
+                aux_quad.setDiscontinuityType(this.discontinuity_type);
+                // ya pintamos el inicio, pasamos al final
+                aux_quad.setStatus(1);
+                // guardo la linea actual en una variable de clase para poder
+                // manipularla desde otros metodos y no tener que buscar en el array
+                this.newShape = aux_quad;
+                // la meto en el array especifico que uso para mis propias clases
+                this.myShapes.add(this.newShape);
+                break;
+            case "cubic":
+                myCubicCurve aux_cubic = new myCubicCurve(aux);
+                aux_cubic.setAlpha(this.myAlpha);
+                aux_cubic.setBorderColor(this.border_color);
+                aux_cubic.setFlatten(this.myFlatten);
+                aux_cubic.setLineWidth(aux_stroke);
+                aux_cubic.setDiscontinuityType(this.discontinuity_type);
+                aux_cubic.setStatus(1);
+                this.newShape = aux_cubic;
+                this.myShapes.add(this.newShape);
+                break;
+            case "rect":
+                myRectangle aux_rect = new myRectangle(aux, aux);
+                aux_rect.setAlpha(this.myAlpha);
+                aux_rect.setBorderColor(this.border_color);
+                if (this.option_fill > 0) {
+                    aux_rect.setFill(this.option_fill, this.mySpacesColors, this.myFillColors);
+                }
+                aux_rect.setFlatten(this.myFlatten);
+                aux_rect.setLineWidth(aux_stroke);
+                aux_rect.setDiscontinuityType(this.discontinuity_type);
+                this.newShape = aux_rect;
+                this.myShapes.add(this.newShape);
+                break;
+            case "rect_round":
+                myRoundRectangle aux_rect_round = new myRoundRectangle(aux, aux);
+                aux_rect_round.setAlpha(this.myAlpha);
+                aux_rect_round.setBorderColor(this.border_color);
+                if (this.option_fill > 0) {
+                    aux_rect_round.setFill(this.option_fill, this.mySpacesColors, this.myFillColors);
+                }
+                aux_rect_round.setFlatten(this.myFlatten);
+                aux_rect_round.setLineWidth(aux_stroke);
+                aux_rect_round.setDiscontinuityType(this.discontinuity_type);
+                this.newShape = aux_rect_round;
+                this.myShapes.add(this.newShape);
+                break;
+            case "oval":
+                myEllipse aux_oval = new myEllipse(aux, aux);
+                aux_oval.setAlpha(this.myAlpha);
+                aux_oval.setBorderColor(this.border_color);
+                if (this.option_fill > 0) {
+                    aux_oval.setFill(this.option_fill, this.mySpacesColors, this.myFillColors);
+                }
+                aux_oval.setFlatten(this.myFlatten);
+                aux_oval.setLineWidth(aux_stroke);
+                aux_oval.setDiscontinuityType(this.discontinuity_type);
+                this.newShape = aux_oval;
+                this.myShapes.add(this.newShape);
+                break;
+            case "polygon":
+                // creo el polígono de mi propia clase
+                myPolygon aux_poly = new myPolygon(aux);
+                // le pongo las propiedades que quiero
+                aux_poly.setAlpha(this.myAlpha);
+                aux_poly.setBorderColor(this.border_color);
+                if (this.option_fill > 0) {
+                    aux_poly.setFill(this.option_fill, this.mySpacesColors, this.myFillColors);
+                }
+                aux_poly.setFlatten(this.myFlatten);
+                aux_poly.setLineWidth(aux_stroke);
+                aux_poly.setDiscontinuityType(this.discontinuity_type);
+                // lo guardo en una variable de clase para poder manipularlo
+                // desde otros metodos y no tener que buscar en el array
+                this.newShape = aux_poly;
+                // la meto en el array especifico que uso para mis propias clases
+                this.myShapes.add(this.newShape);
+                break;
+        }
+        return ret;
+    }
+
+    /**
+     * Con este método cambiamos la forma según vamos moviendo el ratón
+     *
+     * @param fin [in] Será la posición final, donde termina la forma
+     */
+    private void updateShape(Point2D fin) {
+        // Lo que hago es convertir el punto de java a uno de los mios, y lo posiciono en el sitio correcto
+        geoPoint aux = new geoPoint(fin.getX() - this.point_to_paint.getPosX(), fin.getY() - this.point_to_paint.getPosY());
+        switch (myTool) {
+            case "line":
+                myLine aux_line = (myLine) this.newShape;
+                aux_line.updateLine(myLine.END_POINT, aux);
+                break;
+            case "cubic":
+                myCubicCurve aux_cubic = (myCubicCurve) this.newShape;
+                aux_cubic.updateCurve(aux);
+                break;
+            case "quad":
+                myQuadCurve aux_quad = (myQuadCurve) this.newShape;
+                aux_quad.updateCurve(aux);
+                break;
+            case "rect":
+                myRectangle aux_rect = (myRectangle) this.newShape;
+                aux_rect.updateRectangle(aux);
+                break;
+            case "rect_round":
+                myRoundRectangle aux_rect_round = (myRoundRectangle) this.newShape;
+                aux_rect_round.updateRectangle(aux);
+                break;
+            case "oval":
+                myEllipse aux_oval = (myEllipse) this.newShape;
+                aux_oval.updateRectangle(aux);
+                break;
+//            Por ahora no hace falta el update del polígono
+//            case "polygon":
+//                myPolygon aux_poly = (myPolygon) this.newShape;
+//                /*
+//                Aquí tienes que controlar en el estado en el que estas para
+//                sustituir los diferentes puntos del polígono
+//                 */
+//                aux_poly.updatePolygon(aux);
+//                break;
+        }
+    }
+
+    private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
+        // los pongo a 0 para que no guardar posiciones de otras pulsaciones
+        this.distx = this.disty = 0;
+        switch (this.option) {
+            case "paint":
+                /* Los sieguientes if son para poder pulsar el CTRL para dibujar las figuras con mas de un paso */
+                if (((evt.getModifiers() & java.awt.event.MouseEvent.CTRL_MASK) == java.awt.event.MouseEvent.CTRL_MASK)
+                        && this.myTool.equals("rect_round")) {
+                    ((myRoundRectangle) this.newShape).endPaint(true);
+                } else if (((evt.getModifiers() & java.awt.event.MouseEvent.CTRL_MASK) == java.awt.event.MouseEvent.CTRL_MASK)
+                        && this.myTool.equals("quad") && ((myQuadCurve) this.newShape).getStatus() == 1) {
+                    ((myQuadCurve) this.newShape).setStatus(2);
+                } else if (((evt.getModifiers() & java.awt.event.MouseEvent.CTRL_MASK) == java.awt.event.MouseEvent.CTRL_MASK)
+                        && this.myTool.equals("cubic") && ((myCubicCurve) this.newShape).getStatus() == 1 && this.FIRST) {
+                    ((myCubicCurve) this.newShape).setStatus(2);
+                } else if (((evt.getModifiers() & java.awt.event.MouseEvent.CTRL_MASK) == java.awt.event.MouseEvent.CTRL_MASK)
+                        && this.myTool.equals("cubic") && ((myCubicCurve) this.newShape).getStatus() == 2 && !this.FIRST) {
+                    ((myCubicCurve) this.newShape).setStatus(3);
+                } else if (this.myTool.equals("polygon")
+                        && this.newShape != null
+                        && this.newShape instanceof myPolygon
+                        && !((myPolygon) this.newShape).isLastPoint()) {
+                    /*
+                    Lo que hago es convertir el punto de java a uno de los mios, y lo posiciono en el sitio correcto
+                    puesto que el point_to_paint es el punto donde puedo empezar a pintar para que cuando se mueva
+                    el lienzo se siga pintando en el sitio correcto.
+                     */
+                    geoPoint aux = new geoPoint(evt.getPoint().getX() - this.point_to_paint.getPosX(), evt.getPoint().getY() - this.point_to_paint.getPosY());
+                    ((myPolygon) this.newShape).setPoint(aux);
+                } else {
+                    this.createShape(evt.getPoint());
+                }
+                break;
+            case "move":
+                for (myShape aux : myShapes) {
+                    aux.showBounding(false);
+                }
+                this.newShape = this.getSelectedShape(evt.getPoint());
+                if (this.newShape != null) {
+                    this.newShape.showBounding(true);
+                    this.distx = evt.getX() - this.newShape.getLocation().getPosX();
+                    this.disty = evt.getY() - this.newShape.getLocation().getPosY();
+                    this.newShape.setFlatten(this.myFlatten);
+                    if (!(this.newShape instanceof myPoint)) {
+                        this.newShape.setDiscontinuityType(this.discontinuity_type);
+                        ((myExtraInfo) this.newShape).setAlpha(this.myAlpha);
+                        ((myExtraInfo) this.newShape).setBorderColor(this.border_color);
+                        ((myExtraInfo) this.newShape).setLineWidth(this.myStroke.getLineWidth());
+                    }
+                    if (this.newShape instanceof myRectangle) {
+                        if (this.option_fill > 0) {
+                            ((myRectangle) this.newShape).setFill(this.option_fill, this.mySpacesColors, this.myFillColors);
+                        }
+                    } else if (this.newShape instanceof myRoundRectangle) {
+                        if (this.option_fill > 0) {
+                            ((myRoundRectangle) this.newShape).setFill(this.option_fill, this.mySpacesColors, this.myFillColors);
+                        }
+                    } else if (this.newShape instanceof myEllipse) {
+                        if (this.option_fill > 0) {
+                            ((myEllipse) this.newShape).setFill(this.option_fill, this.mySpacesColors, this.myFillColors);
+                        }
+                    } else if (this.newShape instanceof myPolygon) {
+                        if (this.option_fill > 0) {
+                            ((myPolygon) this.newShape).setFill(this.option_fill, this.mySpacesColors, this.myFillColors);
+                        }
+                    }
+                }
+                break;
+            case "delete":
+                this.newShape = this.getSelectedShape(evt.getPoint());
+                this.deleteShape(this.newShape);
+                break;
+            default:
+                break;
+        }
+        repaint();
+    }//GEN-LAST:event_formMousePressed
+
+    private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
+        switch (this.option) {
+            case "paint":
+                this.updateShape(evt.getPoint());
+                break;
+            case "move":
+                if (this.newShape != null) {
+                    this.newShape.setLocation(new geoPoint(evt.getX() - this.distx, evt.getY() - this.disty));
+                }
+                break;
+            case "delete":
+                // @TODO aqui no hacemos nada por que la forma ya se ha borrado
+                // pero dejamos la opción por si mas adelante se me ocurre algo
+                break;
+        }
+        repaint();
+    }//GEN-LAST:event_formMouseDragged
+
+    private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
+        if (this.option.equals("paint") && this.myTool.equals("cubic")) {
+            if (((evt.getModifiers() & java.awt.event.MouseEvent.CTRL_MASK) == java.awt.event.MouseEvent.CTRL_MASK)
+                    && ((myCubicCurve) this.newShape).getStatus() == 2) {
+                this.FIRST = false;
+            } else if (((evt.getModifiers() & java.awt.event.MouseEvent.CTRL_MASK) == java.awt.event.MouseEvent.CTRL_MASK)
+                    && ((myCubicCurve) this.newShape).getStatus() == 3) {
+                this.FIRST = true;
+            }
+        }
+        if ((evt.getModifiers() & java.awt.event.MouseEvent.CTRL_MASK) == java.awt.event.MouseEvent.CTRL_MASK
+                && this.option.equals("paint") && this.myTool.equals("rect_round")) {
+            ((myRoundRectangle) this.newShape).endPaint(false);
+        }
+        if ((evt.getModifiers() & java.awt.event.MouseEvent.CTRL_MASK) == java.awt.event.MouseEvent.CTRL_MASK
+                && this.option.equals("paint") && this.myTool.equals("polygon")) {
+            ((myPolygon) this.newShape).endPaint(true);
+        }
+
+    }//GEN-LAST:event_formMouseReleased
+
+    /**
+     * Este método limpia el lienzo y pone los valores por defecto del mismo.
+     */
+    public void clean() {
+        this.myShapes.clear();
+        this.myTool = "point";
+        this.border_color = Color.black;
+        this.myFillColors = null;
+        this.mySpacesColors = null;
+        this.myAlpha = 1;
+        this.myFlatten = false;
+        this.myStroke = new BasicStroke(4F);
+    }
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // End of variables declaration//GEN-END:variables
+}
