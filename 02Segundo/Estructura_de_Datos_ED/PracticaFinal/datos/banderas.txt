@@ -1,0 +1,87 @@
+#Banderas. Los rasgos son 10, Se tiene en cuenta solamente los colores dentro de la bandera que no estan en los escudos ni estrellas.
+#El escudo y estrellas son dos rasgos diferentes
+#Preguntas posibles
+14 #numero de preguntas
+¿Tiene color amarillo?
+¿Tiene color azul?
+¿Tiene color blanco?
+¿Tiene color negro?
+¿Tiene color rojo?
+¿Tiene color verde?
+¿Tiene escudo?
+¿Tiene estrellas?
+¿Es 1 el numero de colores?
+¿Es 2 el numero de colores?
+¿Es 3 el numero de colores?
+¿Es Ninguno el sentido de las bandas?
+¿Es Horizontal el sentido de las bandas?
+¿Es Vertical el sentido de las bandas?
+
+#Banderas
+16 #numero de banderas
+##############0##########################
+
+Alemania
+datos/banderas/alemania.png
+
+###########1#############################
+Argentina
+datos/banderas/argentina.png
+
+################2########################
+Austria
+datos/banderas/austria.png
+
+############3############################
+Bolivia
+datos/banderas/bolivia.png
+
+############4############################
+Brasil
+datos/banderas/brasil.png
+
+############5############################
+Canada
+datos/banderas/canada.png
+
+############6############################
+Chipre
+datos/banderas/chipre.png
+
+############7############################
+China
+datos/banderas/china.png
+
+############8############################
+Ecuador
+datos/banderas/ecuador.png
+############9############################
+EEUU
+datos/banderas/eeuu.png
+############10############################
+España
+datos/banderas/espanha.png
+
+
+############11############################
+Francia
+datos/banderas/francia.png
+
+############12############################
+Italia
+datos/banderas/italia.png
+
+############13############################
+Jamaica
+datos/banderas/jamaica.png
+
+############14############################
+Portugal
+datos/banderas/portugal.png
+
+############15############################
+Suecia
+datos/banderas/suecia.png
+
+#Informacion con el arbol describiendo a las banderas
+datos/banderas.tree

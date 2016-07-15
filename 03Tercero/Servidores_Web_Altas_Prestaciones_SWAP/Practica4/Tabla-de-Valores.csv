@@ -1,0 +1,47 @@
+1000				
+SERVIDOR WEB – OPENWEBLOAD – APACHE				
+	Total TPS (x1000)	Avg. Response time	Max Response time	Total Requests (x1000)
+Medición 1: 	1,29	0,008	0,516	12,931
+Medición 2: 	1,27	0,008	0,637	12,720
+Medición 3: 	1,41	0,007	0,545	14,131
+Medición 4: 	1,42	0,007	0,558	14,187
+Medición 5: 	1,29	0,008	0,621	12,946
+Medición 6: 	1,29	0,008	0,549	12,922
+Medición 7: 	1,31	0,008	0,542	13,073
+Medición 8: 	1,32	0,008	0,603	13,197
+Medición 9: 	1,40	0,007	0,549	14,016
+Medición 10: 	1,40	0,007	0,812	14,014
+Media: 	1,34	0,008	0,593	13
+Desviación: 	0,06	0,00	0,09	0,59
+				
+				
+BALANCEADOR DE CARGA – OPENWEBLOAD – NGINX - APACHE				
+	Total TPS (x1000)	Avg. Response time	Max Response time	Total Requests (x1000)
+Medición 1: 	0,97	0,009	0,052	9,686
+Medición 2: 	1,16	0,009	0,038	11,586
+Medición 3: 	0,84	0,011	0,037	8,399
+Medición 4: 	1,09	0,009	0,045	10,861
+Medición 5: 	1,17	0,009	0,031	11,659
+Medición 6: 	0,90	0,010	0,048	8,972
+Medición 7: 	1,18	0,008	0,035	11,766
+Medición 8: 	1,08	0,009	0,049	10,792
+Medición 9: 	1,09	0,009	0,033	10,940
+Medición 10: 	1,02	0,010	0,051	10,157
+Media: 	1,05	0,009	0,042	10
+Desviación: 	0,12	0,00	0,01	1,16
+				
+				
+BALANCEADOR DE CARGA – OPENWEBLOAD – HAPROXY - APACHE				
+	Total TPS (x1000)	Avg. Response time	Max Response time	total requests (X1000)
+Medición 1: 	0,76	0,012	0,073	7,609
+Medición 2: 	0,91	0,010	0,023	9,091
+Medición 3: 	0,87	0,011	0,035	8,698
+Medición 4: 	0,85	0,011	0,026	8,541
+Medición 5: 	0,89	0,010	0,035	8,876
+Medición 6: 	0,90	0,010	0,048	8,972
+Medición 7: 	0,77	0,012	0,049	7,675
+Medición 8: 	0,92	0,010	0,021	9,195
+Medición 9: 	0,78	0,012	0,051	7,813
+Medición 10: 	0,90	0,010	0,023	8,968
+Media: 	0,85	0,011	0,038	9
+Desviación: 	0,06	0,00	0,02	0,61

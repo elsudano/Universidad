@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" onload="init(evt)" >
+
+  <style>
+    .caption{
+	font-size: 14px;
+	font-family: Georgia, serif;
+    }
+    .tooltip{
+	font-size: 12px;
+    }
+    .tooltip_bg{
+	fill: white;
+	stroke: black;
+	stroke-width: 1;
+	opacity: 0.85;
+    }
+  </style>
+
+  <script type="text/ecmascript">
+    <![CDATA[
+
+	function init(evt)
+	{
+	    if ( window.svgDocument == null )
+	    {
+		svgDocument = evt.target.ownerDocument;
+	    }
+
+	  tooltip = svgDocument.getElementById('tooltip');
+	//  tooltip_bg = svgDocument.getElementById('tooltip_bg');
+
+	}
+
+	function ShowTooltip(evt, mouseovertext)
+	{
+	   //tooltip = svgDocument.getElementById(nombre);
+	    tooltip.setAttributeNS(null,"x",evt.clientX+11);
+	    tooltip.setAttributeNS(null,"y",evt.clientY+27);
+	    tooltip.firstChild.data = mouseovertext;
+	    tooltip.setAttributeNS(null,"visibility","visible");
+
+	   /* length = tooltip.getComputedTextLength();
+	    tooltip_bg.setAttributeNS(null,"width",length+8);
+	    tooltip_bg.setAttributeNS(null,"x",evt.clientX+8);
+	    tooltip_bg.setAttributeNS(null,"y",evt.clientY+14);
+	    tooltip_bg.setAttributeNS(null,"visibility","visible");*/
+	}
+
+	function HideTooltip(evt)
+	{
+	    tooltip.setAttributeNS(null,"visibility","hidden");
+	    tooltip_bg.setAttributeNS(null,"visibility","hidden");
+	}
+
+	function changerect(evt) {
+          var svgobj=evt.target;
+	  if (svgobj.style.opacity=='0.2'){
+	   svgobj.style.opacity='0.8';
+	  }
+	  else {
+	   svgobj.style.opacity='0.2';
+	  }
+	  
+          //svgobj.style.opacity= 0;
+          
+         }
+    ]]>
+  </script>
+  <rect x="2" y="2" width="500" height="710" stroke="blue" fill="purple"
+       fill-opacity="0.5" stroke-opacity="0.8"/>
+      <text class="tooltip" id="tooltip" x="0" y="0" visibility="hidden">Tooltip</text>
+      <image width="100" height="100" x="10" y="10" xlink:href="alemania.png"    onmousemove="ShowTooltip(evt, 'Alemania')"
+       onmouseout="HideTooltip(evt)" onclick='changerect(evt)' opacity='0.8'/> 
+    
+	<image width="100" height="100"  x="150" y="10" xlink:href="argentina.png"  onmousemove="ShowTooltip(evt, 'Argentina')"
+	onmouseout="HideTooltip(evt)" onclick='changerect(evt)' opacity='0.8'/>
+       
+	<image width="100" height="100" x="290" y="10" xlink:href="austria.png"  onmousemove="ShowTooltip(evt, 'Austria')"
+	onmouseout="HideTooltip(evt)" onclick='changerect(evt)' opacity='0.8'/>
+       
+	<image width="100" height="100" x="10" y="150" xlink:href="bolivia.png"  onmousemove="ShowTooltip(evt, 'Bolivia')"
+	onmouseout="HideTooltip(evt)" onclick='changerect(evt)' opacity='0.8'/>
+       
+       <image width="100" height="100" x="150" y="150" xlink:href="brasil.png"  onmousemove="ShowTooltip(evt, 'Brasil')"
+	onmouseout="HideTooltip(evt)" onclick='changerect(evt)' opacity='0.8'/>
+       
+       
+       <image width="100" height="100" x="290" y="150" xlink:href="canada.png"  onmousemove="ShowTooltip(evt, 'Canada')"
+	onmouseout="HideTooltip(evt)" onclick='changerect(evt)' opacity='0.8'/>
+      
+        <image width="100" height="100" x="10" y="300" xlink:href="china.png"  onmousemove="ShowTooltip(evt, 'China')"
+	onmouseout="HideTooltip(evt)" onclick='changerect(evt)' opacity='0.8'/>
+	
+	 
+	<image width="100" height="100" x="150" y="300" xlink:href="chipre.png"    onmousemove="ShowTooltip(evt, 'Chipre')"
+       onmouseout="HideTooltip(evt)" onclick='changerect(evt)' opacity='0.8'/> 
+	
+	<image width="100" height="100" x="290" y="300" xlink:href="ecuador.png"  onmousemove="ShowTooltip(evt, 'Ecuador')"
+	onmouseout="HideTooltip(evt)" onclick='changerect(evt)' opacity='0.8'/>
+	
+	<image width="100" height="100" x="400" y="300" xlink:href="eeuu.png"  onmousemove="ShowTooltip(evt, 'EEUU')"
+	onmouseout="HideTooltip(evt)" onclick='changerect(evt)' opacity='0.8'/>
+	
+	<image width="100" height="100" x="10" y="450" xlink:href="espanha.png"  onmousemove="ShowTooltip(evt, 'espanha')"
+	onmouseout="HideTooltip(evt)" onclick='changerect(evt)' opacity='0.8'/>
+	
+	<image width="100" height="100" x="150" y="450" xlink:href="francia.png"  onmousemove="ShowTooltip(evt, 'Francia')"
+	onmouseout="HideTooltip(evt)" onclick='changerect(evt)' opacity='0.8'/>
+	
+	<image width="100" height="100" x="290" y="450" xlink:href="italia.png"  onmousemove="ShowTooltip(evt, 'Italia')"
+	onmouseout="HideTooltip(evt)" onclick='changerect(evt)' opacity='0.8'/>
+	
+	<image width="100" height="100" x="10" y="600" xlink:href="jamaica.png"    onmousemove="ShowTooltip(evt, 'Jamaica')"
+       onmouseout="HideTooltip(evt)" onclick='changerect(evt)' opacity='0.8'/> 
+    
+       <image width="100" height="100" x="150" y="600" xlink:href="portugal.png"    onmousemove="ShowTooltip(evt, 'Portugal')"
+       onmouseout="HideTooltip(evt)" onclick='changerect(evt)' opacity='0.8'/>  
+       
+
+       <image width="100" height="100" x="290" y="600" xlink:href="suecia.png"    onmousemove="ShowTooltip(evt, 'Suecia')"
+       onmouseout="HideTooltip(evt)" onclick='changerect(evt)' opacity='0.8'/>  
+	
+	  
+	
+	
+</svg>

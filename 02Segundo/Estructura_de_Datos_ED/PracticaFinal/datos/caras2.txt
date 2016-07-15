@@ -1,0 +1,93 @@
+#Preguntas posibles
+17 #Numero de preguntas
+¿Tiene barba?
+¿Tiene bigote?
+¿Es calvo?
+¿Es Claro su color de ojos?
+¿Es Oscuro su color de ojos?
+¿Tiene el pelo Negro?
+¿Tiene el pelo Rubio?
+¿Tiene el pelo Blanco?
+¿Tiene el pelo Pelirrojo?
+¿Tiene el pelo Marron?
+¿Tiene la piel Clara?
+¿Tiene la piel Oscura?
+¿Tiene gafas?
+¿Es Mujer?
+¿Es Hombre?
+¿Es Largo su pelo?
+¿Es Corto su pelo?
+
+
+
+#PERSONAJES
+16 #numero de personajes
+##############0##########################
+#nombre del personaje
+Ana
+datos/caras2/ana.png #imagen del personaje
+
+###########1#############################
+Clara
+datos/caras2/clara.png
+
+###########2#############################
+Cristina
+datos/caras2/cristina.png
+
+############3############################
+Eloy
+datos/caras2/eloy.png
+
+############4############################
+Enrique
+datos/caras2/enrique.png
+
+############5############################
+Javier
+datos/caras2/javier.png
+
+############6############################
+Juan
+datos/caras2/juan.png
+
+############7############################
+Lidia
+datos/caras2/lidia.png
+
+############8############################
+Manuel
+datos/caras2/manuel.png
+
+############9############################
+Maria
+datos/caras2/maria.png
+
+############10############################
+Pedro
+datos/caras2/pedro.png
+
+############11############################
+Pepe
+datos/caras2/pepe.png
+
+############12############################
+Sofia
+datos/caras2/sofia.png
+
+############13############################
+Victoria
+datos/caras2/victoria.png
+
+############14############################
+Zandra
+datos/caras2/zandra.png
+
+############15############################
+Antonio
+datos/caras2/antonio.png
+
+
+
+#Informacion con el arbol describiendo a los personajes.
+datos/caras2.tree

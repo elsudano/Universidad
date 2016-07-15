@@ -1,0 +1,9 @@
+rm -Rf lib/* obj/*.o*
+g++ -m32 -g -O0 -Wall -DVER1 -Llib -Iinclude -c src/test.cpp -o obj/test.o
+In file included from src/test.cpp:6:0:
+include/ArbolGeneral.h:609:28: error fatal: ArbolGeneral.cpp: No existe el fichero o el directorio
+ #include "ArbolGeneral.cpp"
+                            ^
+compilación terminada.
+Makefile:54: recipe for target 'obj/test.o' failed
+gmake: *** [obj/test.o] Error 1

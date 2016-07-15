@@ -1,0 +1,19 @@
+#ifndef _MATRIZ_H_
+#define _MATRIZ_H_
+
+class Matriz {
+    double * datos;
+    int filas, columnas;
+  public:
+    Matriz();
+    Matriz(int f,int c);
+    Matriz(const Matriz & m);
+    Matriz& operator = (const Matriz & m);
+    inline int f(){return filas;}
+    inline int c(){return columnas;}
+    void Set(int f, int c, double d);
+    double Get(int f, int c) const;
+    int Leer(const char * nombre);
+    int Escribir(const char * nombre) const;
+};
+#endif

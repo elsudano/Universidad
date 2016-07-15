@@ -1,0 +1,107 @@
+/*----------------RESET-----------------*/
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,table,th,td{ 
+  margin:0;
+  padding:0;
+}
+table{
+  border-collapse:collapse;
+  border-spacing:0;
+}
+fieldset,img{ 
+  border:0;
+}
+address,caption,cite,dfn,th,var{
+  font-style:normal;
+  font-weight:normal;
+}
+ol,ul{
+  list-style:none;
+}
+caption,th{
+  text-align:left;
+}
+h1,h2,h3,h4,h5,h6{
+  font-size:100%;
+  font-weight:normal;
+}
+q:before,q:after{
+  content:'';
+}
+abbr,acronym{
+  border:0;
+}
+
+/*----------------Comienza el diseño-----------------*/
+body {
+	text-align:center;
+	overflow: inherit;
+	margin: 0px;
+}
+
+address{
+	text-align: left;
+	font-weight: bold;
+}
+
+img {
+	height: auto;
+	border: none;
+	/*border: 1px solid black;*/
+}
+
+img.auto {
+	width: 100%;
+	max-width: 100%;
+	height: auto;
+	border: none;
+	/*border: 1px solid black;*/
+}
+
+/*--------------Listas para el pie de pagina-----------------*/
+ul{
+  width:inherit;
+  margin-bottom:10px;
+  overflow:hidden;
+  border:1px none #CCCCCC;
+}
+li{
+	width: inherit;
+	line-height:1.5em;
+	border-bottom:1px none #CCCCCC;
+	float:left;
+	display:inline;
+}
+#dos-col li { width:50%;}
+#tres-col li { width:33.333%; }
+#cuatro-col li { width:25%; }
+#seis-col li { width:16.666%; }
+
+header{
+  font-family: Lucida Console;
+  font-weight: bold;
+  font-size: x-large;
+  border-spacing: 0px;
+  padding: 0.5em;
+  color: #E9AA25;
+}
+
+address{
+  text-align: center;
+}
+
+/*--------------Boton de como se hizo-----------------*/
+a {
+  text-decoration: none;
+}
+
+a.boton {
+  font: bold 11px Arial;
+  text-decoration: none;
+  background-color: #EEEEEE;
+  color: #333333;
+  padding: 2px 6px 2px 6px;
+  border-top: 1px solid #CCCCCC;
+  border-right: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+  border-left: 1px solid #CCCCCC;
+}

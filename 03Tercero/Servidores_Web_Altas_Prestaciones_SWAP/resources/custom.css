@@ -1,0 +1,279 @@
+body{
+	text-align:center;
+	background-image: url("https://raw.githubusercontent.com/elsudano/swap1415/master/resources/tela.jpg");
+	background-repeat: repeat;
+	font:14px/22px 'Roboto Condensed', sans-serif;
+}
+
+/* Standard Styles Starts */
+
+a{
+	color:#4bac52;
+	text-decoration:none;
+}
+a:hover{
+	color:#252a2f;
+	text-decoration:none;
+}
+a:focus{
+	outline:none;
+}
+h1, h2, h3, h4, h5, h6{
+	font-family:'Roboto Condensed', sans-serif;
+	color: #252a2f;
+}
+h1{
+	font-size:38px;
+}
+h2{
+	font-size:32px;
+}
+h3{
+	font-size:26px;
+}
+h4{
+	font-size:20px;
+}
+h5{
+	font-size:18px;
+}
+h6{
+	font-size:14px;
+}
+
+hr{
+	border-color:#8c8f92;
+}
+
+/* Form & Buttons Styles Starts */
+
+.btn-black {
+	background-color: #303030;
+}
+.btn-black:hover,
+.btn-black:focus,
+.btn-black:active,
+.btn-black.active,
+.btn-main {
+	background-color: #4bac52;
+}
+.btn-main:hover,
+.btn-main:focus,
+.btn-main:active,
+.btn-main.active {
+	background-color: #3e9144;
+}
+.btn-black,
+.btn-black:hover,
+.btn-black:focus,
+.btn-black:active,
+.btn-black.active,
+.btn-main,
+.btn-main:hover,
+.btn-main:focus,
+.btn-main:active,
+.btn-main.active {
+	color:#fff;
+}
+
+/* conrtenedor principal */
+#tablon{
+	margin-top: 10px;
+	margin-bottom: 10px;
+	background:#fff;
+	box-shadow: 0em 0em 1.5em 0.5em #888888;
+	-moz-box-shadow: 0em 0em 1.5em 0.5em #888888;
+	-webkit-box-shadow: 0em 0em 1.5em 0.5em #888888;
+}
+
+/* Header Area Styles Starts */
+#header-area{
+	margin-top: 10px;
+}
+	.header-top{
+		background:#252a2f;
+	}
+
+/* Main Container Styles Starts */
+#main-container{
+	background: #fff;
+	margin-bottom:0;
+}
+	#opciones{
+
+	}
+
+	#opciones ol{
+		list-style-type: upper-alpha;
+	}
+
+/* Footer Area Styles Starts */
+#footer-area{
+	padding: 10px;
+	background:#444c53;
+}
+
+/* Buttons Area Styles Starts */
+#botonera{
+	padding: 10px;
+}
+
+/* Main Menu Styles Starts */
+#main-menu{
+	background:#00f;
+	/*background:#4bac52;*/
+}
+#main-menu.navbar{
+	margin:0;
+	padding:0;
+	border:none;
+	-webkit-border-radius:0;
+	   -moz-border-radius:0;
+			border-radius:0;
+}
+	#main-menu .navbar-nav > li{
+	}
+	#main-menu .navbar-nav > li + li{
+	}
+	#main-menu .navbar-nav > li a{
+		color:#fff;
+		text-transform:uppercase;
+	}
+	#main-menu .navbar-nav > li > a:hover,
+	#main-menu .navbar-nav > li > a:focus,
+	#main-menu .navbar-nav > li.open a{
+		background:#252a2f;
+		color:#fff;
+	}
+		#main-menu .dropdown-menu{
+			background:#252a2f;
+			border:none;
+			padding:0;
+			-webkit-border-radius:0;
+			   -moz-border-radius:0;
+			        border-radius:0;
+			-webkit-box-shadow:none;
+			   -moz-box-shadow:none;
+			     box-shadow:none;
+		}
+			#main-menu .dropdown-menu li a{
+				color:#fff;
+				font-size:15px;
+				padding-top:6px;
+				padding-bottom:6px;
+				font-weight:normal;
+			}
+			#main-menu .dropdown-menu li:hover a{
+				background:#42484f;
+				text-decoration:none;
+			}
+				#main-menu .dropdown-inner {
+					display:table;
+					padding-bottom:10px;
+				}
+					#main-menu .dropdown-inner ul {
+						display:table-cell;
+					}
+					#main-menu .dropdown-inner .dropdown-header{
+						font-size:15px;
+						text-transform:uppercase;
+						color:#fff;
+						padding:15px 0 10px 15px;
+					}
+					#main-menu .dropdown-inner li a {
+						min-width:160px;
+						display:block;
+						padding:3px 20px;
+						clear:both;
+					}
+/* Tabs Styles Starts */
+	.tabs-panel{
+		margin-top:20px;
+	}
+	.tabs-panel.panel-smart{
+		padding:0;
+	}
+		.tabs-panel .nav-tabs{
+			text-transform:uppercase;
+			font-size:16px;
+			border-bottom:4px solid #4bac52;
+		}
+		.tabs-panel .nav-tabs > li{
+			margin-bottom:0;
+		}
+		.tabs-panel .nav-tabs > li > a{
+			color:#4bac52;
+			margin:0;
+		}
+		.tabs-panel .nav-tabs > li > a,
+		.tabs-panel .btn,
+		.tabs-panel .form-control{
+			-webkit-border-radius:0;
+			   -moz-border-radius:0;
+			        border-radius:0;
+		}
+		.tabs-panel .nav-tabs > li.active > a,
+		.tabs-panel .nav-tabs > li.active > a:hover,
+		.tabs-panel .nav-tabs > li.active > a:focus,
+		.tabs-panel .nav > li > a:hover,
+		.tabs-panel .nav > li > a:focus{
+			background:none;
+		}
+		.tabs-panel .nav-tabs > li > a,
+		.tabs-panel .nav-tabs > li.active > a,
+		.tabs-panel .nav-tabs > li.active > a:hover,
+		.tabs-panel .nav-tabs > li.active > a:focus,
+		.tabs-panel .nav-tabs > li > a:hover{
+			border:none;
+		}
+		.tabs-panel .nav-tabs > li.active,
+		.tabs-panel .nav-tabs > li.active > a{
+			background:#4bac52;
+			color:#fff;
+		}
+		.tabs-panel .nav-tabs > li > a:hover{
+			background:#f4f4f4;
+		}
+		.tabs-panel .tab-content{
+			padding:20px;
+			font-size:13px;
+		}
+		.tabs-panel label.control-label{
+			text-transform:uppercase;
+			font-weight:normal;
+		}
+		.tabs-panel label.control-label.ratings{
+			padding-top:1px;
+		}
+		.tabs-panel .btn{
+			margin-left:-10px;
+		}
+
+/* Pagination Styles Starts */
+	.pagination{
+		margin:0;
+	}
+		.pagination > li > a{
+			color:#444c53;
+		}
+		.pagination > li:first-child > a,
+		.pagination > li:first-child > span,
+		.pagination > li:last-child > a,
+		.pagination > li:last-child > span{
+			-webkit-border-radius:0;
+			   -moz-border-radius:0;
+					border-radius:0;
+		}
+		.pagination > .active > a,
+		.pagination > .active > span,
+		.pagination > .active > a:hover,
+		.pagination > .active > span:hover,
+		.pagination > .active > a:focus,
+		.pagination > .active > span:focus{
+			background:#4bac52;
+			border-color:#4bac52;
+		}
+	.results{
+		padding-top:10px;
+		text-align:right;
+	}

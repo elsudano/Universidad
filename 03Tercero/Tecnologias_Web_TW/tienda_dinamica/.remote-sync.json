@@ -1,0 +1,13 @@
+{
+  "transport": "scp",
+  "uploadOnSave": true,
+  "hostname": "192.168.1.50",
+  "port": "22",
+  "target": "/SUDANO/tienda",
+  "ignore": [
+    ".git/**"
+  ],
+  "username": "root",
+  "keyfile": "/home/usuario/.ssh/carlos_de_la_torre",
+  "passphrase": "d3la70rr3"
+}

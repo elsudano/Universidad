@@ -1,6 +1,0 @@
-Sectario1,1,+1 por cada sectario en juego,No puedes dejar de ser sectario
-Sectario2,2,+2 por cada sectario en juego,No puedes dejar de ser sectario
-Sectario3,1,+1 por cada sectario en juego,No puedes dejar de ser sectario
-Sectario4,2,+2 por cada sectario en juego,No puedes dejar de ser sectario
-Sectario5,1,+1 por cada sectario en juego,No puedes dejar de ser sectario
-Sectario6,1,+1 por cada sectario en juego,No puedes dejar de ser sectario

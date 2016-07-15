@@ -1,0 +1,6 @@
+rm -Rf lib/* obj/*.o*
+g++ -m32 -g -O0 -Wall -DTIPO_LISTA -Llib -Iinclude -c src/pasa_test.cpp -o obj/pasa_test.o
+src/pasa_test.cpp:2:31: error fatal: conjuntopreguntas.h: No existe el fichero o el directorio
+compilación terminada.
+Makefile:54: recipe for target 'obj/pasa_test.o' failed
+gmake: *** [obj/pasa_test.o] Error 1

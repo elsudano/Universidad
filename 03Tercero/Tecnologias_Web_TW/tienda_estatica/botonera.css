@@ -1,0 +1,129 @@
+/*-----------------Botonera del Menu-----------------*/
+nav {
+    display: block;
+/*	background:#c6c6b4;*/
+}
+
+nav a{
+	color:#FFFFFF;
+	letter-spacing:0.025em;
+	text-shadow: 0px -1px 0px #b1b1b1;
+	text-decoration: none; /*remove the underline from the links*/
+	padding:4px 6px 2px 6px;
+	/*add a curve to the corners of the button*/
+/*	-webkit-border-radius:4px;
+	-moz-border-radius:4px;
+	border-radius:4px;*/
+	/*add a drop shadow to the button*/
+/*	-webkit-box-shadow: rgba(66, 66, 66, .75) 0 1px 10px;
+	-moz-box-shadow: rgba(66, 66, 66, .75) 0 1px 10px;
+	box-shadow: rgba(66, 66, 66, .75) 0 1px 10px;*/
+}
+
+nav a:hover, nav a:focus{
+	color:#FFFFFF;
+	text-shadow: none;
+	/*reduce the size of the box-shadow to give an impression of the button being pushed*/
+/*	-webkit-box-shadow: rgba(255, 255, 255, .95) 0 1px 4px;
+	-moz-box-shadow: rgba(255, 255, 255, .95) 0 1px 4px;
+	box-shadow: rgba(255, 255, 255, .95) 0 1px 4px;*/
+}
+
+nav a.A{
+	/*add a gradient to the background*/
+	background: #35B17C;
+	background: -webkit-linear-gradient(top, #54C997, #35B17C);
+	background: -moz-linear-gradient(top, #54C997, #35B17C);
+	background: -o-linear-gradient(top, #54C997, #35B17C);
+	background: -ms-linear-gradient(top, #54C997, #35B17C);
+	background: -linear-gradient(top, #54C997, #35B17C);
+	-pie-background: linear-gradient(#54C997, #35B17C); /*IE8 and earlier see CSS3Pie website for more info*/
+}
+nav a.A:hover, nav a.A:focus{
+	background: #19A066;
+}
+
+nav a.B{
+	/*add a gradient to the background*/
+	background:#6D3FB0;
+	background: -webkit-linear-gradient(top, #895EC8, #6D3FB0);
+	background: -moz-linear-gradient(top, #895EC8, #6D3FB0);
+	background: -o-linear-gradient(top, #895EC8, #6D3FB0);
+	background: -ms-linear-gradient(top, #895EC8, #6D3FB0);
+	background: -linear-gradient(top, #895EC8, #6D3FB0);
+	-pie-background: linear-gradient(#895EC8, #6D3FB0); /*IE8 and earlier see CSS3Pie website for more info*/
+}
+nav a.B:hover, nav a.B:focus{
+	background: #56259E;
+}
+
+nav a.C{
+	/*add a gradient to the background*/
+	background:#415EAE;
+	background: -webkit-linear-gradient(top, #607BC7, #415EAE);
+	background: -moz-linear-gradient(top, #607BC7, #415EAE);
+	background: -o-linear-gradient(top, #607BC7, #415EAE);
+	background: -ms-linear-gradient(top, #607BC7, #415EAE);
+	background: -linear-gradient(top, #607BC7, #415EAE);
+	-pie-background: linear-gradient(#607BC7, #415EAE); /*IE8 and earlier see CSS3Pie website for more info*/
+}
+nav a.C:hover, nav a.C:focus{
+	background: #27479D;
+}
+
+nav a.D{
+	/*add a gradient to the background*/
+	background:#FF956B;
+	background: -webkit-linear-gradient(top, #FFAF8F, #FF956B);
+	background: -moz-linear-gradient(top, #FFAF8F, #FF956B);
+	background: -o-linear-gradient(top, #FFAF8F, #FF956B);
+	background: -ms-linear-gradient(top, #FFAF8F, #FF956B);
+	background: -linear-gradient(top, #FFAF8F, #FF956B);
+	-pie-background: linear-gradient(#FFAF8F, #FF956B); /*IE8 and earlier see CSS3Pie website for more info*/
+}
+nav a.D:hover, nav a.D:focus{
+	background: #FF7F4C;
+}
+
+nav a.E{
+	/*add a gradient to the background*/
+	background:#D03E8D;
+	background: -webkit-linear-gradient(top, #DE5DA3, #D03E8D);
+	background: -moz-linear-gradient(top, #DE5DA3, #D03E8D);
+	background: -o-linear-gradient(top, #DE5DA3, #D03E8D);
+	background: -ms-linear-gradient(top, #DE5DA3, #D03E8D);
+	background: -linear-gradient(top, #DE5DA3, #D03E8D);
+	-pie-background: linear-gradient(#DE5DA3, #D03E8D); /*IE8 and earlier see CSS3Pie website for more info*/
+}
+nav a.E:hover, nav a.E:focus{
+	background: #BD1E75;
+}
+
+nav a.F{
+	/*add a gradient to the background*/
+	background:#A6373F;
+	background: -webkit-linear-gradient(top, #CF686F, #A6373F);
+	background: -moz-linear-gradient(top, #CF686F, #A6373F);
+	background: -o-linear-gradient(top, #CF686F, #A6373F);
+	background: -ms-linear-gradient(top, #CF686F, #A6373F);
+	background: -linear-gradient(top, #CF686F, #A6373F);
+	-pie-background: linear-gradient(#CF686F, #A6373F); /*IE8 and earlier see CSS3Pie website for more info*/
+}
+nav a.F:hover, nav a.F:focus{
+	background: #A6373F;
+}
+
+nav a.G{
+	/*add a gradient to the background*/
+	background:#E9AA25;
+	background: -webkit-linear-gradient(top, #FFC54C, #E9AA25);
+	background: -moz-linear-gradient(top, #FFC54C, #E9AA25);
+	background: -o-linear-gradient(top, #FFC54C, #E9AA25);
+	background: -ms-linear-gradient(top, #FFC54C, #E9AA25);
+	background: -linear-gradient(top, #FFC54C, #E9AA25);
+	-pie-background: linear-gradient(#FFC54C, #E9AA25); /*IE8 and earlier see CSS3Pie website for more info*/
+}
+
+nav a.G:hover, nav a.G:focus{
+	background: #E9AA25;
+}

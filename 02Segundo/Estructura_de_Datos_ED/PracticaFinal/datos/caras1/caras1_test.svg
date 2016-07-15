@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+
+
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" onload="init(evt)" >
+
+  <style>
+    .caption{
+	font-size: 14px;
+	font-family: Georgia, serif;
+    }
+    .tooltip{
+	font-size: 12px;
+    }
+    .tooltip_bg{
+	fill: white;
+	stroke: black;
+	stroke-width: 1;
+	opacity: 0.85;
+    }
+  </style>
+
+  <script LANGUAGE="JavaScript">
+    <![CDATA[
+
+        
+        /*function WriteFile()
+	{
+
+	    var fh = fopen("/tmp/MyFile.txt", 3); // Open the file for writing
+
+	    if(fh!=-1) // If the file has been successfully opened
+	    {
+		var str = "Some text goes here...";
+		fwrite(fh, str); // Write the string to a file
+		fclose(fh); // Close the file
+	    }
+
+	}
+	*/
+	
+	function writeTextFile(afilename, output)
+	{
+	
+	
+	if (window.File && window.FileReader && window.FileList && window.Blob) {
+	      var txtFile =new File(["prueba"],afilename,{type: 'text/plain'});
+	 
+	  
+	  txtFile.write(output);
+	  txtFile.close();
+	
+	
+	  } else {
+	      alert('The File APIs are not fully supported in this browser.');
+	  }
+	 
+	}
+	function onInitFs(fs) {
+
+	fs.root.getFile('log.txt', {create: true}, function(fileEntry) {
+
+	// Create a FileWriter object for our FileEntry (log.txt).
+	fileEntry.createWriter(function(fileWriter) {
+
+	  fileWriter.onwriteend = function(e) {
+	    console.log('Write completed.');
+	  };
+
+	  fileWriter.onerror = function(e) {
+	    console.log('Write failed: ' + e.toString());
+	  };
+
+	  // Create a new Blob and write it to log.txt.
+	  var blob = new Blob(['Lorem Ipsum'], {type: 'text/plain'});
+
+	  fileWriter.write(blob);
+
+	}, errorHandler);
+
+	}, errorHandler);
+
+
+	}
+
+	function init(evt)
+	{
+	    if ( window.svgDocument == null )
+	    {
+		svgDocument = evt.target.ownerDocument;
+	    }
+
+	  tooltip = svgDocument.getElementById('tooltip');
+
+	  window.requestFileSystem(window.TEMPORARY, 1024*1024, onInitFs, errorHandler);
+
+
+	}
+
+	function SaveDatFileBro(localstorage) {
+	localstorage.root.getFile("/tmp/info.txt", {create: true}, function(DatFile) {
+	  DatFile.createWriter(function(DatContent) {
+	  var blob = new Blob(["Lorem Ipsum"], {type: "text/plain"});
+	  DatContent.write(blob);
+	});
+	});
+	}
+	function ShowTooltip(evt, mouseovertext)
+	{
+	   //tooltip = svgDocument.getElementById(nombre);
+	    tooltip.setAttributeNS(null,"x",evt.clientX+11);
+	    tooltip.setAttributeNS(null,"y",evt.clientY+27);
+	    tooltip.firstChild.data = mouseovertext;
+	    tooltip.setAttributeNS(null,"visibility","visible");
+
+	   /* length = tooltip.getComputedTextLength();
+	    tooltip_bg.setAttributeNS(null,"width",length+8);
+	    tooltip_bg.setAttributeNS(null,"x",evt.clientX+8);
+	    tooltip_bg.setAttributeNS(null,"y",evt.clientY+14);
+	    tooltip_bg.setAttributeNS(null,"visibility","visible");*/
+	}
+
+	function HideTooltip(evt)
+	{
+	    tooltip.setAttributeNS(null,"visibility","hidden");
+	    tooltip_bg.setAttributeNS(null,"visibility","hidden");
+	}
+
+	function changerect(evt,nombre) {
+	  var f ="/tmp/comunicador.txt";
+	  writeTextFile(f, nombre);
+	  /*WriteFile();*/
+          var svgobj=evt.target;
+	  if (svgobj.style.opacity=='0.2'){
+	   svgobj.style.opacity='0.8';
+	  }
+	  else {
+	   svgobj.style.opacity='0.2';
+	  }
+	  
+          //svgobj.style.opacity= 0;
+          
+         }
+    ]]>
+  </script>
+  <rect x="2" y="2" width="500" height="710" stroke="blue" fill="purple"
+       fill-opacity="0.5" stroke-opacity="0.8"/>
+      <text class="tooltip" id="tooltip" x="0" y="0" visibility="hidden">Tooltip</text>
+      <image width="100" height="100" x="10" y="10" xlink:href="alejandro.png"    onmousemove="ShowTooltip(evt, 'Alejandro')"
+       onmouseout="HideTooltip(evt)" onclick="changerect(evt,'Alejandro')" opacity='0.8'/> 
+    
+	<image width="100" height="100"  x="150" y="10" xlink:href="alfonso.png"  onmousemove="ShowTooltip(evt, 'Alfonso')"
+	onmouseout="HideTooltip(evt)" onclick="changerect(evt,'Alfonso')" opacity='0.8'/>
+       
+	<image width="100" height="100" x="290" y="10" xlink:href="antonio.png"  onmousemove="ShowTooltip(evt, 'Antonio')"
+	onmouseout="HideTooltip(evt)" onclick="changerect(evt,'Antonio')" opacity='0.8'/>
+       
+	<image width="100" height="100" x="10" y="150" xlink:href="cristina.png"  onmousemove="ShowTooltip(evt, 'Cristina')"
+	onmouseout="HideTooltip(evt)" onclick="changerect(evt,'Cristina')" opacity='0.8'/>
+       
+       <image width="100" height="100" x="150" y="150" xlink:href="gabriela.png"  onmousemove="ShowTooltip(evt, 'Grabiela')"
+	onmouseout="HideTooltip(evt)" onclick="changerect(evt,'Grabiela')" opacity='0.8'/>
+       
+       
+       <image width="100" height="100" x="290" y="150" xlink:href="ivan.png"  onmousemove="ShowTooltip(evt, 'Ivan')"
+	onmouseout="HideTooltip(evt)" onclick="changerect(evt,'Ivan')" opacity='0.8'/>
+      
+        <image width="100" height="100" x="10" y="300" xlink:href="javier.png"  onmousemove="ShowTooltip(evt, 'Javier')"
+	onmouseout="HideTooltip(evt)" onclick="changerect(evt,'Javier')" opacity='0.8'/>
+	
+	 
+	<image width="100" height="100" x="150" y="300" xlink:href="juan.png"    onmousemove="ShowTooltip(evt, 'Juan')"
+       onmouseout="HideTooltip(evt)" onclick="changerect(evt,'Juan')" opacity='0.8'/> 
+	
+	<image width="100" height="100" x="290" y="300" xlink:href="laura.png"  onmousemove="ShowTooltip(evt, 'Laura')"
+	onmouseout="HideTooltip(evt)" onclick="changerect(evt,'Laura')" opacity='0.8'/>
+	
+	<image width="100" height="100" x="400" y="300" xlink:href="luis.png"  onmousemove="ShowTooltip(evt, 'Luis')"
+	onmouseout="HideTooltip(evt)" onclick="changerect(evt,'Luis')" opacity='0.8'/>
+	
+	<image width="100" height="100" x="10" y="450" xlink:href="marco.png"  onmousemove="ShowTooltip(evt, 'Marco')"
+	onmouseout="HideTooltip(evt)" onclick="changerect(evt,'Marco')" opacity='0.8'/>
+	
+	<image width="100" height="100" x="150" y="450" xlink:href="maria.png"  onmousemove="ShowTooltip(evt, 'Maria')"
+	onmouseout="HideTooltip(evt)" onclick="changerect(evt,'Maria')" opacity='0.8'/>
+	
+	<image width="100" height="100" x="290" y="450" xlink:href="paco.png"  onmousemove="ShowTooltip(evt, 'Paco')"
+	onmouseout="HideTooltip(evt)" onclick="changerect(evt,'Paco')" opacity='0.8'/>
+	
+	<image width="100" height="100" x="10" y="600" xlink:href="pepe.png"    onmousemove="ShowTooltip(evt, 'Pepe')"
+       onmouseout="HideTooltip(evt)" onclick="changerect(evt,'Pepe')" opacity='0.8'/> 
+    
+       <image width="100" height="100" x="150" y="600" xlink:href="sofia.png"    onmousemove="ShowTooltip(evt, 'Sofia')"
+       onmouseout="HideTooltip(evt)" onclick="changerect(evt,'Sofia')" opacity='0.8'/>  
+       
+
+       <image width="100" height="100" x="290" y="600" xlink:href="sonia.png"    onmousemove="ShowTooltip(evt, 'Sonia')"
+       onmouseout="HideTooltip(evt)" onclick="changerect(evt,'Sonia')" opacity='0.8'/>  
+	
+	  
+	
+	
+</svg>

@@ -1,0 +1,7 @@
+Los ficheros en este directorio son:
+* fichero con extension txt: corresponde a los ficheros de configuracion. Estos se componen de tres secciones:
+    1) Seccion de preguntas 
+    2) Seccion de personajes
+    3) El fichero con la descripcion de los personajes con extension (tree).
+   
+* ficheros tree. Codifican los rasgos de los personajes descritos en la seccion de personajes del fichero txt correspondiente.

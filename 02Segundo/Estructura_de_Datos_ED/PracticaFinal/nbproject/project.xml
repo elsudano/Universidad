@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://www.netbeans.org/ns/project/1">
+    <type>org.netbeans.modules.cnd.makeproject</type>
+    <configuration>
+        <data xmlns="http://www.netbeans.org/ns/make-project/1">
+            <name>whoiswho</name>
+            <c-extensions/>
+            <cpp-extensions>cpp</cpp-extensions>
+            <header-extensions>h,hxx</header-extensions>
+            <sourceEncoding>UTF-8</sourceEncoding>
+            <make-dep-projects/>
+            <sourceRootList>
+                <sourceRootElem>.</sourceRootElem>
+            </sourceRootList>
+            <confList>
+                <confElem>
+                    <name>Default</name>
+                    <type>0</type>
+                </confElem>
+                <confElem>
+                    <name>PruArbParam</name>
+                    <type>0</type>
+                </confElem>
+                <confElem>
+                    <name>TestParam</name>
+                    <type>0</type>
+                </confElem>
+                <confElem>
+                    <name>QuEQu_ban_hum</name>
+                    <type>0</type>
+                </confElem>
+                <confElem>
+                    <name>Sufi_conju_no_sufi</name>
+                    <type>0</type>
+                </confElem>
+                <confElem>
+                    <name>Min_conju_no_min</name>
+                    <type>0</type>
+                </confElem>
+            </confList>
+            <formatting>
+                <project-formatting-style>false</project-formatting-style>
+            </formatting>
+        </data>
+    </configuration>
+</project>

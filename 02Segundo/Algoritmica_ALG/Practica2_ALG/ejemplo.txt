@@ -1,0 +1,186 @@
+[1;37m Lista Desordenada 
+ 15,74,65,7,30,53,20,78,42
+[0;37m
+[1;31m----------------------------------------------------
+Posición del puntero de la Izquierda[1;37m
+[0;32mValor del pivote: 15, Posición del pivote: 0[1;37m
+15,74,65,[1;31m7[1;37m,30,53,20,78,42
+En este momento el valor del puntero izquierdo es mas pequeño o igual que el valor del pivote
+[1;31m----------------------------------------------------[1;37m
+[1;34m----------------------------------------------------
+Posición del puntero de la Derecha[1;37m
+[0;32mValor del pivote: 15, Posición del pivote: 0[1;37m
+15,74,65,7,30,53,20,78,[1;34m42[1;37m
+En este momento el valor del puntero derecho es mas grande o igual que el valor del pivote
+[1;34m----------------------------------------------------[1;37m
+[1;33m----------------------------------------------------
+Posicionados los dos punteros si el izquierdo es mas pequeño 
+que el derecho se intercambian los valores y se sigue recorriendo
+el vector hasta que se crucen los punteros[1;37m
+15,74,65,[1;31m7[1;37m,30,53,20,78,[1;34m42[1;37m[0;32m Antés[1;37m
+15,74,65,[1;33m42[1;37m,30,53,20,78,[1;33m7[1;37m[0;32m Despúes
+[1;33m----------------------------------------------------[1;37m
+[1;31m----------------------------------------------------
+Seguimos recorriendo el vector, posición del puntero de la Izquierda[1;37m
+[0;32m Valor del pivote: 15, Posición del pivote: 0[1;37m
+15,74,65,42,30,53,20,78,[1;31m7[1;37m
+En este momento el valor del puntero izquierdo es mas pequeño o igual que el valor del pivote
+[1;31m----------------------------------------------------[1;37m
+[1;34m----------------------------------------------------
+Seguimos recorriendo el vector, posición del puntero de la Derecha[1;37m
+[0;32m Valor del pivote: 15, Posición del pivote: 0[1;37m
+15,74,65,42,30,53,20,[1;34m78[1;37m,7
+En este momento el valor del puntero derecho es mas grande o igual que el valor del pivote
+[1;34m----------------------------------------------------[1;37m
+[1;33m----------------------------------------------------
+Como los punteros se han cruzado lo que se hace
+es intercambiar la posición del pivote actual
+por la posición del puntero de la derecha[1;37m
+[0;32mValor del pivote: 15, Posición del pivote: 0[1;37m
+15,74,65,42,30,53,20,[1;34m78[1;37m,[1;31m7[1;37m[0;32m Antés[1;37m
+[1;33m78[1;37m,74,65,42,30,53,20,[1;33m15[1;37m,7[0;32m Despúes[1;37m
+[1;33m----------------------------------------------------[1;37m
+[1;35m----------------------------------------------------[1;37m
+El valor que ha devuelto la funcion pivote() es: 7
+esta es la posición actual que tiene el pivote cuyo valor es: 15
+Como la posición que buscamos es menor que la posición devuelta
+lo que se hace a continuación es partir el vector en 2
+de tal forma que la posición devuelta menos una unidad
+será el limite superior quedando el limite en: 6
+que tiene el valor: 20
+78,74,65,42,30,53,[1;32m20[1;37m,15,7
+[1;35m----------------------------------------------------[1;37m
+[1;31m----------------------------------------------------
+Posición del puntero de la Izquierda[1;37m
+[0;32mValor del pivote: 78, Posición del pivote: 0[1;37m
+78,[1;31m74[1;37m,65,42,30,53,20,15,7
+En este momento el valor del puntero izquierdo es mas pequeño o igual que el valor del pivote
+[1;31m----------------------------------------------------[1;37m
+[1;34m----------------------------------------------------
+Posición del puntero de la Derecha[1;37m
+[0;32mValor del pivote: 78, Posición del pivote: 0[1;37m
+[1;34m78[1;37m,74,65,42,30,53,20,15,7
+En este momento el valor del puntero derecho es mas grande o igual que el valor del pivote
+[1;34m----------------------------------------------------[1;37m
+[1;33m----------------------------------------------------
+Como los punteros se han cruzado lo que se hace
+es intercambiar la posición del pivote actual
+por la posición del puntero de la derecha[1;37m
+[0;32mValor del pivote: 78, Posición del pivote: 0[1;37m
+[1;34m78[1;37m,[1;31m74[1;37m,65,42,30,53,20,15,7[0;32m Antés[1;37m
+[1;33m78[1;37m,74,65,42,30,53,20,15,7[0;32m Despúes[1;37m
+[1;33m----------------------------------------------------[1;37m
+[1;35m----------------------------------------------------[1;37m
+El valor que ha devuelto la funcion pivote() es: 0
+esta es la posición actual que tiene el pivote cuyo valor es: 78
+Como la posición que buscamos es mayor que la posición devuelta
+lo que se hace a continuación es partir el vector en 2
+de tal forma que el la posición devuelta mas una unidad
+será el limite inferior quedando el limite en: 1
+que tiene el valor: 74
+78,[1;32m74[1;37m,65,42,30,53,20,15,7
+[1;35m----------------------------------------------------[1;37m
+[1;31m----------------------------------------------------
+Posición del puntero de la Izquierda[1;37m
+[0;32mValor del pivote: 74, Posición del pivote: 1[1;37m
+78,74,[1;31m65[1;37m,42,30,53,20,15,7
+En este momento el valor del puntero izquierdo es mas pequeño o igual que el valor del pivote
+[1;31m----------------------------------------------------[1;37m
+[1;34m----------------------------------------------------
+Posición del puntero de la Derecha[1;37m
+[0;32mValor del pivote: 74, Posición del pivote: 1[1;37m
+78,[1;34m74[1;37m,65,42,30,53,20,15,7
+En este momento el valor del puntero derecho es mas grande o igual que el valor del pivote
+[1;34m----------------------------------------------------[1;37m
+[1;33m----------------------------------------------------
+Como los punteros se han cruzado lo que se hace
+es intercambiar la posición del pivote actual
+por la posición del puntero de la derecha[1;37m
+[0;32mValor del pivote: 74, Posición del pivote: 1[1;37m
+78,[1;34m74[1;37m,[1;31m65[1;37m,42,30,53,20,15,7[0;32m Antés[1;37m
+78,[1;33m74[1;37m,65,42,30,53,20,15,7[0;32m Despúes[1;37m
+[1;33m----------------------------------------------------[1;37m
+[1;35m----------------------------------------------------[1;37m
+El valor que ha devuelto la funcion pivote() es: 1
+esta es la posición actual que tiene el pivote cuyo valor es: 74
+Como la posición que buscamos es mayor que la posición devuelta
+lo que se hace a continuación es partir el vector en 2
+de tal forma que el la posición devuelta mas una unidad
+será el limite inferior quedando el limite en: 2
+que tiene el valor: 65
+78,74,[1;32m65[1;37m,42,30,53,20,15,7
+[1;35m----------------------------------------------------[1;37m
+[1;31m----------------------------------------------------
+Posición del puntero de la Izquierda[1;37m
+[0;32mValor del pivote: 65, Posición del pivote: 2[1;37m
+78,74,65,[1;31m42[1;37m,30,53,20,15,7
+En este momento el valor del puntero izquierdo es mas pequeño o igual que el valor del pivote
+[1;31m----------------------------------------------------[1;37m
+[1;34m----------------------------------------------------
+Posición del puntero de la Derecha[1;37m
+[0;32mValor del pivote: 65, Posición del pivote: 2[1;37m
+78,74,[1;34m65[1;37m,42,30,53,20,15,7
+En este momento el valor del puntero derecho es mas grande o igual que el valor del pivote
+[1;34m----------------------------------------------------[1;37m
+[1;33m----------------------------------------------------
+Como los punteros se han cruzado lo que se hace
+es intercambiar la posición del pivote actual
+por la posición del puntero de la derecha[1;37m
+[0;32mValor del pivote: 65, Posición del pivote: 2[1;37m
+78,74,[1;34m65[1;37m,[1;31m42[1;37m,30,53,20,15,7[0;32m Antés[1;37m
+78,74,[1;33m65[1;37m,42,30,53,20,15,7[0;32m Despúes[1;37m
+[1;33m----------------------------------------------------[1;37m
+[1;35m----------------------------------------------------[1;37m
+El valor que ha devuelto la funcion pivote() es: 2
+esta es la posición actual que tiene el pivote cuyo valor es: 65
+Como la posición que buscamos es mayor que la posición devuelta
+lo que se hace a continuación es partir el vector en 2
+de tal forma que el la posición devuelta mas una unidad
+será el limite inferior quedando el limite en: 3
+que tiene el valor: 42
+78,74,65,[1;32m42[1;37m,30,53,20,15,7
+[1;35m----------------------------------------------------[1;37m
+[1;31m----------------------------------------------------
+Posición del puntero de la Izquierda[1;37m
+[0;32mValor del pivote: 42, Posición del pivote: 3[1;37m
+78,74,65,42,[1;31m30[1;37m,53,20,15,7
+En este momento el valor del puntero izquierdo es mas pequeño o igual que el valor del pivote
+[1;31m----------------------------------------------------[1;37m
+[1;34m----------------------------------------------------
+Posición del puntero de la Derecha[1;37m
+[0;32mValor del pivote: 42, Posición del pivote: 3[1;37m
+78,74,65,42,30,[1;34m53[1;37m,20,15,7
+En este momento el valor del puntero derecho es mas grande o igual que el valor del pivote
+[1;34m----------------------------------------------------[1;37m
+[1;33m----------------------------------------------------
+Posicionados los dos punteros si el izquierdo es mas pequeño 
+que el derecho se intercambian los valores y se sigue recorriendo
+el vector hasta que se crucen los punteros[1;37m
+78,74,65,42,[1;31m30[1;37m,[1;34m53[1;37m,20,15,7[0;32m Antés[1;37m
+78,74,65,42,[1;33m53[1;37m,[1;33m30[1;37m,20,15,7[0;32m Despúes
+[1;33m----------------------------------------------------[1;37m
+[1;31m----------------------------------------------------
+Seguimos recorriendo el vector, posición del puntero de la Izquierda[1;37m
+[0;32m Valor del pivote: 42, Posición del pivote: 3[1;37m
+78,74,65,42,53,[1;31m30[1;37m,20,15,7
+En este momento el valor del puntero izquierdo es mas pequeño o igual que el valor del pivote
+[1;31m----------------------------------------------------[1;37m
+[1;34m----------------------------------------------------
+Seguimos recorriendo el vector, posición del puntero de la Derecha[1;37m
+[0;32m Valor del pivote: 42, Posición del pivote: 3[1;37m
+78,74,65,42,[1;34m53[1;37m,30,20,15,7
+En este momento el valor del puntero derecho es mas grande o igual que el valor del pivote
+[1;34m----------------------------------------------------[1;37m
+[1;33m----------------------------------------------------
+Como los punteros se han cruzado lo que se hace
+es intercambiar la posición del pivote actual
+por la posición del puntero de la derecha[1;37m
+[0;32mValor del pivote: 42, Posición del pivote: 3[1;37m
+78,74,65,42,[1;34m53[1;37m,[1;31m30[1;37m,20,15,7[0;32m Antés[1;37m
+78,74,65,[1;33m53[1;37m,[1;33m42[1;37m,30,20,15,7[0;32m Despúes[1;37m
+[1;33m----------------------------------------------------[1;37m
+[1;37m Lista Modificada 
+ 78,74,65,53,42,30,20,15,7
+[1;37m
+Valor del elemento seleccionado: 42
+Tiempo empleado en la ordenación: 0.001006043[0;39m

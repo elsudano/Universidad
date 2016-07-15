@@ -1,0 +1,87 @@
+#Preguntas posibles
+15 #numero de preguntas
+¿Tiene barba?
+¿Tiene bigote?
+¿Es calvo?
+¿Es Claro su color de ojos?
+¿Es Oscuro su color de ojos?
+¿Tiene el pelo Negro?
+¿Tiene el pelo Rubio?
+¿Tiene el pelo Blanco?
+¿Tiene el pelo Pelirrojo?
+¿Tiene el pelo Marron?
+¿Tiene gafas?
+¿Es Mujer?
+¿Es Hombre?
+¿Es Largo su pelo?
+¿Es Corto su pelo?
+
+
+#PERSONAJES
+15 #numero de personajes
+##############0##########################
+
+#nombre del personaje
+Alejandro 
+datos/caras1/alejandro.png #imagen del personaje
+
+###########1#############################
+Alfonso
+datos/caras1/alfonso.png
+
+########################################
+Antonio
+datos/caras1/antonio.png
+############3############################
+Cristina
+datos/caras1/cristina.png
+
+############4############################
+Gabriela
+datos/caras1/gabriela.png
+
+############5############################
+Ivan
+datos/caras1/ivan.png
+
+############6############################
+Javier
+datos/caras1/javier.pǹg
+
+############7############################
+Juan
+datos/caras1/juan.png
+
+############8############################
+Laura
+datos/caras1/laura.png
+
+############9############################
+Luis
+datos/caras1/luis.png
+
+############10############################
+Marco
+datos/caras1/marco.png
+
+############11############################
+Maria
+datos/caras1/maria.png
+
+############12############################
+Paco
+datos/caras1/paco.png
+
+############13############################
+Pepe
+datos/caras1/pepe.png
+
+############14############################
+Sonia
+datos/caras1/sonia.png
+
+
+
+
+#Informacion con el arbol describiendo a los personajes.
+datos/conjunto_no_suficiente.tree

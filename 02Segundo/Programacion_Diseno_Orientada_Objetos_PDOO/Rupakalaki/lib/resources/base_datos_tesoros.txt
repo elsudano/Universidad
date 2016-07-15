@@ -1,0 +1,32 @@
+Si mi amo,HELMET,4,7,0
+Botas de investigacion,SHOES,3,4,600
+Capucha de Cthulhu,HELMET,3,5,500
+A prueba de babas,ARMOR,2,5,400
+Botas de lluvia acida,BOTHHANDS,1,1,800
+Casco minero,HELMET,2,4,400
+Ametralladora Thompson,BOTHHANDS,4,8,600
+Camiseta de la UGR,ARMOR,1,7,100
+Clavo de rail ferroviario,ONEHAND,3,6,400
+Cuchillo de sushi arcano,ONEHAND,2,3,300
+Fez alopodo,HELMET,3,5,700
+Hacha prehistorica,ONEHAND,2,5,500
+El aparato del Pr. Tesla,ARMOR,4,8,900
+Gaita,BOTHHANDS,4,5,500
+Insecticida,ONEHAND,2,3,300
+Escopeta de 3 caniones,BOTHHANDS,4,6,700
+Garabato mistico,ONEHAND,2,2,300
+La fuerza de Mr. T,NECKLACE,0,0,1000
+La rebeca metalica,ARMOR,2,3,400
+Mazo de los antiguos,ONEHAND,3,4,200
+Necro-playboycon,ONEHAND,3,5,300
+Lanzallamas,BOTHHANDS,4,8,800
+Necro-comicon,ONEHAND,1,1,100
+Necronomicon,BOTHHANDS,5,7,800
+Linterna a 2 manos,BOTHHANDS,3,6,400
+Necro-gnomicon,ONEHAND,2,4,200
+Necrotelecom,HELMET,2,3,300
+Porra preternatural,ONEHAND,2,3,200
+Tentaculo de pega,HELMET,0,1,200
+Zapato deja-amigos,SHOES,0,1,500
+Shogulador,BOTHHANDS,1,1,600
+Varita de atizamiento,ONEHAND,3,4,400

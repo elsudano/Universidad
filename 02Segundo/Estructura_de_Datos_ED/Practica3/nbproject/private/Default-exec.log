@@ -1,0 +1,40 @@
+called: /usr/lib64/ccache/g++
+	/home/usuario/ownCloud/Facultad/01_Estructura_de_Datos_ED_5to/Practicas_15-16/Practica3/pila_min
+	g++
+	-m32
+	-g
+	-DVER1
+	-Llib
+	-Iinclude
+	-O0
+	-c
+	src/usocolas.cpp
+	-o
+	obj/usocolas.o
+
+called: /bin/g++
+	/home/usuario/ownCloud/Facultad/01_Estructura_de_Datos_ED_5to/Practicas_15-16/Practica3/pila_min
+	/bin/g++
+	-m32
+	-g
+	-Llib
+	-O0
+	-DVER1
+	-Iinclude
+	-E
+	src/usocolas.cpp
+
+called: /bin/g++
+	/home/usuario/ownCloud/Facultad/01_Estructura_de_Datos_ED_5to/Practicas_15-16/Practica3/pila_min
+	/bin/g++
+	-m32
+	-g
+	-DVER1
+	-Llib
+	-Iinclude
+	-O0
+	-c
+	src/usocolas.cpp
+	-o
+	obj/usocolas.o
+

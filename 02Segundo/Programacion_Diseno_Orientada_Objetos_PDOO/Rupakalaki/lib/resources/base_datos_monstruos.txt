@@ -1,0 +1,26 @@
+Angeles de la noche ibicenca,14,4,1,Te atrapan para llevarte de fiesta. Descarta 1 mano visible y 1 mano oculta,0,0,0,ONEHAND-,ONEHAND-,false,0
+Bicefalo,20,1,1,Te faltan manos para tanta cabeza. Pierdes 3 niveles y tus tesoros visibles de las manos,3,10,0,,,false,0
+El Espia,5,1,1,Te asusta en la noche. Pierdes un casco visible,0,0,0,HELMET-,,false,0
+El Gorron en el umbral,10,3,1,Pierdes todos tus tesoros visibles,0,10,0,,,false,0
+Pollipolipo volante,3,1,1,Da mucho asquito. Pierdes 3 niveles,3,0,0,,,false,0
+3 Byakhees de bonanza,8,2,1,Pierdes tu armadura visible y otra oculta,0,0,0,ARMOR-,ARMOR-,false,0
+Bichgooth,2,1,1,Sientes bichos bajo la ropa. Descarta la armadura visible,0,0,0,HELMET-,,false,0
+Chibithulhu,2,1,1,Embobados con el lindo primigenio te descartas de tu casco visible,0,0,0,HELMET-,,false,0
+Dameargo,1,2,1,Te intentas escaquear. Pierdes una mano Visible,0,0,0,ONEHAND-,,false,0
+El Gran Cthulhu,20,2,5,Hoy no es tu día de Suerte y Mueres,0,10,10,,,true,4
+El Lenguas,20,1,1,Menudo susto te llevas. Pierdes 2 niveles y 5 tesoros visibles,2,5,0,,,false,0
+El mal indecible impronunciable,10,3,1,Pierdes una mano visible,0,0,0,ONEHAND-,,false,-2
+El rey de rosa,13,4,2,Pierdes 5 niveles y 3 tesoros visibles,5,3,0,,,false,0
+El sopor de Dunwich,2,1,1,El primordial bostezo contagioso. Pierdes el calzado visible,0,0,0,SHOES-,,false,0
+Familia Feliz,1,4,1,La familia te Atrapa. Estas muerto,0,10,10,,,true,0
+Felpuggoth,2,1,1,Pierdes tu casco y tu armadura visible. Pierdes tus manos ocultas.,0,0,0,HELMET-ARMOR-,BOTHHANDS-,false,5
+H.P. Munchcraft,6,2,1,Pierdes la armadura visible,0,0,0,HELMET-,,false,0
+La que redacta en las tinieblas,2,1,1,Toses los pulmones y pierdes 2 niveles,2,0,0,,,false,0
+Lolitagooth,2,1,1,Pintalabios negro. Pierdes 2 niveles.,2,0,0,,,false,3
+Los hondos,8,2,1,Estos monstruos resultan bastante superficiales y te aburren mortalmente. Estas muerto,0,10,10,,,true,0
+Roboggoth,8,2,1,La quinta directiva primaria te obliga a perder 2 niveles y un tesoro 2 manos visible,2,0,0,BOTHHANDS-,,false,0
+Semillas Cthulhu,4,2,1,Pierdes 2 niveles y 2 tesoros ocultos,2,0,2,,,false,0
+Serpiente Politico,8,2,1,Tu gobierno te Recorta 2 niveles,2,0,0,,,false,-2
+Shoggoth,16,4,2,Pierdes 2 niveles.,2,0,0,,,false,-4
+Testigos Oculares,6,2,1,Pierdes tus tesoros visibles JAJAJA,0,10,0,,,false,2
+Yskhtihyssg-Goth,12,3,1,No le hace gracia que pronuncien mal su nombre. Estas muerto,0,10,10,,,true,0
