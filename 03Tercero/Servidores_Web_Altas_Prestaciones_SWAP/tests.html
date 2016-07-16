@@ -245,7 +245,7 @@
 	function actualizarNumPreguntasTema(){
 		$.ajax({
 			type: "GET",
-			url: "https://raw.githubusercontent.com/elsudano/Facultad/raw/FACULTAD/03Tercero/Servidores_Web_Altas_Prestaciones_SWAP/Ejercicios_Clase/xml/tema" + $("#tema_elegido").val() + ".xml",
+			url: "https://raw.githubusercontent.com/elsudano/Facultad/FACULTAD/03Tercero/Servidores_Web_Altas_Prestaciones_SWAP/Ejercicios_Clase/xml/tema" + $("#tema_elegido").val() + ".xml",
 			dataType: "xml",
 			success: function (datos) {
 				// Número total de preguntas
@@ -269,7 +269,7 @@
 		$("#opciones").find("input:radio").prop("checked",false);
 		$.ajax({
 		    type: "GET",
-				url: "https://raw.githubusercontent.com/elsudano/Facultad/raw/FACULTAD/03Tercero/Servidores_Web_Altas_Prestaciones_SWAP/Ejercicios_Clase/xml/tema" + $("#tema_elegido").val() + ".xml",
+				url: "https://raw.githubusercontent.com/elsudano/Facultad/FACULTAD/03Tercero/Servidores_Web_Altas_Prestaciones_SWAP/Ejercicios_Clase/xml/tema" + $("#tema_elegido").val() + ".xml",
 		    dataType: "xml",
 		    success: function (datos) {
 				if($("#orden_elegido").val() == "ordenado"){
