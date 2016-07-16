@@ -12,7 +12,7 @@ En este repositorio guardaremos todas las practicas de la asignatura SWAP
 ### Ejercicios de Clase
 |Descripción||
 |:---|---:|
-|En la carpeta de ejercicios de clase iremos añadiendo las respuestas de las preguntas propuestas en clase, estas preguntas son las que luego se usarán para el examen de la asignatura, así se generan en xml para poder usar el script [tests.hml](https://github.com/elsudano/Facultad/raw/FACULTAD/03Tercero/Servidores_Web_Altas_Prestaciones_SWAP/tests.html)|![Imagen de Prueba](resources/ejercicios.jpg)|![Imagen de Prueba](resources/ejercicios.jpg)|
+|En la carpeta de ejercicios de clase iremos añadiendo las respuestas de las preguntas propuestas en clase, estas preguntas son las que luego se usarán para el examen de la asignatura, así se generan en xml para poder usar el script [tests.html](https://rawgit.com/elsudano/Facultad/FACULTAD/03Tercero/Servidores_Web_Altas_Prestaciones_SWAP/tests.html)|![Imagen de Prueba](resources/ejercicios.jpg)|![Imagen de Prueba](resources/ejercicios.jpg)|
 
 ### Primera Práctica
 |Descripción||
