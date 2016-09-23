@@ -13,7 +13,7 @@ public class Main {
          */
         NapakalakiView napakalakiView = new NapakalakiView();
         /**
-         * Creamos el controlador que gestionara la logica del programa.
+         * Creamos el controlador que gestionara la lógica del programa.
          */
         Napakalaki game = Napakalaki.getInstance();
         /**

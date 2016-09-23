@@ -36,15 +36,18 @@ public class SobelOP extends BufferedImageOP {
         Kernel maskX = new Kernel(3, 3, datamaskX);
         ConvolveOp gradientX = new ConvolveOp(maskX);
         BufferedImage imgAuxX = gradientX.filter(second, null);
+        
         float[] datamaskY = {1.0f, 0.0f, -1.0f, 2.0f, 0.0f, -2.0f, 1.0f, 0.0f, -1.0f};
         Kernel maskY = new Kernel(3, 3, datamaskY);
         ConvolveOp gradientY = new ConvolveOp(maskY);
         BufferedImage imgAuxY = gradientY.filter(second, null);
+        
         BufferedImagePixelIterator itX = new BufferedImagePixelIterator(imgAuxX);
         BufferedImagePixelIterator itY = new BufferedImagePixelIterator(imgAuxY);
         PixelData pixelX, pixelY;
         Color color;
         int samX, samY, mag;
+        
         while (itX.hasNext()) {
             pixelX = itX.next();
             pixelY = itY.next();
