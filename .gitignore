@@ -2,9 +2,11 @@
 *.layout
 *.depend
 *.o
-nbproject/*
-!nbproject/private/
-!gen/
-!bin/
-!nbandroid/
-!build/
+*.dia
+*.png
+*.dia~
+nbproject/
+gen/
+bin/
+nbandroid/
+build/
