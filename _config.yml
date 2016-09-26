@@ -5,7 +5,7 @@ locale: es_ES
 description: Paginas que contienen todos los trabajos, ejercicios, examenes y practicas que he ido desarrollando a lo largo de estos años mientras cursaba la titulación de Grado en Ingeniería Informática en la facultad de Granada.
 logo: site-logo.png
 search: true
-url: http://localhost:4000
+url: https://elsudano.github.io
 
 # Jekyll configuration
 
