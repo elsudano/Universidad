@@ -3,7 +3,7 @@
 *.depend
 *.o
 *.dia
-*.png
+*.pn
 *.dia~
 nbproject/
 gen/
