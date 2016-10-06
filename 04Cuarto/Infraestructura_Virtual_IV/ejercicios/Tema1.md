@@ -14,10 +14,10 @@ Ejercicios del Tema 1
 
     | Año | Porcentaje |                  Valor                  |                    Explicación                                 |
     |:---:|:----------:|:---------------------------------------:|:--------------------------------------------------------------:|
-    | 1   |    26%     |          2.102,06*26%=546,53 €          | Lo que queda de año podemos amortizar (546,53/12)x4=136,63 €   |
-    | 2   |    26%     |   (2.102,06 - 136,63)* 26%=511,01 €     | Restamos el primer año (511,01) €                              |
-    | 3   |    26%     | 2.102,06 - 136,63 - 511,01 =  1454,41 € | todavia queda suficiente para amortizar 511,06 más             |
-    | 4   |    26%     |      1454,41 - 511,06 = 943,35 €        | Lo que queda de año podemos amortizar (546,53/12)x4=136,63 €   |
+    | 1   |    26%     |        2.102,06*26% = 546,53 €          | Lo que queda de año podemos amortizar (546,53/12)x4=136,63 €   |
+    | 2   |    26%     |  2.102,06 - 136,63 -546,53 = 1965,43 €  | Restamos el primer año y el total del año actual               |
+    | 3   |    26%     | 2.102,06 - 136,63 - 546,53 =  1418,9 €  | todavia queda suficiente para amortizar 511,06 más             |
+    | 4   |    26%     |      1418,9 - 546,53 = 872,37 €        | Lo que queda de año podemos amortizar (546,53/12)x4=136,63 €   |
 
     por lo tanto este servidor no es amortizable a 4 años, pero sin enbargo a 7 si.
 
