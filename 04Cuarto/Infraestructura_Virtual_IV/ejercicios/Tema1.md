@@ -6,7 +6,7 @@ Ejercicios del Tema 1
     -  Respuesta:
     Ordenador: [RAX XT16-2260V3-10G](http://www.thinkmate.com/system/rax-xt16-2260v3-10g)
     Precio: 2.934 dolares que es igual a 2.934 * 0,892219843 = 2.617 euros
-    Base imponible: 2.934 (precio) - 10% (tax) = 2.355,99 * 0,892219843 (cambio) =  2.102,06 (euros)
+    Base imponible: 2.934 (precio) - 10% (tax) = 2.667,27 * 0,892219843 (cambio) =  2379,79 (euros)
 
     [Según el articulo](http://infoautonomos.eleconomista.es/fiscalidad/gastos-deducibles-autonomos-irpf-estimacion-directa/) se puede realizar una estimación directa con las tablas simplificadas, buscando hemos encontrado [en la agencia tributaria](http://www.agenciatributaria.es/AEAT.internet/Inicio/_Segmentos_/Empresas_y_profesionales/Empresarios_individuales_y_profesionales/Rendimientos_de_actividades_economicas_en_el_IRPF/Regimenes_para_determinar_el_rendimiento_de_las_actividades_economicas/Estimacion_Directa_Simplificada.shtml) dichas tablas.
 
