@@ -36,18 +36,7 @@ Ejercicios del Tema 1
     -  Respuesta:
 
 <a name="ejercicio3"></a>3- Ejercicio
-* ¿Qué tipo de virtualización usarías en cada caso?
-    -  Respuesta:
-
-        * Cada tipo de virtualización tiene su cometido a la hora de montar cualquier infraestructura virtual hay que tener en cuenta cuales son las caracteristicas que necesitamos en cada caso, por ejemplo un primer nivel de vitualización podría ser la Virtualización de sistema operativo, ya que desde los equipos físicos instalariamos un hipervisor como por ejemplo ESXi de vmware que proporciona comunicación desde los equipos invitados hacia el anfitrión.
-        * Después esta la virtualización plena que se encarga de virtualizar todos los aspectos de un equipo, se puede hacer con VmWare Workstation.
-        * Después tenemos una virtualización de aplicaciones como puede ser Wine para virtualizar aplicaciones windows en Linux.
-
-
-* Crear un programa simple en cualquier lenguaje interpretado para Linux, empaquetarlo con CDE y probarlo en diferentes distribuciones.
-    -  Respuesta:
-
-<a name="ejercicio4"></a>4- Ejercicio
+* En general, cualquier ordenador con menos de 5 o 6 años tendrá estos flags.
 
 * [x]  Comprobar si el procesador o procesadores instalados tienen estos flags.
 * ¿Qué modelo de procesador es?
@@ -56,8 +45,6 @@ Ejercicios del Tema 1
     >model name      : Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz
 * ¿Qué aparece como salida de esa orden?
     -  Respuesta:
-    
-    >flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb intel_pt tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm mpx rdseed adx smap clflushopt xsaveopt xsavec xgetbv1 dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp
 
     >flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb intel_pt tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm mpx rdseed adx smap clflushopt xsaveopt xsavec xgetbv1 dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp
 
@@ -73,15 +60,37 @@ Ejercicios del Tema 1
 
     >flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb intel_pt tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm mpx rdseed adx smap clflushopt xsaveopt xsavec xgetbv1 dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp
 
-<a name="ejercicio5"></a>5- Ejercicio
+    >flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb intel_pt tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm mpx rdseed adx smap clflushopt xsaveopt xsavec xgetbv1 dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp
+
+* Si usas una máquina virtual, ¿qué resultado da?
+    - Respuesta:
+
+    El mismo que lo anterior
+
+* ¿Y en una Raspberry Pi o, si tienes acceso, el procesador del móvil?
+    - Respuesta:
+    ![Movil CPUINFO](captura6.png)
+
+<a name="ejercicio4"></a>4- Ejercicio
 
 * Comprobar si el núcleo instalado en tu ordenador contiene este módulo del kernel usando la orden kvm-ok.
-    -  Respuesta:
+    - Respuesta:
 
     Mi equipo tiene una bios UEFI y parece que no tiene integrado el modulo en el kernel.
 
 * Instalar un hipervisor para gestionar máquinas virtuales, que más adelante se podrá usar en pruebas y ejercicios.
-    -  Respuesta:
-
+    - Respuesta:
     ![VmWare Workstation](captura3.png)
+
+<a name="ejercicio5"></a>5- Ejercicio
+
+* Darse de alta en servicios de nube usando ofertas gratuitas o cupones que pueda proporcionar el profesor.
+    - Respuesta:
+    ![Azure](captura7.png)
+
+<a name="ejercicio6"></a>6- Ejercicio
+
+* Darse de alta en una web que permita hacer pruebas con alguno de los sistemas de gestión de nube anteriores.
+    - Respuesta:
+    ![OpenStack](captura8.png)
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
