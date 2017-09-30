@@ -10,3 +10,4 @@ gen/
 bin/
 nbandroid/
 build/
+debug/
