@@ -26,27 +26,35 @@ OBJ = obj
 
 ###############################################################################
 # Variables que no cambian para cualquier compilación
-INC = include
-LIB = lib
+# Includes Propios
+INC_P = include
+# Includes del sistema
+INC_S = /usr/include
+# Librerias propias
+LIB_P = lib
+# Librerias del sistema
+LIB_S = /usr/lib64
+# Librerias a usar.
+LIBS= -lglut -lGLU -lGL -lX11 -lXext -lc -lm
 RM = rm -Rf
 GCC = g++
 DEBUG = -g3 -O0 -Wall
-ARCH = -m32
+ARCH = #-m32
 
 ###############################################################################
 # Opciones de configuración para compilar cualquier programa
-GCCDEBUGFLAG = $(ARCH) $(DEBUG) -D$(VER) -L$(LIB) -I$(INC) -c
-GCCFLAG = -D$(VER) -L$(LIB) -I$(INC) -c -O3
+GCCDEBUGFLAG = $(ARCH) $(DEBUG) -D$(VER) -L$(LIB_S) -L$(LIB_P) $(LIBS) -I$(INC_S) -I$(INC_P) -c
+GCCFLAG = -D$(VER) -L$(LIB_S) -L$(LIB_P) $(LIBS) -I$(INC_S) -I$(INC_P) -c -O3
 
 ###############################################################################
 # Opciones de configuración para compilar cualquier programa al binario
-BINDEBUGFLAGS = $(ARCH) $(DEBUG) -L$(LIB) -I$(INC)
-BINFLAGS = -L$(LIB) -I$(INC) -O3
+BINDEBUGFLAGS = $(ARCH) $(DEBUG) -L$(LIB_S) -L$(LIB_P) $(LIBS) -I$(INC_S) -I$(INC_P)
+BINFLAGS = -L$(LIB_S) -L$(LIB_P) $(LIBS) -I$(INC_S) -I$(INC_P) -O3
 
 .PHONY: all
 .SECONDARY:
 
-all: clean makedir 
+all: clean makedir practica_0 practica_0_3d
 
 $(OBJ)/%.o: $(SRC_DIR)/%.cpp
 	$(GCC) $(GCCDEBUGFLAG) $^ -o $(DEBUG_DIR)/$@
@@ -64,7 +72,8 @@ makedir:
 	mkdir ./$(BIN_DIR)/$(OBJ)
 
 clean:
-	$(RM) $(LIB)/* $(DEBUG_DIR)/* $(BIN_DIR)/* doc/html/* doc/latex/*
+	# $(RM) $(LIB_P)/* $(DEBUG_DIR)/* $(BIN_DIR)/* doc/html/* doc/latex/*
+	$(RM) $(DEBUG_DIR)/* $(BIN_DIR)/* doc/html/* doc/latex/*
 
 touch:
 	touch $(SRC_DIR)/*
