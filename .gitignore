@@ -5,6 +5,7 @@
 *.dia
 *.png
 *.dia~
+*.gch
 nbproject/
 gen/
 bin/
