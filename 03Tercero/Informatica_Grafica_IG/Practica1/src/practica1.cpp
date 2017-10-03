@@ -9,14 +9,24 @@
 #include "stdio.h"
 #include <GL/glut.h>
 #include <ctype.h>
+#include "cubo.h"
+#include "piramide.h"
 
 // tamaño de los ejes
-const int AXIS_SIZE=5000;
+const int AXIS_SIZE=500;
+// Tipo de figura ha mostrar
+int figura = 1;
+// Tipo de visualización del objeto
+int modo = 1;
 
 // variables que definen la posicion de la camara en coordenadas polares
 GLfloat Observer_distance;
 GLfloat Observer_angle_x;
 GLfloat Observer_angle_y;
+
+// Mis Objetos propios
+_cubo mi_cubo(3.2);
+_piramide mi_piramide(2.3, 4.4);
 
 // variables que controlan la ventana y la transformacion de perspectiva
 GLfloat Window_width,Window_height,Front_plane,Back_plane;
@@ -78,17 +88,35 @@ void draw_axis(){
 // Funcion que dibuja los objetos
 //***************************************************************************
 void draw_objects() {
-	GLfloat Vertices[8][3]= {
-		{5,0,0},{4,4,0},{0,5,0},{-4,4,0},{-5,0,0},{-4,-4,0},{0,-5,0},{4,-4,0}
-	};
-	int i;
-	glColor3f(0,1,0);
-	glPointSize(4);
-	glBegin(GL_POINTS);
-	for (i=0; i<8; i++) {
-	 glVertex3fv((GLfloat *) &Vertices[i]);
+	// GLfloat Vertices[8][3]= {
+	//  {5,0,0},{4,4,0},{0,5,0},{-4,4,0},{-5,0,0},{-4,-4,0},{0,-5,0},{4,-4,0}
+	// };
+	// glColor3f(0,1,0);
+	// glPointSize(4);
+	// glBegin(GL_POINTS);
+	// int i;
+	// for (i=0; i<8; i++) {
+	//  glVertex3fv((GLfloat *) &Vertices[i]);
+	// }
+	if (figura == 1) {
+		if (modo == 1)
+			mi_cubo.draw_puntos(0, 0, 0, 10);
+		else if (modo == 2)
+			mi_cubo.draw_aristas(0, 0, 0, 1);
+		else if (modo == 3)
+			mi_cubo.draw_solido(0.0, 1.0, 0.0);
+		else if (modo == 4)
+			mi_cubo.draw_solido_ajedrez(0.0, 0.0, 1.0, 1.0, 1.0, 0.0);
+	} else if (figura == 2) {
+		if (modo == 1)
+			mi_piramide.draw_puntos(0, 1.0, 0, 5);
+		else if (modo == 2)
+			mi_piramide.draw_aristas(1.0, 0, 1.0, 1);
+		else if (modo == 3)
+			mi_piramide.draw_solido(0, 0, 1.0);
+		else if (modo == 4)
+			mi_piramide.draw_solido_ajedrez(0.0, 1.0, 0.0, 1.0, 0.0, 0.0);
 	}
-
 	glEnd();
 }
 
@@ -125,7 +153,13 @@ void change_window_size(int Ancho1,int Alto1) {
 // posicion y del raton
 //***************************************************************************
 void normal_keys(unsigned char Tecla1,int x,int y) {
-	if (toupper(Tecla1)=='Q') exit(0);
+	if ( toupper(Tecla1) == 'Q' ) exit(0);
+	if ( toupper(Tecla1) == 'P' ) modo = 1;
+	if ( toupper(Tecla1) == 'L' ) modo = 2;
+	if ( toupper(Tecla1) == 'S' ) modo = 3;
+	if ( toupper(Tecla1) == 'A' ) modo = 4;
+	if ( Tecla1 == '1' ) figura = 1;
+	if ( Tecla1 == '2' ) figura = 2;
 }
 
 //***************************************************************************
