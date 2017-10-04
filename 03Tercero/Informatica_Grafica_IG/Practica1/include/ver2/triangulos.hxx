@@ -1,13 +1,19 @@
-#ifndef TRIANGULOS_H
-#define TRIANGULOS_H
+// Constructor por defecto de Triangulos3D
+_triangulos3D::_triangulos3D(){
 
+}
 
+// Función para dibujar aristas
+void _triangulos3D::draw_aristas(float r, float g, float b, int grosor){
 
-#if defined(VER1)
-#include "ver1/triangulos.hxx"
-#elif defined(VER2)
-#include "ver2/triangulos.hxx"
-#else
-#error !!! HAY QUE INDICAR LA VERSION DE LA REPRESENTACION A COMPILAR VER1 o VER2
-#endif
-#endif /* TRIANGULOS_H */
+}
+
+// Función para colorear el sólido
+void _triangulos3D::draw_solido(float r, float g, float b){
+
+}
+
+// Función para colorear las caras pares de un color y las impares de otro
+void _triangulos3D::draw_solido_ajedrez(float r1, float g1, float b1, float r2, float g2, float b2){
+  
+}

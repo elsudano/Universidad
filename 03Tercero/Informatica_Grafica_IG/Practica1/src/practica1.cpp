@@ -26,7 +26,7 @@ GLfloat Observer_angle_y;
 
 // Mis Objetos propios
 _cubo mi_cubo(3.2);
-_piramide mi_piramide(2.3, 4.4);
+_piramide mi_piramide(3.2, 4.4);
 
 // variables que controlan la ventana y la transformacion de perspectiva
 GLfloat Window_width,Window_height,Front_plane,Back_plane;
@@ -232,7 +232,7 @@ int main(int argc, char **argv) {
 	glutInitWindowSize(UI_window_width,UI_window_height);
 	// llamada para crear la ventana, indicando el titulo (no se visualiza hasta que se llama
 	// al bucle de eventos)
-	glutCreateWindow("Práctica 1");
+	glutCreateWindow("Practica 1");
 	// asignación de la funcion llamada "dibujar" al evento de dibujo
 	glutDisplayFunc(draw_scene);
 	// asignación de la funcion llamada "cambiar_tamanio_ventana" al evento correspondiente

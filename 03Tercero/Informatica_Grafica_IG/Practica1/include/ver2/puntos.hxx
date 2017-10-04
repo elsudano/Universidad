@@ -1,13 +1,6 @@
-#ifndef PUNTOS_H
-#define PUNTOS_H
+// Constructor por defecto de Punto3D
+_puntos3D::_puntos3D(){}
 
-
-
-#if defined(VER1)
-#include "ver1/puntos.hxx"
-#elif defined(VER2)
-#include "ver2/puntos.hxx"
-#else
-#error !!! HAY QUE INDICAR LA VERSION DE LA REPRESENTACION A COMPILAR VER1 o VER2
-#endif
-#endif /* PUNTOS_H */
+// Función para pintar un punto en el plano
+void _puntos3D::draw_puntos(float r, float g, float b, int grosor){
+}

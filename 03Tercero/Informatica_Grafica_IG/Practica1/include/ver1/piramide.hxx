@@ -1,7 +1,7 @@
+// Dibujamos la Piramide
 _piramide::_piramide(float tam, float al){
 	// Reservamos memoria para los 16 vértices de la pirámide
 	vertices.resize(16);
-
 	// Construimos la base de la pirámide
 	// Cara 0
 	/*vertices[0].x = -tam;	vertices[0].y = tam;    vertices[0].z = -tam;
