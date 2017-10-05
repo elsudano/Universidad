@@ -40,6 +40,12 @@ void _triangulos3D::draw_solido(float r, float g, float b){
 	glEnd();
 }
 
+// Función para colorear las caras con los colores que tenemos en el vector
+// implementado en la version 2
+void    draw_solido_colores(){
+
+};
+
 // Función para colorear las caras pares de un color y las impares de otro
 void _triangulos3D::draw_solido_ajedrez(float r1, float g1, float b1, float r2, float g2, float b2){
 	const int numero_caras = caras.size();

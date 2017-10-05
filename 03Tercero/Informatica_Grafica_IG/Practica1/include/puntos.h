@@ -18,6 +18,7 @@ using namespace std;
 class _puntos3D {
 public:
 vector<_vertex3f> vertices;
+vector<_vertex3f> colores;
 
 _puntos3D();
 void   draw_puntos(float r, float g, float b, int grosor);

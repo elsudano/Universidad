@@ -18,7 +18,7 @@ DEBUG_DIR = debug
 # Extraemos los nombres de los ficheros para los binarios
 # asegurate que no tienes ninguna definicion en el codigo
 # osea que no se declara "#define STL"
-VER = VER1
+VER = VER2
 
 ###############################################################################
 # Directorio donde se guardan los ficheros .o

@@ -107,6 +107,8 @@ void draw_objects() {
 			mi_cubo.draw_solido(0.0, 1.0, 0.0);
 		else if (modo == 4)
 			mi_cubo.draw_solido_ajedrez(0.0, 0.0, 1.0, 1.0, 1.0, 0.0);
+		else if (modo == 5)
+			mi_cubo.draw_solido_colores();
 	} else if (figura == 2) {
 		if (modo == 1)
 			mi_piramide.draw_puntos(0, 1.0, 0, 5);
@@ -116,6 +118,8 @@ void draw_objects() {
 			mi_piramide.draw_solido(0, 0, 1.0);
 		else if (modo == 4)
 			mi_piramide.draw_solido_ajedrez(0.0, 1.0, 0.0, 1.0, 0.0, 0.0);
+		else if (modo == 5)
+			mi_piramide.draw_solido_colores();
 	}
 	glEnd();
 }
@@ -158,6 +162,7 @@ void normal_keys(unsigned char Tecla1,int x,int y) {
 	if ( toupper(Tecla1) == 'L' ) modo = 2;
 	if ( toupper(Tecla1) == 'S' ) modo = 3;
 	if ( toupper(Tecla1) == 'A' ) modo = 4;
+	if ( toupper(Tecla1) == 'C' ) modo = 5;
 	if ( Tecla1 == '1' ) figura = 1;
 	if ( Tecla1 == '2' ) figura = 2;
 }
