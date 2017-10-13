@@ -1,12 +1,12 @@
 #ifndef PIRAMIDE_H
 #define PIRAMIDE_H
 
-#include "triangulos.h"
+#include "objeto3D.h"
 
 //*************************************************************************
 // clase piramide
 //*************************************************************************
-class _piramide : public _triangulos3D {
+class _piramide : public _objeto3D {
 public:
 _piramide(float tam=0.5, float al=0.75);
 };

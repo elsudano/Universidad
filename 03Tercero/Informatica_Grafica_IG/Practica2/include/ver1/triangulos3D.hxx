@@ -40,11 +40,25 @@ void _triangulos3D::draw_solido(float r, float g, float b){
 	glEnd();
 }
 
-// Función para colorear las caras con los colores que tenemos en el vector
-// implementado en la version 2
-void    draw_solido_colores(){
+// Función para colorear el sólido segun los colores de los vertices
+void _triangulos3D::draw_solido_colores(){
+	const int numero_caras = caras.size();
 
-};
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+	glBegin(GL_TRIANGLES);
+	glShadeModel( GL_SMOOTH);
+	for (int j = 0; j < numero_caras; j++) {
+		glColor3f(colores.at(caras.at(j)._0).x,colores.at(caras.at(j)._0).y,colores.at(caras.at(j)._0).z);
+		glVertex3f(vertices.at(caras.at(j)._0).x, vertices.at(caras.at(j)._0).y, vertices.at(caras.at(j)._0).z);
+		glColor3f(colores.at(caras.at(j)._1).x,colores.at(caras.at(j)._1).y,colores.at(caras.at(j)._1).z);
+		glVertex3f(vertices.at(caras.at(j)._1).x, vertices.at(caras.at(j)._1).y, vertices.at(caras.at(j)._1).z);
+		glColor3f(colores.at(caras.at(j)._2).x,colores.at(caras.at(j)._2).y,colores.at(caras.at(j)._2).z);
+		glVertex3f(vertices.at(caras.at(j)._2).x, vertices.at(caras.at(j)._2).y, vertices.at(caras.at(j)._2).z);
+	}
+	glShadeModel( GL_FLAT);
+	glEnd();
+}
 
 // Función para colorear las caras pares de un color y las impares de otro
 void _triangulos3D::draw_solido_ajedrez(float r1, float g1, float b1, float r2, float g2, float b2){

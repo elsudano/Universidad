@@ -9,6 +9,7 @@
 #include "stdio.h"
 #include <GL/glut.h>
 #include <ctype.h>
+#include "objeto3D.h"
 #include "cubo.h"
 #include "piramide.h"
 
@@ -23,16 +24,18 @@ int modo = 1;
 GLfloat Observer_distance;
 GLfloat Observer_angle_x;
 GLfloat Observer_angle_y;
+GLfloat Observer_angle_z;
 
 // Mis Objetos propios
 _cubo mi_cubo(3.2);
 _piramide mi_piramide(3.2, 4.4);
+_objeto3D mi_objeto3D;
 
 // variables que controlan la ventana y la transformacion de perspectiva
 GLfloat Window_width,Window_height,Front_plane,Back_plane;
 
 // variables que determninan la posicion y tamaño de la ventana X
-int UI_window_pos_x=50,UI_window_pos_y=50,UI_window_width=500,UI_window_height=500;
+int UI_window_pos_x=500,UI_window_pos_y=10,UI_window_width=900,UI_window_height=900;
 
 //**************************************************************************
 // Función para limpiar la ventana donde se dibujan los objetos
@@ -62,6 +65,7 @@ void change_observer(){
 	glTranslatef(0,0,-Observer_distance);
 	glRotatef(Observer_angle_x,1,0,0);
 	glRotatef(Observer_angle_y,0,1,0);
+	glRotatef(Observer_angle_z,0,0,1);
 }
 
 //**************************************************************************
@@ -88,16 +92,7 @@ void draw_axis(){
 // Funcion que dibuja los objetos
 //***************************************************************************
 void draw_objects() {
-	// GLfloat Vertices[8][3]= {
-	//  {5,0,0},{4,4,0},{0,5,0},{-4,4,0},{-5,0,0},{-4,-4,0},{0,-5,0},{4,-4,0}
-	// };
-	// glColor3f(0,1,0);
-	// glPointSize(4);
-	// glBegin(GL_POINTS);
-	// int i;
-	// for (i=0; i<8; i++) {
-	//  glVertex3fv((GLfloat *) &Vertices[i]);
-	// }
+	char nombre_fichero[25];
 	if (figura == 1) {
 		if (modo == 1)
 			mi_cubo.draw_puntos(0, 0, 0, 10);
@@ -120,8 +115,43 @@ void draw_objects() {
 			mi_piramide.draw_solido_ajedrez(0.0, 1.0, 0.0, 1.0, 0.0, 0.0);
 		else if (modo == 5)
 			mi_piramide.draw_solido_colores();
+	} else if (figura == 3) {
+		// Guardo el nombre del fichero en un vector de char
+		// con la ruta en donde se encuentra, esto normalmente
+		// se pasa por parametros
+		strcpy (nombre_fichero, "datos/cubo.ply");
+		// realizo la lectura de los datos en mi objeto
+		mi_objeto3D.leer_objeto(nombre_fichero);
+		if (modo == 1)
+			mi_objeto3D.draw_puntos(0, 1.0, 0, 5);
+		else if (modo == 2)
+			mi_objeto3D.draw_aristas(1.0, 0, 1.0, 1);
+		else if (modo == 3)
+			mi_objeto3D.draw_solido(0, 0, 1.0);
+		else if (modo == 4)
+			mi_objeto3D.draw_solido_ajedrez(0.0, 1.0, 0.0, 1.0, 0.0, 0.0);
+		else if (modo == 5)
+			mi_objeto3D.draw_solido_colores();
+	} else if (figura == 4) {
+		// Guardo el nombre del fichero en un vector de char
+		// con la ruta en donde se encuentra, esto normalmente
+		// se pasa por parametros
+		strcpy (nombre_fichero, "datos/perfil.ply");
+		// realizo la lectura de los datos en mi objeto
+		mi_objeto3D.leer_objeto(nombre_fichero);
+		// realizamos la revolución del perfil para generar el objeto
+		mi_objeto3D.revolucion();
+		if (modo == 1)
+			mi_objeto3D.draw_puntos(0, 1.0, 0, 5);
+		else if (modo == 2)
+			mi_objeto3D.draw_aristas(1.0, 0, 1.0, 1);
+		else if (modo == 3)
+			mi_objeto3D.draw_solido(0, 0, 1.0);
+		else if (modo == 4)
+			mi_objeto3D.draw_solido_ajedrez(0.0, 1.0, 0.0, 1.0, 0.0, 0.0);
+		else if (modo == 5)
+			mi_objeto3D.draw_solido_colores();
 	}
-	glEnd();
 }
 
 //**************************************************************************
@@ -157,14 +187,16 @@ void change_window_size(int Ancho1,int Alto1) {
 // posicion y del raton
 //***************************************************************************
 void normal_keys(unsigned char Tecla1,int x,int y) {
-	if ( toupper(Tecla1) == 'Q' ) exit(0);
-	if ( toupper(Tecla1) == 'P' ) modo = 1;
-	if ( toupper(Tecla1) == 'L' ) modo = 2;
-	if ( toupper(Tecla1) == 'S' ) modo = 3;
-	if ( toupper(Tecla1) == 'A' ) modo = 4;
-	if ( toupper(Tecla1) == 'C' ) modo = 5;
-	if ( Tecla1 == '1' ) figura = 1;
-	if ( Tecla1 == '2' ) figura = 2;
+	if ( toupper(Tecla1) == 'Q' ) exit(0); // Salir
+	if ( toupper(Tecla1) == 'P' ) modo = 1; // Solo los puntos
+	if ( toupper(Tecla1) == 'L' ) modo = 2; // Solo los lineas/aristas
+	if ( toupper(Tecla1) == 'S' ) modo = 3; // El objeto en un color solido
+	if ( toupper(Tecla1) == 'A' ) modo = 4; // Modo Ajedrez
+	if ( toupper(Tecla1) == 'C' ) modo = 5; // Degradado según los colores de los vertices
+	if ( Tecla1 == '1' ) figura = 1; // Cubo con puntos desde método
+	if ( Tecla1 == '2' ) figura = 2; // Piramide con puntos desde método
+	if ( Tecla1 == '3' ) figura = 3; // Objeto cargado desde fichero ply
+	if ( Tecla1 == '4' ) figura = 4; // Objeto creado por revolución
 }
 
 //***************************************************************************
@@ -181,9 +213,12 @@ void special_keys(int Tecla1,int x,int y) {
 		case GLUT_KEY_RIGHT: Observer_angle_y++; break;
 		case GLUT_KEY_UP: Observer_angle_x--; break;
 		case GLUT_KEY_DOWN: Observer_angle_x++; break;
+		case GLUT_KEY_F1: Observer_angle_z--; break;
+		case GLUT_KEY_F2: Observer_angle_z++; break;
 		case GLUT_KEY_PAGE_UP: Observer_distance*=1.2; break;
 		case GLUT_KEY_PAGE_DOWN: Observer_distance/=1.2; break;
 	}
+	printf("Value of: %d\n Value of: %d\n", x, y);
 	glutPostRedisplay();
 }
 
@@ -201,6 +236,7 @@ void initialize(void) {
 	Observer_distance=2*Front_plane;
 	Observer_angle_x=0;
 	Observer_angle_y=0;
+	Observer_angle_z=0;
 
 	// se indica cual sera el color para limpiar la ventana	(r,v,a,al)
 	// blanco=(1,1,1,1) rojo=(1,0,0,1), ...
@@ -237,7 +273,7 @@ int main(int argc, char **argv) {
 	glutInitWindowSize(UI_window_width,UI_window_height);
 	// llamada para crear la ventana, indicando el titulo (no se visualiza hasta que se llama
 	// al bucle de eventos)
-	glutCreateWindow("Practica 1");
+	glutCreateWindow("Practica 2");
 	// asignación de la funcion llamada "dibujar" al evento de dibujo
 	glutDisplayFunc(draw_scene);
 	// asignación de la funcion llamada "cambiar_tamanio_ventana" al evento correspondiente

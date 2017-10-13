@@ -1,12 +1,12 @@
 #ifndef CUBO_H
 #define CUBO_H
 
-#include "triangulos.h"
+#include "objeto3D.h"
 
 //*************************************************************************
 // clase cubo
 //*************************************************************************
-class _cubo : public _triangulos3D {
+class _cubo : public _objeto3D {
 public:
 _cubo(float tam=0.5);
 };

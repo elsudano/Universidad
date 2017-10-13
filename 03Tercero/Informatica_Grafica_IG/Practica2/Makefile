@@ -18,7 +18,7 @@ DEBUG_DIR = debug
 # Extraemos los nombres de los ficheros para los binarios
 # asegurate que no tienes ninguna definicion en el codigo
 # osea que no se declara "#define STL"
-VER = VER2
+VER = VER1
 
 ###############################################################################
 # Directorio donde se guardan los ficheros .o
@@ -56,7 +56,7 @@ BINFLAGS = -L$(LIB_S) -L$(LIB_P) $(LIBS) -I$(INC_S) -I$(INC_P) -O3
 .PHONY: all
 .SECONDARY:
 
-all: clean makedir practica2 lector
+all: clean makedir practica2
 
 $(OBJ)/%.o: $(SRC_DIR)/%.$(EXT)
 	$(GCC) $(GCCDEBUGFLAG) $^ -o $(DEBUG_DIR)/$@
@@ -75,8 +75,8 @@ makedir:
 
 clean:
 	# $(RM) $(LIB_P)/* $(DEBUG_DIR)/* $(BIN_DIR)/* doc/html/* doc/latex/*
-	$(RM) $(DEBUG_DIR)/* $(BIN_DIR)/* doc/html/* doc/latex/*
+	$(RM) $(INC_P)/*.gch $(INC_P)/ver1/*.gch $(INC_P)/ver2/*.gch $(DEBUG_DIR)/* $(BIN_DIR)/* doc/html/* doc/latex/*
 
 touch:
 	touch $(SRC_DIR)/*
-	touch $(INC)/*
+	touch $(INC_P)/*
