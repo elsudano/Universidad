@@ -10,6 +10,7 @@
 #include <GL/glut.h>
 #include <ctype.h>
 #include "objeto3D.h"
+#include "revolucion.h"
 #include "cubo.h"
 #include "piramide.h"
 
@@ -30,6 +31,7 @@ GLfloat Observer_angle_z;
 _cubo mi_cubo(3.2);
 _piramide mi_piramide(3.2, 4.4);
 _objeto3D mi_objeto3D;
+_revolucion mi_revolucion;
 
 // variables que controlan la ventana y la transformacion de perspectiva
 GLfloat Window_width,Window_height,Front_plane,Back_plane;
@@ -116,12 +118,22 @@ void draw_objects() {
 		else if (modo == 5)
 			mi_piramide.draw_solido_colores();
 	} else if (figura == 3) {
-		// Guardo el nombre del fichero en un vector de char
-		// con la ruta en donde se encuentra, esto normalmente
-		// se pasa por parametros
-		strcpy (nombre_fichero, "datos/cubo.ply");
-		// realizo la lectura de los datos en mi objeto
-		mi_objeto3D.leer_objeto(nombre_fichero);
+		if (!mi_objeto3D.in_use()) {
+			// Guardo el nombre del fichero en un vector de char
+			// con la ruta en donde se encuentra, esto normalmente
+			// se pasa por parametros
+			strcpy (nombre_fichero, "datos/big_dodge.ply");
+			// realizo la lectura de los datos en mi objeto
+			mi_objeto3D.leer_objeto(nombre_fichero);
+			if (DEBUG_MODE) {
+				printf("%s %lu\n", "Tamaño del Vector Vertices: practica2.cpp->draw_objects->9", mi_objeto3D.vertices.size());
+				printf("%s %lu\n", "Tamaño del Vector Caras: practica2.cpp->draw_objects->9", mi_objeto3D.caras.size());
+			}
+		}
+		if (DEBUG_MODE) {
+			printf("%s %lu\n", "(Fuera) Tamaño del Vector Vertices: practica2.cpp->draw_objects->10", mi_objeto3D.vertices.size());
+			printf("%s %lu\n", "(Fuera) Tamaño del Vector Caras: practica2.cpp->draw_objects->10", mi_objeto3D.caras.size());
+		}
 		if (modo == 1)
 			mi_objeto3D.draw_puntos(0, 1.0, 0, 5);
 		else if (modo == 2)
@@ -133,24 +145,36 @@ void draw_objects() {
 		else if (modo == 5)
 			mi_objeto3D.draw_solido_colores();
 	} else if (figura == 4) {
-		// Guardo el nombre del fichero en un vector de char
-		// con la ruta en donde se encuentra, esto normalmente
-		// se pasa por parametros
-		strcpy (nombre_fichero, "datos/perfil.ply");
-		// realizo la lectura de los datos en mi objeto
-		mi_objeto3D.leer_objeto(nombre_fichero);
-		// realizamos la revolución del perfil para generar el objeto
-		mi_objeto3D.revolucion();
+		if (!mi_revolucion.in_use()) {
+			// Guardo el nombre del fichero en un vector de char
+			// con la ruta en donde se encuentra, esto normalmente
+			// se pasa por parametros
+			strcpy (nombre_fichero, "datos/perfil.ply");
+			// realizo la lectura de los datos en mi objeto
+			mi_revolucion.leer_objeto(nombre_fichero);
+			// realizamos la revolución del perfil para generar el objeto
+			if (DEBUG_MODE) {
+				mi_revolucion.print_puntos_perfil();
+				printf("%s %lu\n", "Tamaño del Vector Vertices: practica2.cpp->draw_objects->11", mi_revolucion.vertices.size());
+				printf("%s %lu\n", "Tamaño del Vector Caras: practica2.cpp->draw_objects->11", mi_revolucion.caras.size());
+			}
+			mi_revolucion.revolucion(20, true);
+		}
+		if (DEBUG_MODE) {
+			mi_revolucion.print_puntos_perfil();
+			printf("%s %lu\n", "(Fuera) Tamaño del Vector Vertices: practica2.cpp->draw_objects->12", mi_revolucion.vertices.size());
+			printf("%s %lu\n", "(Fuera) Tamaño del Vector Caras: practica2.cpp->draw_objects->12", mi_revolucion.caras.size());
+		}
 		if (modo == 1)
-			mi_objeto3D.draw_puntos(0, 1.0, 0, 5);
+			mi_revolucion.draw_puntos(0, 1.0, 0, 5);
 		else if (modo == 2)
-			mi_objeto3D.draw_aristas(1.0, 0, 1.0, 1);
+			mi_revolucion.draw_aristas(1.0, 0, 1.0, 1);
 		else if (modo == 3)
-			mi_objeto3D.draw_solido(0, 0, 1.0);
+			mi_revolucion.draw_solido(0, 0, 1.0);
 		else if (modo == 4)
-			mi_objeto3D.draw_solido_ajedrez(0.0, 1.0, 0.0, 1.0, 0.0, 0.0);
+			mi_revolucion.draw_solido_ajedrez(0.0, 1.0, 0.0, 1.0, 0.0, 0.0);
 		else if (modo == 5)
-			mi_objeto3D.draw_solido_colores();
+			mi_revolucion.draw_solido_colores();
 	}
 }
 
@@ -218,7 +242,8 @@ void special_keys(int Tecla1,int x,int y) {
 		case GLUT_KEY_PAGE_UP: Observer_distance*=1.2; break;
 		case GLUT_KEY_PAGE_DOWN: Observer_distance/=1.2; break;
 	}
-	printf("Value of: %d\n Value of: %d\n", x, y);
+	if (DEBUG_MODE)
+		printf("Value of: %d\nValue of: %d\n", x, y);
 	glutPostRedisplay();
 }
 
