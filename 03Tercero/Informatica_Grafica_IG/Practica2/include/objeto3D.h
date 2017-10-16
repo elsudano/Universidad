@@ -14,8 +14,8 @@ public:
 _objeto3D();
 void leer_objeto(char *archivo);
 void escribir_objeto(char *archivo);
-void revolucion();
-void extrucion();
+bool in_use();
+void clear();
 };
 
 #if defined(VER1)

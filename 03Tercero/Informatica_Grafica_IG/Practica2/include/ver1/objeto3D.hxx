@@ -15,20 +15,30 @@ void _objeto3D::leer_objeto(char *archivo){
 	int size_vertex, size_face;
 	vector<float> vertices_aux;
 	vector<int> caras_aux;
-	_vertex3f aux1;
+	_vertex3f punto_aux;
 
 	if (mi_ply.open(archivo) == 0)  // Si se ha abierto correctamente
 		if (mi_ply.read(vertices_aux, caras_aux) == 0) // Si se ha leído correctamente los vértices y las caras
 			mi_ply.close(); // Cerramos el fichero
 
+	if (DEBUG_MODE)
+		printf("%s\n", "Se cierra el fichero, objeto3D.hxx->leer_objeto->1");
+	// calculamos la cantidad de vertices que tenemos a partir
+	// del tamaño del vector que hemos llenado con los datos leidos
 	size_vertex = vertices_aux.size() / 3;
+	// Incluimos los puntos leidos en la estructura de datos
 	for (int i = 0; i < size_vertex; i++) {
-		aux1.x = vertices_aux[3*i];
-		aux1.y = vertices_aux[3*i+1];
-		aux1.z = vertices_aux[3*i+2];
-		vertices.push_back(aux1);
+		// generamos un punto con el valor correspondiente de las 3 coordenadas
+		punto_aux.x = vertices_aux[3*i];
+		punto_aux.y = vertices_aux[3*i+1];
+		punto_aux.z = vertices_aux[3*i+2];
+		// lo añadimos al vector de vertices
+		vertices.push_back(punto_aux);
 	}
-
+	if (DEBUG_MODE)
+		printf("%s\n", "Se carga los datos del fichero en los vertices, objeto3D.hxx->leer_objeto->2");
+	// Igual que con los vertices calculamos la cantidad de caras a
+	// partir de los datos que hemos leido del fichero
 	size_face = caras_aux.size() / 3;
 	caras.resize(size_face);
 	for (int i = 0; i < size_face; i++) {
@@ -36,6 +46,8 @@ void _objeto3D::leer_objeto(char *archivo){
 		caras[i].y = caras_aux[3*i+1];
 		caras[i].z = caras_aux[3*i+2];
 	}
+	if (DEBUG_MODE)
+		printf("%s\n", "Se carga los datos del fichero en las caras, objeto3D.hxx->leer_objeto->3");
 }
 
 //******************************************************************************
@@ -47,17 +59,20 @@ void _objeto3D::escribir_objeto(char *archivo){
 }
 
 //******************************************************************************
-// Creación de un objeto por el metodo de revolución
+// Comprobamos si el objeto tiene puntos asignados a los diferentes vectores
 //******************************************************************************
-
-void _objeto3D::revolucion(){
-
+bool _objeto3D::in_use(){
+	bool aux = false;
+	if (vertices.size() > 0 || caras.size() > 0)
+		aux = true;
+	return aux;
 }
 
 //******************************************************************************
-// Creación del objeto por el método de extrución
+// Limpiamos el objeto para que se pueda volver a usar, y llenar los
+// vectores de caras y vertices con datos nuevos
 //******************************************************************************
-
-void _objeto3D::extrucion(){
-
+void _objeto3D::clear(){
+	vertices.clear();
+	caras.clear();
 }
