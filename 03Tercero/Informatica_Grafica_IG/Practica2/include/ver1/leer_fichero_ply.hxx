@@ -11,9 +11,7 @@
 //******************************************************************************
 // Constructor
 //******************************************************************************
-
-_file_ply::_file_ply()
-{
+_file_ply::_file_ply(){
 	_element_token_table Element1;
 	const char* Text_tokens[]={"ply","format","ascii","element","vertex","face","end_header","zzzzzzzz",""};
 
@@ -31,10 +29,7 @@ _file_ply::_file_ply()
 //******************************************************************************
 // Abre el fichero en cuestión
 //******************************************************************************
-
-int _file_ply::open(char *File_name)
-{
-
+int _file_ply::open(char *File_name){
 	if ((File=fopen(File_name,"r"))==NULL) {
 		printf("Error: the file %s cannot be opened\n",File_name);
 		return(-1);
@@ -45,10 +40,7 @@ int _file_ply::open(char *File_name)
 //******************************************************************************
 // Crea el fichero en cuestion si no existe
 //******************************************************************************
-
-int _file_ply::create(char *File_name)
-{
-
+int _file_ply::create(char *File_name){
 	if ((File=fopen(File_name,"w"))==NULL) {
 		printf("Error: the file %s cannot be created\n",File_name);
 		return(-1);
@@ -59,9 +51,7 @@ int _file_ply::create(char *File_name)
 //******************************************************************************
 // Realiza la lectura de una linea del fichero
 //******************************************************************************
-
-int _file_ply::read_line()
-{
+int _file_ply::read_line(){
 	if (!feof(File)) {
 		fgets(Buffer,MAX_LENGTH_LINE,File);
 		if (strlen(Buffer)==0) return(-1);
@@ -75,9 +65,7 @@ int _file_ply::read_line()
 //******************************************************************************
 // Busca el siguiente token valido en la lectura
 //******************************************************************************
-
-int _file_ply::next_token()
-{
+int _file_ply::next_token(){
 	char Aux_token[100];
 	char *Aux_token1;
 	int Num_char=0;
@@ -127,9 +115,7 @@ int _file_ply::next_token()
 //******************************************************************************
 // Rellena los vectores de vertices y de caras según los datos del fichero
 //******************************************************************************
-
-int _file_ply::read(vector<float> &Vertices,vector<int> &Faces)
-{
+int _file_ply::read(vector<float> &Vertices,vector<int> &Faces){
 	int Next_token,i,j;
 	int Num_vertices,Num_faces;
 
@@ -210,9 +196,7 @@ int _file_ply::read(vector<float> &Vertices,vector<int> &Faces)
 //******************************************************************************
 // Realiza la escritura de los datos de los vectores en el fichero
 //******************************************************************************
-
-int _file_ply::write(vector<float> &Vertices,vector<int> &Faces)
-{
+int _file_ply::write(vector<float> &Vertices,vector<int> &Faces){
 	error("Not implemented");
 	return(0);
 }
@@ -220,9 +204,7 @@ int _file_ply::write(vector<float> &Vertices,vector<int> &Faces)
 //******************************************************************************
 // Cierra el fichero que estaba abierto
 //******************************************************************************
-
-int _file_ply::close()
-{
+int _file_ply::close(){
 	fclose(File);
 	return(0);
 }
@@ -230,9 +212,7 @@ int _file_ply::close()
 //******************************************************************************
 // Muestra el error que se produce en la lectura del fichero
 //******************************************************************************
-
-void _file_ply::error(const char *Error)
-{
+void _file_ply::error(const char *Error){
 	printf("Error: %s. Stop in line %d\n",Error,Num_lines);
 	exit(-1);
 }
@@ -240,9 +220,7 @@ void _file_ply::error(const char *Error)
 //******************************************************************************
 // Comprobamos que el token es un numero
 //******************************************************************************
-
-int _file_ply::is_number(char *Aux_token)
-{
+int _file_ply::is_number(char *Aux_token){
 	char *p1;
 
 	for (unsigned int i=0; i<strlen(Aux_token); i++) {
@@ -254,9 +232,7 @@ int _file_ply::is_number(char *Aux_token)
 //******************************************************************************
 // Buscamos un token concreto en la lectura realizada
 //******************************************************************************
-
-int _file_ply::search_token(char *Aux_token)
-{
+int _file_ply::search_token(char *Aux_token){
 	int i=0;
 
 	while (!(Token_table[i].Text=="zzzzzzzz")) {
