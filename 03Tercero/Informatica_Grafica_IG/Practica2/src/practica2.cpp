@@ -11,6 +11,7 @@
 #include <ctype.h>
 #include "objeto3D.h"
 #include "revolucion.h"
+#include "revolucion_x.h"
 #include "cubo.h"
 #include "piramide.h"
 
@@ -32,6 +33,7 @@ _cubo mi_cubo(3.2);
 _piramide mi_piramide(3.2, 4.4);
 _objeto3D mi_objeto3D;
 _revolucion mi_revolucion;
+_revolucion_x mi_revolucion_x;
 
 // variables que controlan la ventana y la transformacion de perspectiva
 GLfloat Window_width,Window_height,Front_plane,Back_plane;
@@ -158,7 +160,7 @@ void draw_objects() {
 				printf("%s %lu\n", "Tamaño del Vector Vertices: practica2.cpp->draw_objects->11", mi_revolucion.vertices.size());
 				printf("%s %lu\n", "Tamaño del Vector Caras: practica2.cpp->draw_objects->11", mi_revolucion.caras.size());
 			}
-			mi_revolucion.revolucion(20, true);
+			mi_revolucion.revolucion(12, true);
 		}
 		if (DEBUG_MODE) {
 			mi_revolucion.print_puntos_perfil();
@@ -172,9 +174,40 @@ void draw_objects() {
 		else if (modo == 3)
 			mi_revolucion.draw_solido(0, 0, 1.0);
 		else if (modo == 4)
-			mi_revolucion.draw_solido_ajedrez(0.0, 1.0, 0.0, 1.0, 0.0, 0.0);
+			mi_revolucion.draw_solido_ajedrez(0.3176, 0.4039, 0.3098, 0.7450, 0.5882, 0.8431);
 		else if (modo == 5)
 			mi_revolucion.draw_solido_colores();
+	} else if (figura == 5) {
+		if (!mi_revolucion_x.in_use()) {
+			// Guardo el nombre del fichero en un vector de char
+			// con la ruta en donde se encuentra, esto normalmente
+			// se pasa por parametros
+			strcpy (nombre_fichero, "datos/perfil_x.ply");
+			// realizo la lectura de los datos en mi objeto
+			mi_revolucion_x.leer_objeto(nombre_fichero);
+			// realizamos la revolución del perfil para generar el objeto
+			if (DEBUG_MODE) {
+				mi_revolucion_x.print_puntos_perfil();
+				printf("%s %lu\n", "Tamaño del Vector Vertices: practica2.cpp->draw_objects->11", mi_revolucion_x.vertices.size());
+				printf("%s %lu\n", "Tamaño del Vector Caras: practica2.cpp->draw_objects->11", mi_revolucion_x.caras.size());
+			}
+			mi_revolucion_x.revolucion(12, true);
+		}
+		if (DEBUG_MODE) {
+			mi_revolucion_x.print_puntos_perfil();
+			printf("%s %lu\n", "(Fuera) Tamaño del Vector Vertices: practica2.cpp->draw_objects->12", mi_revolucion_x.vertices.size());
+			printf("%s %lu\n", "(Fuera) Tamaño del Vector Caras: practica2.cpp->draw_objects->12", mi_revolucion_x.caras.size());
+		}
+		if (modo == 1)
+			mi_revolucion_x.draw_puntos(0, 1.0, 0, 5);
+		else if (modo == 2)
+			mi_revolucion_x.draw_aristas(1.0, 0, 1.0, 1);
+		else if (modo == 3)
+			mi_revolucion_x.draw_solido(0, 0, 1.0);
+		else if (modo == 4)
+			mi_revolucion_x.draw_solido_ajedrez(0.3176, 0.4039, 0.3098, 0.7450, 0.5882, 0.8431);
+		else if (modo == 5)
+			mi_revolucion_x.draw_solido_colores();
 	}
 }
 
@@ -220,7 +253,8 @@ void normal_keys(unsigned char Tecla1,int x,int y) {
 	if ( Tecla1 == '1' ) figura = 1; // Cubo con puntos desde método
 	if ( Tecla1 == '2' ) figura = 2; // Piramide con puntos desde método
 	if ( Tecla1 == '3' ) figura = 3; // Objeto cargado desde fichero ply
-	if ( Tecla1 == '4' ) figura = 4; // Objeto creado por revolución
+	if ( Tecla1 == '4' ) figura = 4; // Objeto creado por revolución en eje y
+	if ( Tecla1 == '5' ) figura = 5; // Objeto creado por revolución en eje x
 }
 
 //***************************************************************************

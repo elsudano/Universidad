@@ -23,7 +23,7 @@ void _revolucion::leer_objeto(char *archivo){
 			mi_ply.close(); // Cerramos el fichero
 
 	if (DEBUG_MODE)
-		printf("%s\n", "Se cierra el fichero, revolucion.hxx->leer_objeto->1");
+		printf("%s\n\n\n", "Se cierra el fichero, revolucion.hxx->leer_objeto->1");
 
 	size_vertex = vertices_aux.size() / 3;
 	for (int i = 0; i < size_vertex; i++) {
@@ -33,7 +33,7 @@ void _revolucion::leer_objeto(char *archivo){
 		puntos_perfil.push_back(punto_aux);
 	}
 	if (DEBUG_MODE)
-		printf("%s\n", "Se carga los datos del fichero en los vertices, revolucion.hxx->leer_objeto->2");
+		printf("%s\n\n\n", "Se carga los datos del fichero en los vertices, revolucion.hxx->leer_objeto->2");
 }
 
 //******************************************************************************
@@ -58,45 +58,44 @@ bool _revolucion::in_use(){
 // caras para la revolución del objeto
 //******************************************************************************
 void _revolucion::caras_objeto(int cv, int po){
-	const int cv_aux = cv - 1;
-	_vertex3i punto_aux;
+	_vertex3i cara_aux;
 	if (DEBUG_MODE)
-		printf("%s\n", "generamos las variables, revolucion.hxx->caras_objeto->1");
-	for (int i = 0; i < cv_aux; ++i) {
+		printf("%s\n\n\n", "generamos las variables, revolucion.hxx->caras_objeto->1");
+
+	for (int i = 0; i < cv - 1; ++i) {
 		for (int j = 0; j < po - 1; ++j) {
 			// generamos el primer punto del triangulo (cara)
-			punto_aux.x = i * po + j;
-			punto_aux.y = (i + 1) * po + j;
-			punto_aux.z = i * po + (j + 1);
-			caras.push_back( punto_aux);
+			cara_aux.x = i * po + j;
+			cara_aux.y = (i + 1) * po + j;
+			cara_aux.z = i * po + (j + 1);
+			caras.push_back( cara_aux);
 
 			// generamos el segundo punto del triangulo (cara)
-			punto_aux.x = i * po + (j + 1);
-			punto_aux.y = (i +1) * po + j;
-			punto_aux.z = (i + 1) * po + (j + 1);
-			caras.push_back( punto_aux );
+			cara_aux.x = i * po + (j + 1);
+			cara_aux.y = (i +1) * po + j;
+			cara_aux.z = (i + 1) * po + (j + 1);
+			caras.push_back( cara_aux );
 		}
 	}
 	if (DEBUG_MODE)
-		printf("%s\n", "Generamos los puntos de los triangulos que haran de caras, revolucion.hxx->caras_objeto->2");
+		printf("%s\n\n\n", "Generamos los puntos de los triangulos que haran de caras, revolucion.hxx->caras_objeto->2");
 	//Union del ultimo punto del perfil con el primero
 	for (int k = 0; k < po - 1; ++k) {
 		// generamos el primer punto del triangulo (de la ultima cara)
-		punto_aux.x = (cv_aux) *po + k;
-		punto_aux.y = k;
-		punto_aux.z = (cv_aux) *po + (k + 1);
-		caras.push_back( punto_aux );
+		cara_aux.x = (cv - 1) *po + k;
+		cara_aux.y = k;
+		cara_aux.z = (cv - 1) *po + (k + 1);
+		caras.push_back( cara_aux );
 
 		// generamos el segundo punto del triangulo (de la ultima cara)
-		punto_aux.x = (cv_aux) *po + (k + 1);
-		punto_aux.y = k;
-		punto_aux.z = k + 1;
-		caras.push_back( punto_aux );
+		cara_aux.x = (cv - 1) *po + (k + 1);
+		cara_aux.y = k;
+		cara_aux.z = k + 1;
+		caras.push_back( cara_aux );
 	}
 	if (DEBUG_MODE)
-		printf("%s\n", "Unimos el ultimo punto con el primero, revolucion.hxx->caras_objeto->3");
+		printf("%s\n\n\n", "Unimos el ultimo punto con el primero, revolucion.hxx->caras_objeto->3");
 }
-
 
 //******************************************************************************
 // Generación de las tapas superior he inferior del objeto
@@ -110,12 +109,12 @@ void _revolucion::caras_objeto(int cv, int po){
 //******************************************************************************
 void _revolucion::tapas_objeto(int cv, int po){
 	_vertex3f punto_3D;
-	_vertex3i punto_revolucion;
-	int punto_central_tapa;
-	int punto_x;
-	int punto_y;
-	if (DEBUG_MODE)
+	_vertex3i cara_aux;
+	if (DEBUG_MODE) {
 		printf("%s\n", "Generamos las variables, revolucion.hxx->tapas_objeto->1");
+		printf("%s %lu\n", "Valor de Antes de añadir los puntos centrales de las tapas: revolucion.hxx->tapas_objeto->1", vertices.size());
+	}
+
 	// Punto de abajo
 	punto_3D.x = 0.0;
 	punto_3D.y = vertices.at( po - 1).y;
@@ -123,52 +122,55 @@ void _revolucion::tapas_objeto(int cv, int po){
 	vertices.push_back( punto_3D );
 	if (DEBUG_MODE)
 		printf("%s\n", "Generamos el punto de abajo, revolucion.hxx->tapas_objeto->2");
+
 	// Punto de arriba
 	punto_3D.x = 0.0;
 	punto_3D.y = vertices.at(0).y;
 	punto_3D.z = 0.0;
 	vertices.push_back( punto_3D );
-	if (DEBUG_MODE)
+	if (DEBUG_MODE) {
 		printf("%s\n", "Generamos el punto de arriba, revolucion.hxx->tapas_objeto->3");
-	punto_central_tapa = vertices.size() - 2;
-	punto_x = cv - 1;
-	punto_y = punto_x + cv;
-	if (DEBUG_MODE)
-		printf("%s\n", "Ponemos los primeros puntos para las caras de la tapa, revolucion.hxx->tapas_objeto->4");
-	for(int i = 0; i < cv - 1; ++i) {
-		punto_revolucion.x = punto_central_tapa;
-		punto_revolucion.y = punto_x;
-		punto_revolucion.z = punto_y;
-		caras.push_back( punto_revolucion );
-		punto_x  = punto_y;
-		punto_y += cv;
+		printf("%s %lu\n", "Vertices despues de añadir los puntos centrales de las tapas: revolucion.hxx->tapas_objeto->3", vertices.size());
+		printf("%s %lu\n", "Cantidad de caras en el vector antes de generar las tapas:, revolucion.hxx->tapas_objeto->3", caras.size());
+		printf("\n\n");
 	}
-	if (DEBUG_MODE)
-		printf("%s\n", "Ponemos los primeros puntos para las caras de la tapa, revolucion.hxx->tapas_objeto->5");
-	punto_revolucion.x = punto_central_tapa;
-	punto_revolucion.y = punto_x;
-	punto_revolucion.z = cv - 1;
-	caras.push_back( punto_revolucion );
-
-	punto_central_tapa++;
-	punto_x = cv;
-	punto_y = punto_x - cv;
-
-	for(int i = 0; i < cv - 1; ++i) {
-		punto_revolucion.x = punto_central_tapa;
-		punto_revolucion.y = punto_x;
-		punto_revolucion.z = punto_y;
-		caras.push_back( punto_revolucion );
-
-		punto_y += cv;
-		punto_x += cv;
+/*
+    if (DEBUG_MODE) {
+        printf("%s\n", "Lista de las 3 componentes (x, y, z) de los puntos abajo y arriba, revolucion.hxx->tapas_objeto->4");
+        printf("%s\n", "  x   y   z");
+        for(unsigned int i = vertices.size() - 2; i < vertices.size(); ++i) {
+            printf("%f  %f  %f\n", vertices.at(i).x, vertices.at(i).y, vertices.at(i).z);
+        }
+        printf("\n\n");
+    }
+ */
+	// posición del punto central de la tapa de abajo, primer punto central
+	// el segundo punto se encuentra justo despues, por eso generamos un for
+	// que va pintando la cara de abajo primero y luego la de arriba
+	// Recorremos los puntos de abajo y de arriba
+	for(unsigned int i = vertices.size() - 2; i < vertices.size(); ++i) {
+		// le pongo que llegue a -3 por que son los dos puntos centrales mas el
+		// ultimo punto inicial que no contamos con el
+		for(unsigned int j = 0; j < vertices.size() - 3; ++j) {
+			if (DEBUG_MODE) {
+				printf("%s%u%s\n", "vertices.at(", i, "), revolucion.hxx->tapas_objeto->4");
+				printf("%s%u%s %f%s\n", "Posición X de vertices.at(", i, "):", vertices.at(i).x, ", revolucion.hxx->tapas_objeto->4");
+				printf("%s%u%s %f%s\n", "Posición Y de vertices.at(", i, "):", vertices.at(i).y, ", revolucion.hxx->tapas_objeto->4");
+				printf("%s%u%s %f%s\n", "Posición Z de vertices.at(", i, "):", vertices.at(i).z, ", revolucion.hxx->tapas_objeto->4");
+				printf("%s%u%s %f%s\n", "Posición X de vertices.at(", j, "):", vertices.at(j).x, ", revolucion.hxx->tapas_objeto->4");
+				printf("%s%u%s %f%s\n", "Posición Y de vertices.at(", j, "):", vertices.at(j).y, ", revolucion.hxx->tapas_objeto->4");
+				printf("%s%u%s %f%s\n", "Posición Z de vertices.at(", j, "):", vertices.at(j).z, ", revolucion.hxx->tapas_objeto->4");
+				printf("\n\n");
+			}
+			if (vertices.at(i).y == vertices.at(j).y) {
+				cara_aux._0 = i;
+				cara_aux._1 = j;
+				cara_aux._2 = j + po;
+				caras.push_back(cara_aux);
+				// para realizar la cara del ultimo punto hay que utilizar la operación modulo
+			}
+		}
 	}
-	if (DEBUG_MODE)
-		printf("%s\n", "Ponemos los ultimos puntos para las caras de la tapa, revolucion.hxx->tapas_objeto->6");
-	punto_revolucion.x = punto_central_tapa;
-	punto_revolucion.y = 0;
-	punto_revolucion.z = punto_x - cv;
-	caras.push_back( punto_revolucion );
 }
 
 //******************************************************************************
@@ -189,7 +191,7 @@ void _revolucion::revolucion(int repe, bool con_tapas) {
 	float angulo_rotacion = (2.0 * M_PI) / (repe*1.0);
 
 	if (DEBUG_MODE)
-		printf("%s\n", "Se generan las variables necesarias, revolucion.hxx->revolucion->1");
+		printf("%s\n\n\n", "Se generan las variables necesarias, revolucion.hxx->revolucion->1");
 
 	for (int i = 0; i < repe; ++i) {
 		// con este for recorremos todas la repeticiones que queremos que tenga nuestro objeto
@@ -203,7 +205,7 @@ void _revolucion::revolucion(int repe, bool con_tapas) {
 			angulo_eje_x = ( punto_x * cos(incremento_angulo_rotacion) ) + ( punto_z * sin(incremento_angulo_rotacion) );
 			angulo_eje_z = ( -punto_x * sin(incremento_angulo_rotacion) ) + ( punto_z * cos(incremento_angulo_rotacion) );
 
-			// Añadimos al vector de coordenadas el punto
+			// Añadimos al vector de puntos revolucionados el punto
 			punto_3D.x = angulo_eje_x;
 			punto_3D.y = punto_y;
 			punto_3D.z = angulo_eje_z;
@@ -212,19 +214,19 @@ void _revolucion::revolucion(int repe, bool con_tapas) {
 		incremento_angulo_rotacion += angulo_rotacion;
 	}
 	if (DEBUG_MODE)
-		printf("%s\n", "Despues de realizar el recorrido con los for, revolucion.hxx->revolucion->2");
+		printf("%s\n\n\n", "Se generan la cantidad de vertices tales que: repeticiones por puntos del perfil haya, revolucion.hxx->revolucion->2");
+
+	caras_objeto(repe, puntos_perfil.size());
+	if (DEBUG_MODE)
+		printf("%s\n\n\n", "Despues de generar las caras, revolucion.hxx->revolucion->4");
 
 	if (con_tapas) {
 		tapas_objeto(repe, puntos_perfil.size());
 		if (DEBUG_MODE)
-			printf("%s\n", "Despues de generar las tapas, revolucion.hxx->revolucion->3");
+			printf("%s\n\n\n", "Despues de generar las tapas, revolucion.hxx->revolucion->3");
 	}
-
-	caras_objeto(repe, puntos_perfil.size());
-	if (DEBUG_MODE)
-		printf("%s\n", "Despues de generar las caras, revolucion.hxx->revolucion->4");
 }
 
 void _revolucion::print_puntos_perfil(){
-	printf("%s %lu\n", "Cantidad de puntos del perfil:", puntos_perfil.size());
+	printf("%s %lu\n\n\n", "Cantidad de puntos del perfil:", puntos_perfil.size());
 }
