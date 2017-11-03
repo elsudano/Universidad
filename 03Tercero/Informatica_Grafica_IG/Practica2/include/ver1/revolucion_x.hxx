@@ -1,8 +1,6 @@
-
 //******************************************************************************
 // Creación de un objeto por el método de revolución
 //******************************************************************************
-
 _revolucion_x::_revolucion_x(){
 
 }
@@ -34,18 +32,6 @@ void _revolucion_x::leer_objeto(char *archivo){
 	}
 	if (DEBUG_MODE)
 		printf("%s\n\n\n", "Se carga los datos del fichero en los vertices, revolucion.hxx->leer_objeto->2");
-}
-
-//******************************************************************************
-// Comprobamos si el objeto tiene puntos asignados a los diferentes vectores
-// @note: sobrescribimos el metodo de objeto3D por que en la revolucion no
-// tenemos el vector de caras
-//******************************************************************************
-bool _revolucion_x::in_use(){
-	bool aux = false;
-	if (vertices.size() > 0 || puntos_perfil.size() > 0)
-		aux = true;
-	return aux;
 }
 
 //******************************************************************************
@@ -141,21 +127,17 @@ void _revolucion_x::tapas_objeto(int cv, int po){
 	for(unsigned int i = vertices.size() - 2; i < vertices.size(); ++i) {
 		// le pongo que llegue a -3 por que son los dos puntos centrales mas el
 		// ultimo punto inicial que no contamos con el
-		for(unsigned int j = 0; j < vertices.size() - 3; ++j) {
-			if (DEBUG_MODE) {
-				printf("%s%u%s\n", "vertices.at(", i, "), revolucion.hxx->tapas_objeto->4");
-				printf("%s%u%s %f%s\n", "Posición X de vertices.at(", i, "):", vertices.at(i).x, ", revolucion.hxx->tapas_objeto->4");
-				printf("%s%u%s %f%s\n", "Posición Y de vertices.at(", i, "):", vertices.at(i).y, ", revolucion.hxx->tapas_objeto->4");
-				printf("%s%u%s %f%s\n", "Posición Z de vertices.at(", i, "):", vertices.at(i).z, ", revolucion.hxx->tapas_objeto->4");
-				printf("%s%u%s %f%s\n", "Posición X de vertices.at(", j, "):", vertices.at(j).x, ", revolucion.hxx->tapas_objeto->4");
-				printf("%s%u%s %f%s\n", "Posición Y de vertices.at(", j, "):", vertices.at(j).y, ", revolucion.hxx->tapas_objeto->4");
-				printf("%s%u%s %f%s\n", "Posición Z de vertices.at(", j, "):", vertices.at(j).z, ", revolucion.hxx->tapas_objeto->4");
-				printf("\n\n");
+		for(unsigned int j = 0; j < vertices.size() - 2; ++j) {
+			if (DEBUG_MODE && vertices.at(i).x == vertices.at(j).x) {
+				printf("%s %lu%s\n", "cara_aux._0 =", j % vertices.size(), ";");
+				printf("%s %u%s\n", "cara_aux._1 =", i, ";");
+				printf("%s %lu%s\n", "cara_aux._2 =", (j + po) % (vertices.size() - 2), ";");
+				printf("%s\n", "caras.push_back(cara_aux);");
 			}
 			if (vertices.at(i).x == vertices.at(j).x) {
-				cara_aux._0 = i;
-				cara_aux._1 = j;
-				cara_aux._2 = j + po;
+				cara_aux._0 = j % vertices.size();
+				cara_aux._1 = i;
+				cara_aux._2 = (j + po) % (vertices.size() - 2);
 				caras.push_back(cara_aux);
 				// para realizar la cara del ultimo punto hay que utilizar la operación modulo
 			}
@@ -217,6 +199,22 @@ void _revolucion_x::revolucion(int repe, bool con_tapas) {
 	}
 }
 
+//******************************************************************************
+// Comprobamos si el objeto tiene puntos asignados a los diferentes vectores
+// @note: sobrescribimos el metodo de objeto3D por que en la revolucion no
+// tenemos el vector de caras
+//******************************************************************************
+bool _revolucion_x::in_use(){
+	bool aux = false;
+	if (vertices.size() > 0 || puntos_perfil.size() > 0)
+		aux = true;
+	return aux;
+}
+
+//******************************************************************************
+// Con esto podemos saber la cantidad de puntos que tiene el
+// perfil que vamos a revolucionar
+//******************************************************************************
 void _revolucion_x::print_puntos_perfil(){
 	printf("%s %lu\n\n\n", "Cantidad de puntos del perfil:", puntos_perfil.size());
 }

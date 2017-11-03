@@ -160,7 +160,7 @@ void draw_objects() {
 				printf("%s %lu\n", "Tamaño del Vector Vertices: practica2.cpp->draw_objects->11", mi_revolucion.vertices.size());
 				printf("%s %lu\n", "Tamaño del Vector Caras: practica2.cpp->draw_objects->11", mi_revolucion.caras.size());
 			}
-			mi_revolucion.revolucion(12, true);
+			mi_revolucion.revolucion(5, true);
 		}
 		if (DEBUG_MODE) {
 			mi_revolucion.print_puntos_perfil();
@@ -188,15 +188,15 @@ void draw_objects() {
 			// realizamos la revolución del perfil para generar el objeto
 			if (DEBUG_MODE) {
 				mi_revolucion_x.print_puntos_perfil();
-				printf("%s %lu\n", "Tamaño del Vector Vertices: practica2.cpp->draw_objects->11", mi_revolucion_x.vertices.size());
-				printf("%s %lu\n", "Tamaño del Vector Caras: practica2.cpp->draw_objects->11", mi_revolucion_x.caras.size());
+				printf("%s %lu\n", "Tamaño del Vector Vertices: practica2.cpp->draw_objects->13", mi_revolucion_x.vertices.size());
+				printf("%s %lu\n", "Tamaño del Vector Caras: practica2.cpp->draw_objects->13", mi_revolucion_x.caras.size());
 			}
-			mi_revolucion_x.revolucion(12, true);
+			mi_revolucion_x.revolucion(5, true);
 		}
 		if (DEBUG_MODE) {
 			mi_revolucion_x.print_puntos_perfil();
-			printf("%s %lu\n", "(Fuera) Tamaño del Vector Vertices: practica2.cpp->draw_objects->12", mi_revolucion_x.vertices.size());
-			printf("%s %lu\n", "(Fuera) Tamaño del Vector Caras: practica2.cpp->draw_objects->12", mi_revolucion_x.caras.size());
+			printf("%s %lu\n", "(Fuera) Tamaño del Vector Vertices: practica2.cpp->draw_objects->14", mi_revolucion_x.vertices.size());
+			printf("%s %lu\n", "(Fuera) Tamaño del Vector Caras: practica2.cpp->draw_objects->14", mi_revolucion_x.caras.size());
 		}
 		if (modo == 1)
 			mi_revolucion_x.draw_puntos(0, 1.0, 0, 5);
