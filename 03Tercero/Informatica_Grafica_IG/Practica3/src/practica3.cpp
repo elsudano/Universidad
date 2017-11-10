@@ -14,7 +14,7 @@
 #include "revolucion_x.h"
 #include "cubo.h"
 #include "piramide.h"
-#include "doraemon.h"
+#include "composicion.h"
 
 // tamaño de los ejes
 const int AXIS_SIZE=500;
@@ -211,27 +211,10 @@ void draw_objects() {
 		else if (modo == 5)
 			mi_revolucion_x.draw_solido_colores();
 	} else if (figura == 6) {
-		if (!mi_doraemon.in_use()) {
-			// Guardo el nombre del fichero en un vector de char
-			// con la ruta en donde se encuentra, esto normalmente
-			// se pasa por parametros
-			strcpy (nombre_fichero, "datos/doraemon/cabeza.ply");
-			// realizo la lectura de los datos en mi objeto
-			mi_doraemon.leer_objeto(nombre_fichero);
-			if (DEBUG_MODE) {
-				printf("%s\n", "Final de Doraemon practica3.cpp->draw_objects->15");
-			}
+		mi_doraemon.componer(modo);
+		if (DEBUG_MODE) {
+			printf("%s\n", "Final de Doraemon practica3.cpp->draw_objects->15");
 		}
-		if (modo == 1)
-			mi_doraemon.draw_puntos(0, 1.0, 0, 5);
-		else if (modo == 2)
-			mi_doraemon.draw_aristas(1.0, 0, 1.0, 1);
-		else if (modo == 3)
-			mi_doraemon.draw_solido(0, 0, 1.0);
-		else if (modo == 4)
-			mi_doraemon.draw_solido_ajedrez(0.3176, 0.4039, 0.3098, 0.7450, 0.5882, 0.8431);
-		else if (modo == 5)
-			mi_doraemon.draw_solido_colores();
 	}
 }
 
