@@ -6,14 +6,13 @@
 //*************************************************************************
 // clase Rotación
 //*************************************************************************
-class _doraemon : public _objeto3D {
+class _composicion : public _objeto3D {
 private:
-int mode_of_paint;
 int size_of_dot;
 int size_of_line;
 
 public:
-_doraemon();
+_composicion();
 void cabeza();
 void cuerpo();
 void antebrazoderecho();
@@ -21,8 +20,8 @@ void brazoderecho();
 void antebrazoizquierdo();
 void brazoizquierdo();
 void troncoinferior();
-void dibuja(float r, float g,float b, char nombre_fichero[]);
-void componer(int modo);
+//void dibuja(float r, float g,float b);
+void componer();
 };
 
 #if defined(VER1)

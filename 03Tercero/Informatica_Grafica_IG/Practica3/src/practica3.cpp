@@ -35,7 +35,7 @@ _piramide mi_piramide(3.2, 4.4);
 _objeto3D mi_objeto3D;
 _revolucion mi_revolucion;
 _revolucion_x mi_revolucion_x;
-_doraemon mi_doraemon;
+_composicion mi_robot;
 
 // variables que controlan la ventana y la transformacion de perspectiva
 GLfloat Window_width,Window_height,Front_plane,Back_plane;
@@ -211,9 +211,23 @@ void draw_objects() {
 		else if (modo == 5)
 			mi_revolucion_x.draw_solido_colores();
 	} else if (figura == 6) {
-		mi_doraemon.componer(modo);
+		// Este if lo usamos para que no se cambie el modelo
+		// cada vez que redibujamos la pantalla
+		if (!mi_robot.in_use()) {
+			mi_robot.componer();
+		}
+		if (modo == 1)
+			mi_robot.draw_puntos(0, 1.0, 0, 5);
+		else if (modo == 2)
+			mi_robot.draw_aristas(1.0, 0, 1.0, 1);
+		else if (modo == 3)
+			mi_robot.draw_solido(0, 0, 1.0);
+		else if (modo == 4)
+			mi_robot.draw_solido_ajedrez(0.3176, 0.4039, 0.3098, 0.7450, 0.5882, 0.8431);
+		else if (modo == 5)
+			mi_robot.draw_solido_colores();
 		if (DEBUG_MODE) {
-			printf("%s\n", "Final de Doraemon practica3.cpp->draw_objects->15");
+			printf("%s\n", "Final de Robot practica3.cpp->draw_objects->15");
 		}
 	}
 }
