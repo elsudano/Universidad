@@ -22,6 +22,10 @@ const int AXIS_SIZE=500;
 int figura = 1;
 // Tipo de visualización del objeto
 int modo = 1;
+// Grados de giro de la cintura
+float giro = 0.0;
+// Elevación del hombro
+float eleva = 0.0;
 
 // variables que definen la posicion de la camara en coordenadas polares
 GLfloat Observer_distance;
@@ -211,21 +215,9 @@ void draw_objects() {
 		else if (modo == 5)
 			mi_revolucion_x.draw_solido_colores();
 	} else if (figura == 6) {
-		// Este if lo usamos para que no se cambie el modelo
-		// cada vez que redibujamos la pantalla
-		if (!mi_robot.in_use()) {
-			mi_robot.componer();
-		}
-		if (modo == 1)
-			mi_robot.draw_puntos(0, 1.0, 0, 5);
-		else if (modo == 2)
-			mi_robot.draw_aristas(1.0, 0, 1.0, 1);
-		else if (modo == 3)
-			mi_robot.draw_solido(0, 0, 1.0);
-		else if (modo == 4)
-			mi_robot.draw_solido_ajedrez(0.3176, 0.4039, 0.3098, 0.7450, 0.5882, 0.8431);
-		else if (modo == 5)
-			mi_robot.draw_solido_colores();
+			mi_robot.componer(modo);
+			mi_robot.set_giro_cintura(giro);
+			mi_robot.set_eleva_hombro(eleva);
 		if (DEBUG_MODE) {
 			printf("%s\n", "Final de Robot practica3.cpp->draw_objects->15");
 		}
@@ -271,6 +263,10 @@ void normal_keys(unsigned char Tecla1,int x,int y) {
 	if ( toupper(Tecla1) == 'S' ) modo = 3; // El objeto en un color solido
 	if ( toupper(Tecla1) == 'A' ) modo = 4; // Modo Ajedrez
 	if ( toupper(Tecla1) == 'C' ) modo = 5; // Degradado según los colores de los vertices
+	if ( toupper(Tecla1) == 'K' ) giro = giro+2.5; // Giro derecha del robot
+	if ( toupper(Tecla1) == 'L' ) giro = eleva-2.5; // Giro izquierda del robot
+	if ( toupper(Tecla1) == 'Y' ) eleva = eleva+2; // Eleva el hombro del robot
+	if ( toupper(Tecla1) == 'H' ) eleva = eleva-2; // Desciende el hombro del robot
 	if ( Tecla1 == '1' ) figura = 1; // Cubo con puntos desde método
 	if ( Tecla1 == '2' ) figura = 2; // Piramide con puntos desde método
 	if ( Tecla1 == '3' ) figura = 3; // Objeto cargado desde fichero ply
