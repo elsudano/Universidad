@@ -12,3 +12,5 @@ bin/
 nbandroid/
 build/
 debug/
+
+*.gz
