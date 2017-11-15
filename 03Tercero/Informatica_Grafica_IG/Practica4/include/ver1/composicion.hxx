@@ -185,7 +185,7 @@ void _composicion::componer(int mode){
         // Dibujamos el cuerpo
         this->cuerpo(mode);
         glPushMatrix(); // para que eleve los antebrazos y brazos
-            glTranslatef(0.0,0.320943,+0.025);
+            glTranslatef(0.0,+0.320943,+0.025);
             glRotatef(this->eleva_hombro, 1, 0, 0);
             glTranslatef(0.0,-0.320943,-0.025);
             // Dibujamos el antebrazo derecho

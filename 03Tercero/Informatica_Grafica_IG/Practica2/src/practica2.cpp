@@ -124,7 +124,7 @@ void draw_objects() {
 			// Guardo el nombre del fichero en un vector de char
 			// con la ruta en donde se encuentra, esto normalmente
 			// se pasa por parametros
-			strcpy (nombre_fichero, "datos/big_dodge.ply");
+			strcpy (nombre_fichero, "../datos/big_dodge.ply");
 			// realizo la lectura de los datos en mi objeto
 			mi_objeto3D.leer_objeto(nombre_fichero);
 			if (DEBUG_MODE) {
@@ -151,7 +151,7 @@ void draw_objects() {
 			// Guardo el nombre del fichero en un vector de char
 			// con la ruta en donde se encuentra, esto normalmente
 			// se pasa por parametros
-			strcpy (nombre_fichero, "datos/perfil.ply");
+			strcpy (nombre_fichero, "../datos/perfil.ply");
 			// realizo la lectura de los datos en mi objeto
 			mi_revolucion.leer_objeto(nombre_fichero);
 			// realizamos la revolución del perfil para generar el objeto
@@ -182,7 +182,7 @@ void draw_objects() {
 			// Guardo el nombre del fichero en un vector de char
 			// con la ruta en donde se encuentra, esto normalmente
 			// se pasa por parametros
-			strcpy (nombre_fichero, "datos/perfil_x.ply");
+			strcpy (nombre_fichero, "../datos/perfil_x.ply");
 			// realizo la lectura de los datos en mi objeto
 			mi_revolucion_x.leer_objeto(nombre_fichero);
 			// realizamos la revolución del perfil para generar el objeto

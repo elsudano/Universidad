@@ -132,7 +132,7 @@ void draw_objects() {
 			// Guardo el nombre del fichero en un vector de char
 			// con la ruta en donde se encuentra, esto normalmente
 			// se pasa por parametros
-			strcpy (nombre_fichero, "datos/big_dodge.ply");
+			strcpy (nombre_fichero, "../datos/big_dodge.ply");
 			// realizo la lectura de los datos en mi objeto
 			mi_objeto3D.leer_objeto(nombre_fichero);
 			if (DEBUG_MODE) {
@@ -159,7 +159,7 @@ void draw_objects() {
 			// Guardo el nombre del fichero en un vector de char
 			// con la ruta en donde se encuentra, esto normalmente
 			// se pasa por parametros
-			strcpy (nombre_fichero, "datos/perfil.ply");
+			strcpy (nombre_fichero, "../datos/perfil.ply");
 			// realizo la lectura de los datos en mi objeto
 			mi_revolucion.leer_objeto(nombre_fichero);
 			// realizamos la revolución del perfil para generar el objeto
@@ -190,7 +190,7 @@ void draw_objects() {
 			// Guardo el nombre del fichero en un vector de char
 			// con la ruta en donde se encuentra, esto normalmente
 			// se pasa por parametros
-			strcpy (nombre_fichero, "datos/perfil_x.ply");
+			strcpy (nombre_fichero, "../datos/perfil_x.ply");
 			// realizo la lectura de los datos en mi objeto
 			mi_revolucion_x.leer_objeto(nombre_fichero);
 			// realizamos la revolución del perfil para generar el objeto
@@ -266,8 +266,8 @@ void normal_keys(unsigned char Tecla1,int x,int y) {
 	if ( toupper(Tecla1) == 'S' ) modo = 3; // El objeto en un color solido
 	if ( toupper(Tecla1) == 'A' ) modo = 4; // Modo Ajedrez
 	if ( toupper(Tecla1) == 'C' ) modo = 5; // Degradado según los colores de los vertices
-	if ( toupper(Tecla1) == 'O' ) giro = giro+2.5; // Giro derecha del robot
-	if ( toupper(Tecla1) == 'I' ) giro = giro-2.5; // Giro izquierda del robot
+	if ( toupper(Tecla1) == 'I' ) giro = giro+2.5; // Giro derecha del robot
+	if ( toupper(Tecla1) == 'O' ) giro = giro-2.5; // Giro izquierda del robot
 	if ( toupper(Tecla1) == 'Y' ) eleva = eleva-2; // Desciende el hombro del robot
 	if ( toupper(Tecla1) == 'H' ) eleva = eleva+2; // Eleva el hombro del robot
 	if ( toupper(Tecla1) == 'U' ) elevab = elevab-2; // Desciende el brazo del robot
@@ -356,7 +356,7 @@ int main(int argc, char **argv) {
 	glutInitWindowSize(UI_window_width,UI_window_height);
 	// llamada para crear la ventana, indicando el titulo (no se visualiza hasta que se llama
 	// al bucle de eventos)
-	glutCreateWindow("Practica 3");
+	glutCreateWindow("Practica 4");
 	// asignación de la funcion llamada "dibujar" al evento de dibujo
 	glutDisplayFunc(draw_scene);
 	// asignación de la funcion llamada "cambiar_tamanio_ventana" al evento correspondiente
