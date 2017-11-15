@@ -12,7 +12,7 @@
 
 using namespace std;
 
-const bool DEBUG_MODE = true;
+const bool DEBUG_MODE = false;
 
 //*************************************************************************
 // clase punto

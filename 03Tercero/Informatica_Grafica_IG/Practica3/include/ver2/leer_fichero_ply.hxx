@@ -170,7 +170,9 @@ int _file_ply::read(vector<float> &Vertices,vector<int> &Faces){
 							Next_token=next_token();
 							if (Next_token==NUMBER) {
 								if ((int)Yylval.Real!=3) {
-									printf("Face=%d Token=%s\n",i,Yylval.Text.c_str());
+									if (DEBUG_MODE) {
+									  printf("Face=%d Token=%s\n",i,Yylval.Text.c_str());
+									}
 									error("only triangles supported");;
 								}
 							}else error("no number of vertex indices");
@@ -181,7 +183,9 @@ int _file_ply::read(vector<float> &Vertices,vector<int> &Faces){
 								}else error("no number for coordinate");
 							}
 						}
-						printf("File readed\n");
+						if (DEBUG_MODE) {
+						  printf("File readed\n");
+						}
 					}else error("no format number");
 				}else error("no ascii format");
 			}else error("no format word");

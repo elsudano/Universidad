@@ -266,18 +266,19 @@ void normal_keys(unsigned char Tecla1,int x,int y) {
 	if ( toupper(Tecla1) == 'S' ) modo = 3; // El objeto en un color solido
 	if ( toupper(Tecla1) == 'A' ) modo = 4; // Modo Ajedrez
 	if ( toupper(Tecla1) == 'C' ) modo = 5; // Degradado según los colores de los vertices
-	if ( toupper(Tecla1) == 'K' ) giro = giro+2.5; // Giro derecha del robot
-	if ( toupper(Tecla1) == 'L' ) giro = giro-2.5; // Giro izquierda del robot
-	if ( toupper(Tecla1) == 'Y' ) eleva = eleva+2; // Eleva el hombro del robot
-	if ( toupper(Tecla1) == 'H' ) eleva = eleva-2; // Desciende el hombro del robot
-	if ( toupper(Tecla1) == 'U' ) elevab = elevab+2; // Eleva el brazo del robot
-	if ( toupper(Tecla1) == 'J' ) elevab = elevab-2; // Desciende el brazo del robot
+	if ( toupper(Tecla1) == 'I' ) giro = giro+2.5; // Giro derecha del robot
+	if ( toupper(Tecla1) == 'O' ) giro = giro-2.5; // Giro izquierda del robot
+	if ( toupper(Tecla1) == 'Y' ) eleva = eleva-2; // Desciende el hombro del robot
+	if ( toupper(Tecla1) == 'H' ) eleva = eleva+2; // Eleva el hombro del robot
+	if ( toupper(Tecla1) == 'U' ) elevab = elevab-2; // Desciende el brazo del robot
+	if ( toupper(Tecla1) == 'J' ) elevab = elevab+2; // Eleva el brazo del robot
 	if ( Tecla1 == '1' ) figura = 1; // Cubo con puntos desde método
 	if ( Tecla1 == '2' ) figura = 2; // Piramide con puntos desde método
 	if ( Tecla1 == '3' ) figura = 3; // Objeto cargado desde fichero ply
 	if ( Tecla1 == '4' ) figura = 4; // Objeto creado por revolución en eje y
 	if ( Tecla1 == '5' ) figura = 5; // Objeto creado por revolución en eje x
 	if ( Tecla1 == '6' ) figura = 6; // Objeto multiple
+	glutPostRedisplay();
 }
 
 //***************************************************************************

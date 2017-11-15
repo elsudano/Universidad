@@ -174,18 +174,24 @@ void _composicion::componer(int mode){
     // Comenzamos con el dibujado del modelo
     // Dibujamos la cabeza
     glPushMatrix(); // para que gire la cintura
-    glRotatef(this->giro_cintura, 0, 1, 0);
-    this->cabeza(mode);
-    // Dibujamos el cuerpo
-	   this->cuerpo(mode);
-    // Dibujamos el antebrazo derecho
-    this->antebrazoderecho(mode);
-    // Dibujamos el brazo derecho
-    this->brazoderecho(mode);
-    // Dibujamos el antebrazo izquierdo
-    this->antebrazoizquierdo(mode);
-	// Dibujamos el brazo izquierdo
-    this->brazoizquierdo(mode);
+        glRotatef(this->giro_cintura, 0, 1, 0);
+        this->cabeza(mode);
+        // Dibujamos el cuerpo
+        this->cuerpo(mode);
+        glPushMatrix(); // para que eleve los antebrazos y brazos
+            glRotatef(this->eleva_hombro, 1, 0, 0);
+            // Dibujamos el antebrazo derecho
+            this->antebrazoderecho(mode);
+            // Dibujamos el antebrazo izquierdo
+            this->antebrazoizquierdo(mode);
+            glPushMatrix(); // para que eleve los brazos
+                glRotatef(this->eleva_brazo, 1, 0, 0);
+                // Dibujamos el brazo derecho
+                this->brazoderecho(mode);
+            	// Dibujamos el brazo izquierdo
+                this->brazoizquierdo(mode);
+            glPopMatrix();
+        glPopMatrix();
     glPopMatrix();
     // Dibujamos el resto del cuerpo
     this->troncoinferior(mode);
