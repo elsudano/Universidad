@@ -177,7 +177,7 @@ void _composicion::componer(int mode){
     glRotatef(this->giro_cintura, 0, 1, 0);
     this->cabeza(mode);
     // Dibujamos el cuerpo
-	this->cuerpo(mode);
+	   this->cuerpo(mode);
     // Dibujamos el antebrazo derecho
     this->antebrazoderecho(mode);
     // Dibujamos el brazo derecho
@@ -198,7 +198,10 @@ void _composicion::componer(int mode){
 // a la izquierda valores positivos.
 // @param grados: es un valor float expresado en grados con un maximo de +/-45º
 //******************************************************************************
-void set_giro_cintura(float grados){
+void _composicion::set_giro_cintura(float grados){
+    if (DEBUG_MODE) {
+      printf("%s %f\n", "Los grados son: composicion.hxx->set_giro_cintura->1",grados);
+    }
     this->giro_cintura = grados;
 }
 
@@ -206,6 +209,9 @@ void set_giro_cintura(float grados){
 // Con esto solicitamos el tamaño de giro de cintura se devuelve en grados
 //******************************************************************************
 float _composicion::get_giro_cintura(){
+    if (DEBUG_MODE) {
+      printf("%s %f\n", "Los grados son: composicion.hxx->set_giro_cintura->1",this->giro_cintura);
+    }
     return this->giro_cintura;
 }
 
@@ -216,6 +222,9 @@ float _composicion::get_giro_cintura(){
 // @param cm: es un valor float expresado en cm con un maximo de +20/-5
 //******************************************************************************
 void _composicion::set_eleva_hombro(float cm){
+    if (DEBUG_MODE) {
+      printf("%s %f\n", "Los cm son: composicion.hxx->set_eleva_hombro->1",cm);
+    }
     this->eleva_hombro = cm;
 }
 
@@ -223,6 +232,9 @@ void _composicion::set_eleva_hombro(float cm){
 // Con esto solicitamos el grado de elevación que tiene el hombro
 //******************************************************************************
 float _composicion::get_eleva_hombro(){
+    if (DEBUG_MODE) {
+      printf("%s %f\n", "Los grados son: composicion.hxx->get_eleva_hombro->1",this->eleva_hombro);
+    }
     return this->eleva_hombro;
 }
 
@@ -233,6 +245,9 @@ float _composicion::get_eleva_hombro(){
 // @param cm: es un valor float expresado en cm con un maximo de +20/-5
 //******************************************************************************
 void _composicion::set_eleva_brazo(float cm){
+    if (DEBUG_MODE) {
+      printf("%s %f\n", "Los cm son: composicion.hxx->set_eleva_brazo->1",cm);
+    }
     this->eleva_brazo = cm;
 }
 
@@ -240,5 +255,8 @@ void _composicion::set_eleva_brazo(float cm){
 // Con esto solicitamos el grado de elevación que tiene el brazo
 //******************************************************************************
 float _composicion::get_eleva_brazo(){
+    if (DEBUG_MODE) {
+      printf("%s %f\n", "Los cm son: composicion.hxx->get_eleva_brazo->1",this->eleva_brazo);
+    }
     return this->eleva_brazo;
 }
