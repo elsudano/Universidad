@@ -1,5 +1,5 @@
 //**************************************************************************
-// Práctica 2
+// Práctica 4
 //
 // Domingo Martin Perandres 2013-2016
 //
@@ -15,6 +15,7 @@
 #include "cubo.h"
 #include "piramide.h"
 #include "composicion.h"
+#include "luz.h"
 
 // tamaño de los ejes
 const int AXIS_SIZE=500;
@@ -23,11 +24,13 @@ int figura = 1;
 // Tipo de visualización del objeto
 int modo = 1;
 // Grados de giro de la cintura
-float giro = 0.0;
+GLfloat giro = 0.0;
 // Elevación del hombro
-float eleva = 0.0;
+GLfloat eleva = 0.0;
 // Elevación del hombro
-float elevab = 0.0;
+GLfloat elevab = 0.0;
+// variable que controla si poner o quitar el suavizado de los objetos
+bool suavizado = false;
 
 // variables que definen la posicion de la camara en coordenadas polares
 GLfloat Observer_distance;
@@ -42,6 +45,12 @@ _objeto3D mi_objeto3D;
 _revolucion mi_revolucion;
 _revolucion_x mi_revolucion_x;
 _composicion mi_robot;
+_luz mi_luz01(1);
+// variable que se encarga del obturador de foco de la luz 1
+GLfloat foco = mi_luz01.get_obturador_foco();
+// variable para controlar la posición de la luz 1
+_vertex4f posicion_foco = mi_luz01.get_posicion();
+_luz mi_luz02(2);
 
 // variables que controlan la ventana y la transformacion de perspectiva
 GLfloat Window_width,Window_height,Front_plane,Back_plane;
@@ -101,6 +110,18 @@ void draw_axis(){
 }
 
 //**************************************************************************
+// Funcion que dibuja los ejes utilizando la primitiva grafica de lineas
+//***************************************************************************
+void draw_ligths(){
+	mi_luz01.set_modo(LUZ_FOCO);
+	mi_luz02.set_modo(LUZ_DIFUSA);
+	mi_luz01.set_obturador_foco(foco);
+	mi_luz01.set_posicion(posicion_foco);
+	mi_luz01.interruptor();
+	mi_luz02.interruptor();
+}
+
+//**************************************************************************
 // Funcion que dibuja los objetos
 //***************************************************************************
 void draw_objects() {
@@ -116,6 +137,14 @@ void draw_objects() {
 			mi_cubo.draw_solido_ajedrez(0.0, 0.0, 1.0, 1.0, 1.0, 0.0);
 		else if (modo == 5)
 			mi_cubo.draw_solido_colores();
+		else if (modo == 6){
+			mi_cubo.set_material(2);
+			draw_ligths(); // con esto encendemos las luces
+			mi_cubo.draw_solido_luz(suavizado);
+			draw_ligths();// con esto apagamos las luces
+		}
+		else if (modo == 7)
+			mi_cubo.draw_solido_tex("../datos/imagen.png");
 	} else if (figura == 2) {
 		if (modo == 1)
 			mi_piramide.draw_puntos(0, 1.0, 0, 5);
@@ -127,6 +156,14 @@ void draw_objects() {
 			mi_piramide.draw_solido_ajedrez(0.0, 1.0, 0.0, 1.0, 0.0, 0.0);
 		else if (modo == 5)
 			mi_piramide.draw_solido_colores();
+		else if (modo == 6){
+			mi_piramide.set_material(2);
+			draw_ligths(); // con esto encendemos las luces
+			mi_piramide.draw_solido_luz(suavizado);
+			draw_ligths();// con esto apagamos las luces
+		}
+		else if (modo == 7)
+			mi_piramide.draw_solido_tex("../datos/imagen.png");
 	} else if (figura == 3) {
 		if (!mi_objeto3D.in_use()) {
 			// Guardo el nombre del fichero en un vector de char
@@ -154,6 +191,14 @@ void draw_objects() {
 			mi_objeto3D.draw_solido_ajedrez(0.0, 1.0, 0.0, 1.0, 0.0, 0.0);
 		else if (modo == 5)
 			mi_objeto3D.draw_solido_colores();
+		else if (modo == 6){
+			mi_objeto3D.set_material(1);
+			draw_ligths(); // con esto encendemos las luces
+			mi_objeto3D.draw_solido_luz(suavizado);
+			draw_ligths();// con esto apagamos las luces
+		}
+		else if (modo == 7)
+			mi_objeto3D.draw_solido_tex("../datos/imagen.png");
 	} else if (figura == 4) {
 		if (!mi_revolucion.in_use()) {
 			// Guardo el nombre del fichero en un vector de char
@@ -185,6 +230,14 @@ void draw_objects() {
 			mi_revolucion.draw_solido_ajedrez(0.3176, 0.4039, 0.3098, 0.7450, 0.5882, 0.8431);
 		else if (modo == 5)
 			mi_revolucion.draw_solido_colores();
+		else if (modo == 6){
+			mi_revolucion.set_material(2);
+			draw_ligths(); // con esto encendemos las luces
+			mi_revolucion.draw_solido_luz(suavizado);
+			draw_ligths();// con esto apagamos las luces
+		}
+		else if (modo == 7)
+			mi_revolucion.draw_solido_tex("../datos/imagen.png");
 	} else if (figura == 5) {
 		if (!mi_revolucion_x.in_use()) {
 			// Guardo el nombre del fichero en un vector de char
@@ -216,6 +269,14 @@ void draw_objects() {
 			mi_revolucion_x.draw_solido_ajedrez(0.3176, 0.4039, 0.3098, 0.7450, 0.5882, 0.8431);
 		else if (modo == 5)
 			mi_revolucion_x.draw_solido_colores();
+		else if (modo == 6){
+			mi_revolucion_x.set_material(2);
+			draw_ligths(); // con esto encendemos las luces
+			mi_revolucion_x.draw_solido_luz(suavizado);
+			draw_ligths();// con esto apagamos las luces
+		}
+		else if (modo == 7)
+			mi_revolucion_x.draw_solido_tex("../datos/imagen.png");
 	} else if (figura == 6) {
 			mi_robot.componer(modo);
 			mi_robot.set_giro_cintura(giro);
@@ -260,24 +321,48 @@ void change_window_size(int Ancho1,int Alto1) {
 // posicion y del raton
 //***************************************************************************
 void normal_keys(unsigned char Tecla1,int x,int y) {
-	if ( toupper(Tecla1) == 'Q' ) exit(0); // Salir
-	if ( toupper(Tecla1) == 'P' ) modo = 1; // Solo los puntos
-	if ( toupper(Tecla1) == 'L' ) modo = 2; // Solo los lineas/aristas
-	if ( toupper(Tecla1) == 'S' ) modo = 3; // El objeto en un color solido
-	if ( toupper(Tecla1) == 'A' ) modo = 4; // Modo Ajedrez
-	if ( toupper(Tecla1) == 'C' ) modo = 5; // Degradado según los colores de los vertices
-	if ( toupper(Tecla1) == 'I' ) giro = giro+2.5; // Giro derecha del robot
-	if ( toupper(Tecla1) == 'O' ) giro = giro-2.5; // Giro izquierda del robot
-	if ( toupper(Tecla1) == 'Y' ) eleva = eleva-2; // Desciende el hombro del robot
-	if ( toupper(Tecla1) == 'H' ) eleva = eleva+2; // Eleva el hombro del robot
-	if ( toupper(Tecla1) == 'U' ) elevab = elevab-2; // Desciende el brazo del robot
-	if ( toupper(Tecla1) == 'J' ) elevab = elevab+2; // Eleva el brazo del robot
-	if ( Tecla1 == '1' ) figura = 1; // Cubo con puntos desde método
-	if ( Tecla1 == '2' ) figura = 2; // Piramide con puntos desde método
-	if ( Tecla1 == '3' ) figura = 3; // Objeto cargado desde fichero ply
-	if ( Tecla1 == '4' ) figura = 4; // Objeto creado por revolución en eje y
-	if ( Tecla1 == '5' ) figura = 5; // Objeto creado por revolución en eje x
-	if ( Tecla1 == '6' ) figura = 6; // Objeto multiple
+	switch (toupper(Tecla1)){
+		case 'Q': exit(0); break;// Salir
+		case 'D': modo = 1; break; // Solo los puntos
+		case 'Z': modo = 2; break; // Solo los lineas/aristas
+		case 'S': modo = 3; break; // El objeto en un color solido
+		case 'A': modo = 4; break; // Modo Ajedrez
+		case 'C': modo = 5; break; // Degradado según los colores de los vertices
+		case 'X': modo = 6; break; // Modo de pintado solido con luces
+		case 'E': modo = 7; break; // Objeto con textura
+		case 'W': suavizado = !suavizado; break; // podemos poner el metodo de suavizado o quitarlo
+		case 'F': foco = foco+2; break; // Ampliar el tamaño del foco
+		case 'V': foco = foco-2; break; // Disminuir el tamaño del foco
+		case 'H': posicion_foco._1 = posicion_foco._1+2; break; // Mover hacia arriba en el eje y la luz
+		case 'N': posicion_foco._1 = posicion_foco._1-2; break; // Mover hacia abajo en el eje y la luz
+		case 'M': posicion_foco._0 = posicion_foco._0+2; break; // Mover hacia derecha en el eje x la luz
+		case 'B': posicion_foco._0 = posicion_foco._0-2; break; // Mover hacia izquierda en el eje x la luz
+		case 'G': posicion_foco._2 = posicion_foco._2+2; break; // Mover hacia delante en el eje z la luz
+		case 'T': posicion_foco._2 = posicion_foco._2-2; break; // Mover hacia atras en el eje z la luz
+		case 'U': posicion_foco._3 = posicion_foco._3+2; break; // Giramos a derecha el foco en Y
+		case 'Y': posicion_foco._3 = posicion_foco._3-2; break; // Giramos a izquierda el foco en Y
+		case 'R':// Reiniciamos la posición de la luz al 10,10,10
+			posicion_foco._0 = 10;
+			posicion_foco._1 = 10;
+			posicion_foco._2 = 10;
+			break;
+		//-----------------------------------------------------------------------
+		case 'K': giro = giro+2.5; break; // Giro derecha del robot
+		case 'J': giro = giro-2.5; break; // Giro izquierda del robot
+		case 'L': eleva = eleva-2; break; // Desciende el hombro del robot
+		case 'O': eleva = eleva+2; break; // Eleva el hombro del robot
+		case 'P': elevab = elevab-2; break; // Desciende el brazo del robot
+		case '0': elevab = elevab+2; break; // Eleva el brazo del robot
+		//-----------------------------------------------------------------------
+		case '1': Observer_angle_y--; break;// Movemos hacia la izquierda la camara del observador
+		case '3': Observer_angle_y++; break;// Movemos hacia la derecha la camara del observador
+		case '5': Observer_angle_x--; break;// Movemos hacia arriba la camara del observador
+		case '2': Observer_angle_x++; break;// Movemos hacia abajo la camara del observador
+		case '4': Observer_angle_z++; break;// Giramos el objeto en el eje Z
+		case '7': Observer_angle_z--; break;// Giramos el objeto en el eje Z
+		case '8': mi_luz01.interruptor(); break;// Apaga y enciende la luz 1
+		case '9': mi_luz02.interruptor(); break;// Apaga y enciende la luz 2
+	}
 	glutPostRedisplay();
 }
 
@@ -291,12 +376,12 @@ void normal_keys(unsigned char Tecla1,int x,int y) {
 //***************************************************************************
 void special_keys(int Tecla1,int x,int y) {
 	switch (Tecla1) {
-		case GLUT_KEY_LEFT: Observer_angle_y--; break;
-		case GLUT_KEY_RIGHT: Observer_angle_y++; break;
-		case GLUT_KEY_UP: Observer_angle_x--; break;
-		case GLUT_KEY_DOWN: Observer_angle_x++; break;
-		case GLUT_KEY_F1: Observer_angle_z--; break;
-		case GLUT_KEY_F2: Observer_angle_z++; break;
+		case GLUT_KEY_F1: figura = 1; break;// Cubo con puntos desde método
+		case GLUT_KEY_F2: figura = 2; break;// Piramide con puntos desde método
+		case GLUT_KEY_F3: figura = 3; break;// Objeto cargado desde fichero ply
+		case GLUT_KEY_F4: figura = 4; break;// Objeto creado por revolución en eje y
+		case GLUT_KEY_F5: figura = 5; break;// Objeto creado por revolución en eje x
+		case GLUT_KEY_F6: figura = 6; break;// Objeto multiple
 		case GLUT_KEY_PAGE_UP: Observer_distance*=1.2; break;
 		case GLUT_KEY_PAGE_DOWN: Observer_distance/=1.2; break;
 	}
