@@ -2,7 +2,7 @@
 #define PUNTOS_H
 
 //**************************************************************************
-// Práctica 1 usando objetos
+// Práctica 4 usando objetos
 //**************************************************************************
 
 #include <vector>
@@ -12,7 +12,7 @@
 
 using namespace std;
 
-const bool DEBUG_MODE = false;
+const bool DEBUG_MODE = true;
 
 //*************************************************************************
 // clase punto
