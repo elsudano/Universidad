@@ -155,6 +155,8 @@ void _composicion::dibuja(int mode){
         this->parte_cuerpo->draw_solido_ajedrez(this->r, this->g, this->b, 1.0-this->r, 1.0-this->g, 1.0-this->b);
     }else if (mode == 5){
         this->parte_cuerpo->draw_solido_colores();
+    }else if (mode == 6){
+        this->parte_cuerpo->draw_solido_luz(true);
     }
 }
 
