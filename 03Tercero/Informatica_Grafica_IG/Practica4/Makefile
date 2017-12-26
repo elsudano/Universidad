@@ -18,7 +18,7 @@ DEBUG_DIR = debug
 # Extraemos los nombres de los ficheros para los binarios
 # asegurate que no tienes ninguna definicion en el codigo
 # osea que no se declara "#define STL"
-VER = VER1
+VER = VER2
 
 ###############################################################################
 # Directorio donde se guardan los ficheros .o
@@ -35,7 +35,7 @@ LIB_P = lib
 # Librerias del sistema
 LIB_S = /usr/lib64
 # Librerias a usar.
-LIBS = -lglut -lGLU -lGL -lX11 -lXext -lc -lm
+LIBS = -lglut -lGLU -lGL -lX11 -lXext -lc -lm -lpthread
 # Extención de los ficheros fuente
 EXT = cpp # pueden ser cpp, cc
 RM = rm -Rf
