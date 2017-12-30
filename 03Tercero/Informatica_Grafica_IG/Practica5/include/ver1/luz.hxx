@@ -110,8 +110,8 @@ float _luz::get_obturador_foco(){
 
 //*************************************************************************
 // Para encender y apagar la luz y poder setear todos los parametros
-// necesarios para OpenGL
-// @param bool on_off indica si queremos encenderla o apagarla
+// necesarios para OpenGL, la primera llamada enciende las luces
+// la segunda llamada apaga las luces.
 //*************************************************************************
 void _luz::interruptor(){
     glDisable (GL_LIGHT0);
@@ -129,6 +129,8 @@ void _luz::interruptor(){
         glLightfv(this->num_luz,GL_SPOT_DIRECTION,this->direccion);
 		glPopMatrix();
 	}else{
+		glEnable (GL_LIGHT0);
+		glDisable (GL_LIGHTING);
 		glDisable (this->num_luz);
 	}
 	this->encendida_apagada = !this->encendida_apagada;
