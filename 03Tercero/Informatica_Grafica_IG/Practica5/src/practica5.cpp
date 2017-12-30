@@ -18,21 +18,34 @@
 #include "luz.h"
 
 // tamaño de los ejes
-const int AXIS_SIZE=500;
+const GLint AXIS_SIZE=500;
 // Tipo de figura ha mostrar
-int figura = 1;
+GLint figura = 1;
 // Tipo de visualización del objeto
-int modo = 1;
+GLint modo = 1;
 // Grados de giro de la cintura
 GLfloat giro = 0.0;
 // Elevación del hombro
 GLfloat eleva = 0.0;
 // Elevación del hombro
 GLfloat elevab = 0.0;
+// posición X inicial del raton cuando se produce una pulsación
+GLint pos_x;
+// posición X inicial del raton cuando se produce una pulsación
+GLint pos_y;
 // variable que controla si poner o quitar el suavizado de los objetos
 bool suavizado = false;
+// variable que controla si podemos mover la figura en x,y al mantener pulsado
+// el primer boton del raton
+bool xy_move = false;
+// variable que controla si podemos mover la figura en z al mantener pulsado
+// el segundo boton
+bool z_move = false;
+// se utiliza para ver solo la vista 3D o las 4 vistas
+bool vista_multiple = false;
 
 // variables que definen la posicion de la camara en coordenadas polares
+GLfloat Observer_zoom;
 GLfloat Observer_distance;
 GLfloat Observer_angle_x;
 GLfloat Observer_angle_y;
@@ -62,25 +75,13 @@ int UI_window_pos_x=500,UI_window_pos_y=10,UI_window_width=900,UI_window_height=
 // Función para limpiar la ventana donde se dibujan los objetos
 //***************************************************************************
 void clear_window(){
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-}
-
-//**************************************************************************
-// Funcion para definir la transformación de proyeccion
-//***************************************************************************
-void change_projection(){
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	// formato(x_minimo,x_maximo, y_minimo, y_maximo,Front_plane, plano_traser)
-	//  Front_plane>0  Back_plane>PlanoDelantero)
-	glFrustum(-Window_width,Window_width,-Window_height,Window_height,Front_plane,Back_plane);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 //**************************************************************************
 // Funcion para definir la transformación de vista (posicionar la camara)
 //***************************************************************************
 void change_observer(){
-	// posicion del observador
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glTranslatef(0,0,-Observer_distance);
@@ -137,13 +138,12 @@ void draw_objects() {
 			mi_cubo.draw_solido_ajedrez(0.0, 0.0, 1.0, 1.0, 1.0, 0.0);
 		else if (modo == 5)
 			mi_cubo.draw_solido_colores();
-		else if (modo == 6){
+		else if (modo == 6) {
 			mi_cubo.set_material(2);
 			draw_ligths(); // con esto encendemos las luces
 			mi_cubo.draw_solido_luz(suavizado);
 			draw_ligths();// con esto apagamos las luces
-		}
-		else if (modo == 7)
+		}else if (modo == 7)
 			mi_cubo.draw_solido_tex("../datos/imagen.png");
 	} else if (figura == 2) {
 		if (modo == 1)
@@ -156,13 +156,12 @@ void draw_objects() {
 			mi_piramide.draw_solido_ajedrez(0.0, 1.0, 0.0, 1.0, 0.0, 0.0);
 		else if (modo == 5)
 			mi_piramide.draw_solido_colores();
-		else if (modo == 6){
+		else if (modo == 6) {
 			mi_piramide.set_material(2);
 			draw_ligths(); // con esto encendemos las luces
 			mi_piramide.draw_solido_luz(suavizado);
 			draw_ligths();// con esto apagamos las luces
-		}
-		else if (modo == 7)
+		}else if (modo == 7)
 			mi_piramide.draw_solido_tex("../datos/imagen.png");
 	} else if (figura == 3) {
 		if (!mi_objeto3D.in_use()) {
@@ -191,13 +190,12 @@ void draw_objects() {
 			mi_objeto3D.draw_solido_ajedrez(0.0, 1.0, 0.0, 1.0, 0.0, 0.0);
 		else if (modo == 5)
 			mi_objeto3D.draw_solido_colores();
-		else if (modo == 6){
+		else if (modo == 6) {
 			mi_objeto3D.set_material(1);
 			draw_ligths(); // con esto encendemos las luces
 			mi_objeto3D.draw_solido_luz(suavizado);
 			draw_ligths();// con esto apagamos las luces
-		}
-		else if (modo == 7)
+		}else if (modo == 7)
 			mi_objeto3D.draw_solido_tex("../datos/imagen.png");
 	} else if (figura == 4) {
 		if (!mi_revolucion.in_use()) {
@@ -230,13 +228,12 @@ void draw_objects() {
 			mi_revolucion.draw_solido_ajedrez(0.3176, 0.4039, 0.3098, 0.7450, 0.5882, 0.8431);
 		else if (modo == 5)
 			mi_revolucion.draw_solido_colores();
-		else if (modo == 6){
+		else if (modo == 6) {
 			mi_revolucion.set_material(2);
 			draw_ligths(); // con esto encendemos las luces
 			mi_revolucion.draw_solido_luz(suavizado);
 			draw_ligths();// con esto apagamos las luces
-		}
-		else if (modo == 7)
+		}else if (modo == 7)
 			mi_revolucion.draw_solido_tex("../datos/imagen.png");
 	} else if (figura == 5) {
 		if (!mi_revolucion_x.in_use()) {
@@ -269,22 +266,78 @@ void draw_objects() {
 			mi_revolucion_x.draw_solido_ajedrez(0.3176, 0.4039, 0.3098, 0.7450, 0.5882, 0.8431);
 		else if (modo == 5)
 			mi_revolucion_x.draw_solido_colores();
-		else if (modo == 6){
+		else if (modo == 6) {
 			mi_revolucion_x.set_material(2);
 			draw_ligths(); // con esto encendemos las luces
 			mi_revolucion_x.draw_solido_luz(suavizado);
 			draw_ligths();// con esto apagamos las luces
-		}
-		else if (modo == 7)
+		}else if (modo == 7)
 			mi_revolucion_x.draw_solido_tex("../datos/imagen.png");
 	} else if (figura == 6) {
-			mi_robot.componer(modo);
-			mi_robot.set_giro_cintura(giro);
-			mi_robot.set_eleva_hombro(eleva);
-			mi_robot.set_eleva_brazo(elevab);
+		mi_robot.componer(modo);
+		mi_robot.set_giro_cintura(giro);
+		mi_robot.set_eleva_hombro(eleva);
+		mi_robot.set_eleva_brazo(elevab);
 		if (DEBUG_MODE) {
 			printf("%s\n", "Final de Robot practica3.cpp->draw_objects->15");
 		}
+	}
+}
+
+//**************************************************************************
+// Funcion para definir la transformación de proyeccion
+//***************************************************************************
+void change_projection(){
+	if (vista_multiple) {
+		//superior-derecha perfil
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(-9, 9, -9, 9, -9, 9);
+		glViewport(UI_window_width / 2, UI_window_height / 2, UI_window_width / 2, UI_window_height / 2);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		glScalef(Observer_zoom,Observer_zoom,Observer_zoom);
+		gluLookAt(0, 0, 1, 0, 0, 0, 0, 1, 0);
+		draw_axis();
+		draw_objects();
+		// superior-izquierda alzado
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(-9, 9, -9, 9, -9, 9);
+		glViewport(0, UI_window_height / 2, UI_window_width / 2, UI_window_height / 2);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		glScalef(Observer_zoom,Observer_zoom,Observer_zoom);
+		gluLookAt(1, 0, 0, 0, 0, 0, 0, 1, 0);
+		draw_axis();
+		draw_objects();
+		// inferior-izquierda planta
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(-9, 9, -9, 9, -9, 9);
+		glViewport(0, 0, UI_window_width / 2, UI_window_height / 2);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		glScalef(Observer_zoom,Observer_zoom,Observer_zoom);
+		gluLookAt(0, 1, 0, 0, 0, 0, -1, 0, 0);
+		draw_axis();
+		draw_objects();
+		// inferior-derecha perspectiva
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glFrustum(-Window_width, Window_width, -Window_height, Window_height, Front_plane, Back_plane);
+		glViewport(UI_window_width / 2, 0, UI_window_width / 2, UI_window_height / 2);
+		change_observer();
+		draw_axis();
+		draw_objects();
+	} else if (!vista_multiple) {
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glFrustum(-Window_width, Window_width, -Window_height, Window_height, Front_plane, Back_plane);
+		glViewport(0, 0, UI_window_width, UI_window_height);
+		change_observer();
+		draw_axis();
+		draw_objects();
 	}
 }
 
@@ -293,9 +346,8 @@ void draw_objects() {
 //***************************************************************************
 void draw_scene(void) {
 	clear_window();
+	change_projection();
 	change_observer();
-	draw_axis();
-	draw_objects();
 	glutSwapBuffers();
 }
 
@@ -308,7 +360,14 @@ void draw_scene(void) {
 //***************************************************************************
 void change_window_size(int Ancho1,int Alto1) {
 	change_projection();
-	glViewport(0,0,Ancho1,Alto1);
+	if (DEBUG_MODE) {
+		printf("%s %d,%d\n", "practica5.cpp->change_window_size->1 Ancho y alto de la ventana:", Ancho1, Alto1);
+		printf("%s %d,%d\n", "practica5.cpp->change_window_size->2 Ancho y alto de la ventana (Globales):", UI_window_width, UI_window_height);
+		printf("%s %f,%f\n", "practica5.cpp->change_window_size->3 Ancho y alto de la vista (Globales):", Window_width, Window_height);
+	}
+	// igualamos los parametros de entrada al as variables globales
+	UI_window_width = Ancho1;
+	UI_window_height = Alto1;
 	glutPostRedisplay();
 }
 
@@ -321,7 +380,7 @@ void change_window_size(int Ancho1,int Alto1) {
 // posicion y del raton
 //***************************************************************************
 void normal_keys(unsigned char Tecla1,int x,int y) {
-	switch (toupper(Tecla1)){
+	switch (toupper(Tecla1)) {
 		case 'Q': exit(0); break;// Salir
 		case 'I': DEBUG_MODE = !DEBUG_MODE; break;// Activa/Desactiva el modo debug
 		case 'D': modo = 1; break; // Solo los puntos
@@ -383,11 +442,62 @@ void special_keys(int Tecla1,int x,int y) {
 		case GLUT_KEY_F4: figura = 4; break;// Objeto creado por revolución en eje y
 		case GLUT_KEY_F5: figura = 5; break;// Objeto creado por revolución en eje x
 		case GLUT_KEY_F6: figura = 6; break;// Objeto multiple
-		case GLUT_KEY_PAGE_UP: Observer_distance*=1.2; break;
-		case GLUT_KEY_PAGE_DOWN: Observer_distance/=1.2; break;
+		case GLUT_KEY_F8: vista_multiple = !vista_multiple; change_projection(); break;// poner una o varias camaras
 	}
 	if (DEBUG_MODE)
 		printf("Value of: %d\nValue of: %d\n", x, y);
+	glutPostRedisplay();
+}
+
+//***************************************************************************
+// Función llamada cuando se produce un click del raton
+//
+// @param x entero con la posición x del evento en la pantalla
+// @param y entero con la posición y del evento en la pantalla
+//***************************************************************************
+void click_mouse(int button, int state, int x, int y){
+	pos_x = x;
+	pos_y = y;
+	switch (button) {
+		case 0: // boton izquierdo
+			if (state == GLUT_DOWN) xy_move = true;
+			else if (state == GLUT_UP) xy_move = false;
+			break;
+		case 1: break; // boton central
+		case 2: // boton derecho
+			if (state == GLUT_DOWN) z_move = true;
+			else if (state == GLUT_UP) z_move = false;
+			break;
+		case 3: Observer_zoom/=1.02; Observer_distance*=1.02; break; // ruleta hacia arriba
+		case 4: Observer_zoom*=1.02; Observer_distance/=1.02; break; // ruleta hacia abajo
+	}
+	if (DEBUG_MODE) {
+		if (state == GLUT_DOWN) {
+			printf("%s %d %s %d %s %d\n", "practica5.cpp->click_mouse->1 Pulso el boton:", button, "en la posicion X:", x, " y posición Y:", y);
+		}else if (state == GLUT_UP) {
+			printf("%s %d %s %d %s %d\n", "practica5.cpp->click_mouse->2 Suelto el boton:", button, "en la posicion X:", x, " y posición Y:", y);
+		}
+	}
+	glutPostRedisplay();
+}
+
+//***************************************************************************
+// Función llamada cuando se produce un movimiento del raton y mientras
+// alguno de los botones esta pulsado, para rescatar la posición del raton
+// mientras no se pulsa ninguna tecla del mismo hay que usar el metodo de
+// normal_keys realizado mas arriba
+// @param x entero con la posición x del evento en la pantalla
+// @param y entero con la posición y del evento en la pantalla
+//***************************************************************************
+void move_mouse(int x, int y){
+	if (xy_move) {
+		Observer_angle_y=x-pos_x;// Movemos izquierda/derecha la camara del observador
+		Observer_angle_x=y-pos_y;// Movemos arriba/abajo la camara del observador
+	}
+	if (z_move) Observer_angle_z=y-pos_y; // Giramos el objeto en el eje Z
+	if (DEBUG_MODE) {
+		printf("%s %d %s %d\n", "practica5.cpp->move_mouse->1 Muevo el raton a X:", x, "Y:", y);
+	}
 	glutPostRedisplay();
 }
 
@@ -396,13 +506,14 @@ void special_keys(int Tecla1,int x,int y) {
 //***************************************************************************
 void initialize(void) {
 	// se inicalizan la ventana y los planos de corte
-	Window_width=5;
-	Window_height=5;
-	Front_plane=10;
+	Window_width=6;
+	Window_height=6;
+	Front_plane=20;
 	Back_plane=1000;
 
 	// se inicia la posicion del observador, en el eje z
-	Observer_distance=2*Front_plane;
+	Observer_zoom=1; // este es el zoom para las vistas ortho
+	Observer_distance=2*Front_plane; // este es para la vista frustrum
 	Observer_angle_x=0;
 	Observer_angle_y=0;
 	Observer_angle_z=0;
@@ -414,7 +525,7 @@ void initialize(void) {
 	// se habilita el z-bufer
 	glEnable(GL_DEPTH_TEST);
 	change_projection();
-	glViewport(0,0,UI_window_width,UI_window_height);
+	glutPostRedisplay();
 }
 
 //***************************************************************************
@@ -469,8 +580,8 @@ void help(){
 int main(int argc, char **argv) {
 	int param_min = 1;
 	int param_max = 2;
-	if (argc > param_min && argc <= param_max){
-		if (std::string(argv[1]) == "--help"){
+	if (argc > param_min && argc <= param_max) {
+		if (std::string(argv[1]) == "--help") {
 			help();
 			exit(0);
 		}
@@ -502,6 +613,10 @@ int main(int argc, char **argv) {
 	glutKeyboardFunc(normal_keys);
 	// asignación de la funcion llamada "tecla_Especial" al evento correspondiente
 	glutSpecialFunc(special_keys);
+	// asignación de la función para cuando se produzca un evento de raton
+	glutMouseFunc(click_mouse);
+	// asignación de la función para cuando se produzca el movimiento del raton
+	glutMotionFunc(move_mouse);
 	// funcion de inicialización
 	initialize();
 	// inicio del bucle de eventos
