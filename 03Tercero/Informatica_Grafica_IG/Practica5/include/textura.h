@@ -22,6 +22,7 @@ public:
 _textura();
 std::vector<unsigned char> cargar_imagen_a_memoria(const char* fichero, int &ancho, int &alto);
 GLuint prepara_textura(int id, int &ancho, int &alto, std::vector<unsigned char> datos);
+void limpia_textura();
 };
 
 #if defined(VER1)

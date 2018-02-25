@@ -237,6 +237,7 @@ void _triangulos3D::draw_solido_tex(const char* imagen){
 
 	glDrawArrays(GL_TRIANGLES, 0, this->caras.size());
 
+	this->la_textura.limpia_textura();
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_TEXTURE_2D);

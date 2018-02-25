@@ -3,6 +3,10 @@
 SHELL = /bin/bash
 
 ###############################################################################
+# Este es el nombre 2ue tendrá el fichero reultante de la compilación
+OBJETIVO = practica5
+
+###############################################################################
 # Variable que guarda los ficheros que hay que compilar
 SRC_DIR = src
 
@@ -56,7 +60,7 @@ BINFLAGS = -L$(LIB_S) -L$(LIB_P) $(LIBS) -I$(INC_S) -I$(INC_P) -O3
 .PHONY: all
 .SECONDARY:
 
-all: clean makedir practica5
+all: clean makedir $(OBJETIVO)
 
 $(OBJ)/%.o: $(SRC_DIR)/%.$(EXT)
 	$(GCC) $(GCCDEBUGFLAG) $^ -o $(DEBUG_DIR)/$@
@@ -65,6 +69,9 @@ $(OBJ)/%.o: $(SRC_DIR)/%.$(EXT)
 %: $(OBJ)/%.o
 	$(GCC) $(BINDEBUGFLAGS) $(DEBUG_DIR)/$^ -o $(DEBUG_DIR)/$@
 	$(GCC) $(BINFLAGS) $(BIN_DIR)/$^ -o $(BIN_DIR)/$@
+
+run: all
+	./$(BIN_DIR)/$(OBJETIVO)
 
 docu:
 	doxygen ./doc/doxys/dox_config

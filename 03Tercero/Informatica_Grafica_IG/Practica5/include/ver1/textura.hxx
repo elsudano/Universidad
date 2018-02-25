@@ -38,3 +38,9 @@ GLuint _textura::prepara_textura(int id, int &ancho, int &alto, std::vector<unsi
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, ancho, alto, 0, GL_RGB, GL_UNSIGNED_BYTE, &datos[0]);
 	return this->textura_id;
 }
+
+// Funcion para liberar la memoria de la textura
+void _textura::limpia_textura(){
+	// eliminamos la textura de la memoria
+	glDeleteTextures(1, &this->textura_id);
+}

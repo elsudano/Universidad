@@ -296,6 +296,8 @@ void change_projection(){
 		glViewport(UI_window_width / 2, UI_window_height / 2, UI_window_width / 2, UI_window_height / 2);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
+		if (figura == 6)
+			Observer_zoom = 0.5;
 		glScalef(Observer_zoom,Observer_zoom,Observer_zoom);
 		gluLookAt(0, 0, 1, 0, 0, 0, 0, 1, 0);
 		draw_axis();
@@ -307,6 +309,8 @@ void change_projection(){
 		glViewport(0, UI_window_height / 2, UI_window_width / 2, UI_window_height / 2);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
+		if (figura == 6)
+			Observer_zoom = 0.5;
 		glScalef(Observer_zoom,Observer_zoom,Observer_zoom);
 		gluLookAt(1, 0, 0, 0, 0, 0, 0, 1, 0);
 		draw_axis();
@@ -318,6 +322,8 @@ void change_projection(){
 		glViewport(0, 0, UI_window_width / 2, UI_window_height / 2);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
+		if (figura == 6)
+			Observer_zoom = 0.5;
 		glScalef(Observer_zoom,Observer_zoom,Observer_zoom);
 		gluLookAt(0, 1, 0, 0, 0, 0, -1, 0, 0);
 		draw_axis();
@@ -545,6 +551,7 @@ void help(){
 	printf("\t%s\n", "Tecla W Opción para poner o quitar el suavizado en los materiales.");
 	printf("\t%s\n", "Tecla F Aumentar el radio del tamaño del foco.");
 	printf("\t%s\n", "Tecla V Disminuir el radio del tamaño del foco.");
+	printf("\t%s\n", "Tecla I Activa/Desactiva el modo Debug.");
 	printf("\t%s\n", "Tecla H Mover hacia arriba en el eje y el foco.");
 	printf("\t%s\n", "Tecla N Mover hacia abajo en el eje y la foco.");
 	printf("\t%s\n", "Tecla M Mover hacia derecha en el eje x la foco.");
@@ -562,7 +569,10 @@ void help(){
 	printf("\t%s\n", "Tecla 0 Eleva el brazo del robot.");
 	printf("\t%s\n", "Tecla 8 Encender/Apagar el foco de la escena.");
 	printf("\t%s\n", "Tecla 9 Encender/Apagar la luz ambiental de la escena.");
-	printf("\n\t%s\n\n", "Se recomienda el uso del teclado númerico para el moviemiento de la figura");
+	printf("\t%s\n", "Teclas F1-F6 Seleccionan los objetos de la escena");
+	printf("\t%s\n", "Teclas F8 Activa/Desactiva la vista multiple");
+	printf("\n\t%s\n", "Se recomienda el uso del teclado númerico para el moviemiento de la figura");
+	printf("\t%s\n\n", "O si se desea se puede usar el raton para mover la camara");
 	printf("\t\t%s\n", "Tecla 1 Movemos hacia la izquierda la cámara del observador.");
 	printf("\t\t%s\n", "Tecla 3 Movemos hacia la derecha la cámara del observador.");
 	printf("\t\t%s\n", "Tecla 5 Movemos hacia arriba la cámara del observador.");
