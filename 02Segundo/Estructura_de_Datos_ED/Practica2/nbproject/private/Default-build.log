@@ -1,3 +1,0 @@
-touch src/*
-g++ -m32 -g -Llib -Iinclude -O0 -c  src/pruebagen_test.cpp -o obj/pruebagen_test.o
-g++ -m32 -g -Llib -Iinclude -O0  obj/pruebagen_test.o -o bin/pruebagen_test

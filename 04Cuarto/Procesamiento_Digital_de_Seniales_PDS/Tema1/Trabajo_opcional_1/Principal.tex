@@ -1,0 +1,283 @@
+\input{Preambulo.tex}
+
+%----------------------------------------------------------------------------------------
+%	TÍTULO Y DATOS DEL ALUMNO
+%----------------------------------------------------------------------------------------
+
+\titlehead{}%aquí se pone una foto o imagen para la portada
+\title{	
+\normalfont \normalsize 
+\textsc{{Procesamiento Digital de Señales PDS} \\ Grado en Ingeniería Informática \\ Universidad de Granada} \\ [25pt] % Your university, school and/or department name(s)
+\horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
+\huge Como se realiza la compresión en MP3 % The assignment title
+\horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
+}
+\author{Carlos de la Torre}
+\date{\normalsize\today} % Incluye la fecha actual
+
+%----------------------------------------------------------------------------------------
+% DOCUMENTO
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle % Muestra el Título
+\begin{figure}[H]
+	\centering
+	%\includegraphics[width=\textwidth]{odoo_logo_rgb.png}
+	\label{fig:LogoOdoo}
+\end{figure}
+
+\thispagestyle{empty}
+
+\newpage %inserta un salto de página
+\thispagestyle{empty} 
+
+\hypertarget{Elindice}{} % es la referencia de el indice para volver a el cualquier momento
+\tableofcontents % para generar el índice de contenidos
+
+%\listoffigures
+
+%\listoftables
+\thispagestyle{empty} % Permite no mostrar el número de la página en la que se usa.
+\newpage
+\setcounter{page}{1} % Resetea el número de página y comienza a contar desde el número que le pases, ejemplo: \setcounter{page}{1}
+
+%--------------------------------------------------------------------------------------------
+%                                                   RESUMEN
+%--------------------------------------------------------------------------------------------
+\section[Resumen/Abstract]{Resumen/Abstract}
+\begin{abstract}
+	Estos son los puntos que hay que tratar en la memoria de la aplicación android
+	\begin{itemize}
+		\item Hay que poner el objetivo de la aplicación (breve descripción)
+		\item Motivación de la misma (el por que he escogido hacer eso)
+		\item Cuales son las consultas que he hecho con los interesados (Posibles clientes)
+		\item Cuales son las consultas realizadas con los proveedores (Posibles proveedores)
+		\item A nivel de programación cuales han sido las decisiones tomadas y por que
+		\item 
+	\end{itemize}
+	\begin{multicols}{2}
+		
+	\end{multicols}
+\end{abstract}
+\thispagestyle{empty} % Permite no mostrar el número de la página en la que se usa.
+\clearpage
+
+%--------------------------------------------------------------------------------------------
+%                                              Primera Sección
+%--------------------------------------------------------------------------------------------
+\section{Descripción del entorno de trabajo}
+Para poder explicar de la mejor manera posible como poder crear un CPD de bajo coste y que se pueda utilizar en un entorno de producción sin que afecte al rendimiento se ha optado por crear un laboratorio que se asemeje a un CPD real.\\
+Para ello se han utilizado 6 maquinas virtuales y una maquina física, que se encargaran de los diferentes servicios que tiene que alojar un CPD.
+
+\begin{enumerate}
+	\setlength\itemsep{1px} % Espacio vertical para la lista
+	\item FIREWALL
+	\item DNS
+	\item DHCP
+	\item LOAD BALANCED
+	\item WWW
+	\item FTP
+	\item EMAIL
+\end{enumerate}
+
+\begin{wrapfigure}{i}{0.1\textwidth}
+	\vspace{-25pt}
+	\begin{center}
+		%\includegraphics[width=1\textwidth]{Fabien}
+	\end{center}
+	\vspace{-25pt}
+\end{wrapfigure}
+
+Por supuesto que al ser un entorno virtual, y siendo solamente un laboratorio, hay algunas restricciones inherentes a dicho entorno, como por ejemplo, que desde el exterior de la red virtual solo se permite el acceso a solo un servidor web, que en este caso sera el balanceador de carga.\\
+Otro aspecto a tener en cuenta en la configuración del laboratorio es que aunque se ha diseñado el mismo para tener una configuración de doble DMZ la parte de la red empresarial no se ha implementado en dicho laboratorio, ya que esta su implementación es trivial, y solo se deseaba simular la configuración de los servidores y el acceso de los mismo a Internet.\\
+
+\subsection{Descripción de la maquina física}
+Para mondar dicho laboratorio se ha utilizado una maquina que denominaremos host con la siguiente configuración, tanto de hardware como de software:
+\subsubsection{Hardware}
+\begin{enumerate}
+	\setlength\itemsep{1px} % Espacio vertical para la lista
+	\item Portátil Phoenix
+	\item Placa Base: Pegatron Corporation model: H36Y
+	\item Procesador: Intel\textregistered~Core\texttrademark~i5 CPU M430  @ 2.27GHz 4 nucleos x64\_86
+	\item Memoria: Transcend 2 x JM1066KSN-4Gb 1066MHz (0.9ns de acceso)
+	\item Gráfica: Intel\textregistered~Corporation VGA Compatible
+	\item Disco Duro (OS): Samsung SSD 840 250Gb
+	\item Disco Duro (VM): Seagate ST1000LM024 HN-M 1TB
+	\item Red: Qualcomm Atheros AR8131 Gigabit Ethernet
+	\item Wifi: Qualcomm Atheros  AR9285 Wireless Network Adapter
+\end{enumerate}
+
+\subsubsection{Software}
+\begin{enumerate}
+	\setlength\itemsep{1px} % Espacio vertical para la lista
+	\item Sistema Operativo: Fedora Spin 21 x64\_86
+	\item Kernel: 3.18.9-100.fc20.x86\_64
+	\item Gestor Gráfico: Qt 4.8.6, KDE: 4.14.6
+	\item HyperVisor: VMware Workstation 11.0.0 build-2305329
+\end{enumerate}
+
+\subsection{Descripción de las maquinas virtuales}
+Como las maquinas virtuales utilizas parten de una misma base, describiremos la base desde la cual se han clonado todas y a continuación iremos agregando o quitando propiedades a las diferentes maquinas para que se amolden a las necesidades de los servicios que tienen que prestar dentro del CPD.\\
+
+\subsubsection{Maquina Virtual Base}
+Datos de la maquina base:\\
+\begin{tabular}{|l|l|l|c|}
+	\hline \multicolumn{2}{|l|}{\textbf{Hardware}} & \multicolumn{2}{l|}{\textbf{Software}} \\ 
+	\hline \textbf{Procesador:} & 1 x Intel\textregistered~Core\texttrademark~i5 @ 2.27GHz & \textbf{Sistema Operativo:} & Centos 7 x64\_86 \\ 
+	\hline \textbf{Memoria:} & 384 Mb & \textbf{Kernel:} &  \\ 
+	\hline \textbf{Disco Duro:} & 8Gb SATA & \textbf{Gestor Gráfico:} & Sin gestor \\ 
+	\hline \textbf{Red 1:} & VmNet8 NAT  & \multicolumn{2}{c|}{\textbf{Addons:}} \\ 
+	\hline \textbf{Red 2:} & VmNet1 Host Only & \multicolumn{2}{c|}{Webmin, Apache, MySQL, Issue panel} \\ 
+	\hline 
+\end{tabular} 
+
+\subsubsection{Maquina DNS}
+En esta maquina como se utilizan los servicios de DNS, DHCP y ninguno de los dos son servicios que necesiten demasiados recursos lo que se ha hecho es bajar la configuración de la memoria hasta los 256 Mb y solo una tarjeta de red, y por supuesto se ha añadido el software necesario para poder configurar ambos servicios, aparte se han añadido también los módulos necesarios de WebMin.\\
+\begin{tabular}{|l|l|l|c|}
+	\hline \multicolumn{2}{|l|}{\textbf{Hardware}} & \multicolumn{2}{l|}{\textbf{Software}} \\ 
+	\hline \textbf{Procesador:} & 1 x Intel\textregistered~Core\texttrademark~i5 @ 2.27GHz & \textbf{Sistema Operativo:} & Centos 7 x64\_86 \\ 
+	\hline \textbf{Memoria:} & 256 Mb & \textbf{Kernel:} &  \\ 
+	\hline \textbf{Disco Duro:} & 8Gb SATA & \textbf{Gestor Gráfico:} & Sin gestor \\ 
+	\hline \textbf{Red 1:} & VmNet8 NAT  & \multicolumn{2}{c|}{\textbf{Addons:}} \\ 
+	\hline \multicolumn{4}{|c|}{Webmin, Apache, MySQL, Issue panel, plugin DNS, DHCP, FTP} \\ 
+	\hline 
+\end{tabular} 
+
+\subsection{Entorno DMZ}
+Como ya se ha explicado varias veces en clase esta parte de la topología de red, denominada así por su similitud con una zona de un conflicto armado, se utiliza para asegurar aquella zona de la topología, la cual aun teniendo sus propios sistemas de seguridad, se aísla de la red de manera física aportando así un extra en dicha seguridad.\\
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[b]{0.3\textwidth}
+		%\includegraphics[width=\textwidth]{3-openerp-wizard.jpg}
+		\caption{Bienvenida del asistente}
+		\label{fig:Bienvenida}
+	\end{subfigure}
+	~
+	\begin{subfigure}[b]{0.3\textwidth}
+		%\includegraphics[width=\textwidth]{4-openerp-wizard.jpg}
+		\caption{Aceptamos la licencia}
+		\label{fig:Licencia}
+	\end{subfigure}
+	~
+	\begin{subfigure}[b]{0.3\textwidth}
+		%\includegraphics[width=\textwidth]{5-openerp-wizard.jpg}
+		\caption{Elegimos que instalar}
+		\label{fig:Elección}
+	\end{subfigure}
+	~
+	\begin{subfigure}[b]{0.3\textwidth}
+		%\includegraphics[width=\textwidth]{6-openerp-wizard.jpg}
+		\caption{Componentes a instalar}
+		\label{fig:Componentes}
+	\end{subfigure}
+	~
+	\begin{subfigure}[b]{0.3\textwidth}
+		%\includegraphics[width=\textwidth]{7-openerp-wizard.jpg}
+		\caption{Datos de conexión BD}
+		\label{fig:DBConn}
+	\end{subfigure}
+	~
+	\begin{subfigure}[b]{0.3\textwidth}
+		%\includegraphics[width=\textwidth]{8-openerp-wizard.jpg}
+		\caption{Ruta de instalación}
+		\label{fig:Ruta}
+	\end{subfigure}
+	~
+	\begin{subfigure}[b]{0.3\textwidth}
+		%\includegraphics[width=\textwidth]{9-openerp-wizard.jpg}
+		\caption{Proceso de instalación}
+		\label{fig:Instalación}
+	\end{subfigure}
+	~
+	\begin{subfigure}[b]{0.3\textwidth}
+		%\includegraphics[width=\textwidth]{10-openerp-wizard.jpg}
+		\caption{Final de la instalación}
+		\label{fig:Final}
+	\end{subfigure}
+	\caption{Instalación en \win}
+	\label{fig:InstalaciónWin}
+\end{figure}
+
+\subsection{Topología completa de Red}
+\begin{figure}[H]
+		%\includegraphics[width=\textwidth]{}
+		\caption{Topología de Red}
+		\label{fig:bienvenida}
+\end{figure}
+
+
+%--------------------------------------------------------------------------------------------
+%                                              Segunda Sección
+%--------------------------------------------------------------------------------------------
+\section{Descripción de la parte del Firewall}
+
+\subsection{Posible Software para el uso}
+
+\subsection{Posibilidades de Hardware para el balanceador}
+
+\subsection{Ventajas y desventajas, opiniones, conclusiones, configuraciones}
+
+%\lstinputlisting{httpd.cfg}
+
+%--------------------------------------------------------------------------------------------
+%                                              Tercera Sección
+%--------------------------------------------------------------------------------------------
+\section{Descripción de la parte del Balanceador de Carga}
+
+\subsection{Posible Software para el uso}
+
+\subsection{Posibilidades de Hardware para el balanceador}
+
+\subsection{Ventajas y desventajas, opiniones, conclusiones, configuraciones}
+\begin{itemize}
+	\item Procesador: AMD Opteron(tm) Processor 4386 , 1 core
+	\item Memoria: 1024 MB Registered
+	\item HDD: 10 GB Virtual HD
+\end{itemize}
+
+%\lstinputlisting{ssl.cfg}
+
+%--------------------------------------------------------------------------------------------
+%                                              Cuarta Sección
+%--------------------------------------------------------------------------------------------
+\section{Descripción de la parte del Servidor DNS}
+
+\subsection{Posible Software para el uso}
+
+\subsection{Posibilidades de Hardware para el balanceador}
+
+\subsection{Ventajas y desventajas, opiniones, conclusiones, configuraciones}
+
+%--------------------------------------------------------------------------------------------
+%                                              Quinta Sección
+%--------------------------------------------------------------------------------------------
+\section{Descripción de la parte del Servidor Apache}
+
+\subsection{Posible Software para el uso}
+
+\subsection{Ventajas y desventajas, opiniones, conclusiones, configuraciones}
+
+%--------------------------------------------------------------------------------------------
+%                                              Sexta Sección
+%--------------------------------------------------------------------------------------------
+\section{Descripción de la parte del Servidores Base de Datos}
+
+\subsection{Posible Software para el uso}
+
+\subsection{Ventajas y desventajas, opiniones, conclusiones, configuraciones}
+%--------------------------------------------------------------------------------------------
+%                                              Conclusiones
+%--------------------------------------------------------------------------------------------
+\section{Conclusiones}
+
+%--------------------------------------------------------------------------------------------
+%                           Bibliografia y agradecimientos
+%--------------------------------------------------------------------------------------------
+\bibliography{citas} %archivo citas.bib que contiene las entradas 
+\bibliographystyle{plain} % hay varias formas de citar
+\label{UltimaPagina} % esto es para marcar que es la ultima pagina
+
+\end{document}

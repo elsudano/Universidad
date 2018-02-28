@@ -6,7 +6,7 @@
 *.png
 *.dia~
 *.gch
-nbproject/
+\nbproject/
 gen/
 bin/
 nbandroid/
@@ -14,3 +14,15 @@ build/
 debug/
 
 *.gz
+
+*.aux
+
+*.bbl
+
+*.blg
+
+*.log
+
+*.out
+
+*.toc

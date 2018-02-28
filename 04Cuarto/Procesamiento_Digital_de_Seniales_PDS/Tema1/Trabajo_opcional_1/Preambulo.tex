@@ -1,0 +1,291 @@
+%%%%%%%%%%%%%%%%%%%%%
+% Short Sectioned Assignment LaTeX Template Version 1.0 (5/5/12)
+% This template has been downloaded from: http://www.LaTeXTemplates.com
+% Original author:  Frits Wenneker (http://www.howtotex.com)
+% License: CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[paper=a4, fontsize=10pt]{scrartcl} % A4 paper and 11pt font size
+
+% ---- Margenes y Tamaño del Folio -----
+\usepackage{geometry}
+\geometry{a4paper, total={210mm,297mm}, left=25mm, right=25mm, top=20mm, bottom=25mm,}
+
+% ---- Entrada y salida de texto -----
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage[utf8]{inputenc}
+%\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+
+
+% ---- Idioma y Figuras --------
+% Selecciona el español para palabras introducidas automáticamente, p.ej. "septiembre" en la fecha
+% y especifica que se use la palabra Tabla en vez de Cuadro
+\usepackage[spanish, es-tabla]{babel} 
+\usepackage{wrapfig} % es para que las imagenes puedan estar entre el texto
+\usepackage{subcaption} % para las imagenes en columnas
+%\usepackage{svg} % paquete para poder insertar graficos en formato svg y que se impriman en pdf
+
+% ---- Otros paquetes ----
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+\usepackage{graphics,graphicx,floatrow} %para incluir imágenes y notas en las imágenes
+\usepackage{lscape, pdflscape} %Permite poner paginas "tumbadas" en un documento con las paginas "rectas".
+\usepackage{pgfgantt} % Para realizar los diagramas de Gantt
+\usepackage{fancyhdr, extramarks} % Custom headers and footers
+
+% ---------- Para hacer tablas comlejas ---------
+\usepackage{multirow,threeparttable}
+\usepackage{multicol} % Required for creating multiple columns in slides
+\usepackage{sectsty} % Allows customizing section commands
+\usepackage{tabularx} % Tables with width auto ajust
+%\usepackage{tablefootnote} % para poner pie de notas en las tablas solo en tabular envirotment
+
+%------------------------------------------------
+%                  Links y Moneda
+\usepackage[hidelinks]{hyperref} % para los enlaces de la bibliografía
+\hypersetup{
+	colorlinks,
+	citecolor=blue,
+	filecolor=brown,
+	linkcolor=black,
+	urlcolor=blue
+}
+\usepackage{eurosym} % para el euro
+
+%------------------------------------------------
+% Colors
+%\usepackage[usenames,table]{xcolor}	 % Required for custom colors only with tikz package
+\usepackage{xcolor, colortbl} % color en las tablas
+% Define a few colors for making text stand out within the presentation
+\definecolor{mygreen}{RGB}{44,85,17}
+\definecolor{myblue}{RGB}{34,31,217}
+\definecolor{mybrown}{RGB}{194,164,113}
+\definecolor{myred}{RGB}{255,66,56}
+\definecolor{mygrey}{RGB}{230,230,230}
+% Use these colors within the presentation by enclosing text in the commands below
+\newcommand*{\mygreen}[1]{\textcolor{mygreen}{#1}}
+\newcommand*{\myblue}[1]{\textcolor{myblue}{#1}}
+\newcommand*{\mybrown}[1]{\textcolor{mybrown}{#1}}
+\newcommand*{\myred}[1]{\textcolor{myred}{#1}}
+\newcommand*{\mygrey}[1]{\textcolor{mygrey}{#1}}
+
+%------------------------------------------------
+%             Listas
+\usepackage{listings} % para los listados de código
+\usepackage{tabto} % para utilizar los tab en las listas
+\lstdefinestyle{C++}{
+	belowcaptionskip=1\baselineskip,
+	frame=L,
+	xleftmargin=\parindent,
+	showstringspaces=false,
+	basicstyle=\footnotesize\ttfamily,
+	keywordstyle=\bfseries\color{green!40!black},
+	%commentstyle=\itshape\color{purple!40!black},
+	commentstyle=\color{gray}\upshape,
+	identifierstyle=\color{blue},
+	stringstyle=\color{orange},
+	%tagstyle=\color{darkblue}\bf,
+	language=C++,
+	extendedchars=true, 
+	breaklines=true,
+	breakatwhitespace=true,
+	emph={},
+	emphstyle=\color{red},
+	columns=fullflexible,
+	morestring=[b]",
+	morecomment=[s]{/**}{*/},
+	morecomment=[s][\color{forestgreen}]{<!--}{-->},
+	otherkeywords={},
+	morekeywords={IP,num,string,Servicio}
+}
+\lstdefinestyle{java}{
+	language=Java,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\footnotesize\ttfamily},
+	numberstyle={\tiny},
+	numbers=left,
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3
+}
+
+\lstdefinestyle{bytecode}{
+	otherkeywords={invokedynamic},
+	language=JVMIS,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\footnotesize\ttfamily},
+	numberstyle={\tiny},
+	numbers=left,
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3
+}
+
+\lstdefinestyle{fsharp} {	
+	otherkeywords={ let!, return!, do!, yield!, use!, var, from, select, where, order},
+	keywordstyle=\color{blue},
+	sensitive=true,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false, 
+	columns=flexible,
+	basicstyle={\footnotesize\ttfamily},
+	numberstyle={\tiny},
+	numbers=left,
+	breaklines=true,
+	upquote=true,
+	tabsize=3,
+	morecomment=[l][\color{dkgreen}]{///},
+	morecomment=[l][\color{dkgreen}]{//},
+	morecomment=[s][\color{dkgreen}]{{(*}{*)}},
+	morestring=[b]",
+	showstringspaces=false,
+	literate={`}{\`}1,
+	stringstyle=\color{mauve},
+	morekeywords={let, new, match, with, rec, 
+		open, module, namespace, type, of, member, 
+		and, for, while, true, false, in, do, begin, 
+		end, fun, function, return, yield, try, val, 
+		mutable, if, then, else, cloud, async, static, 
+		use, abstract, interface, inherit, finally, maybe, option }
+}
+
+\lstdefinestyle{csharp} {
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\footnotesize\ttfamily},
+	numberstyle={\tiny},
+	numbers=left,
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3,
+	morecomment = [l]{//}, 
+	morecomment = [l]{///},
+	morecomment = [s]{/*}{*/},
+	morestring=[b]", 
+	sensitive = true,
+	morekeywords = {async, await, abstract,  
+		event,  new,  struct,
+		as,  explicit,  null,  switch,
+		base,  extern,  object,  this,
+		bool,  false,  operator,  throw,
+		break,  finally,  out,  true,
+		byte,  fixed,  override,  try,
+		case,  float,  params,  typeof,
+		catch,  for,  private,  uint,
+		char,  foreach,  protected,  ulong,
+		checked,  goto,  public,  unchecked,
+		class,  if,  readonly,  unsafe,
+		const,  implicit,  ref,  ushort,
+		continue,  in,  return,  using,
+		decimal,  int,  sbyte,  virtual,
+		default,  interface,  sealed,  volatile,
+		delegate,  internal,  short,  void,
+		do,  is,  sizeof,  while,
+		double,  lock,  stackalloc,   
+		else,  long,  static,   
+		enum,  namespace,  string }
+}
+
+\lstdefinestyle{scala} {  
+	morekeywords={ abstract,case,catch,
+		char,class,
+		def,else,extends,final,
+		if,import,
+		match,module,new,null,object,
+		override,package,private,protected,
+		public,return,super,this,throw,
+		trait,try,type,val,var,with,implicit,
+		macro,sealed
+	},
+	sensitive,
+	morecomment=[l]//,
+	morecomment=[s]{/*}{*/},
+	morestring=[b]",
+	morestring=[b]',
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\footnotesize\ttfamily},
+	numberstyle={\tiny},
+	numbers=left,
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3
+}
+\lstset{ %
+	literate={á}{{\'a}}1 {ó}{{\'o}}1 {ñ}{{\~n}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ú}{{\'u}}1, % esto es para los acentos en utf8
+	backgroundcolor=\color{mygrey},     % elegir el color de fondo; debe agregar \usepackage{color} o \usepackage{xcolor}
+	basicstyle=\footnotesize\ttfamily,                 % el tamaño de las fuentes que se utilizan para el código
+	breakatwhitespace=false,                % establece si se rompe automáticos sólo debe ocurrir en los espacios en blanco
+	breaklines=true,                               % establece los saltos de línea automática
+	captionpos=b,                                  % establece el título de la posición hacia abajo
+	commentstyle=\color{magenta},         % estilo de comentarios
+	deletekeywords={...},                      % si desea eliminar palabras clave de la lengua dada
+	escapeinside={\%*}{*)},                % si desea agregar LaTeX dentro de su código
+	extendedchars=true,                        % le permite utilizar caracteres no ASCII; de 8-bits de codificaciones sólo, no funciona con UTF-8
+	frame=single,                                   % agrega un marco alrededor del código
+	keepspaces=true,                            % mantiene espacios de texto, útiles para mantener la sangría de código (posiblemente necesita columnas = flexible)
+	keywordstyle=\color{blue},              % estilo palabra clave
+	%language=bash,                            % el lenguaje del código
+	morekeywords={*,...},                     % si quieres añadir más palabras clave para el conjunto
+	numbers=left,                                   % dónde poner la línea de números; los valores posibles son (ninguno, izquierda, derecha)
+	numbersep=5pt,                               % hasta qué punto las alineaciones números son a partir del código
+	numberstyle=\footnotesize\color{blue},        % el estilo que se utiliza para los números de línea-
+	rulecolor=\color{black},                    % si no se establece, el marco-color puede ser cambiado en saltos de línea en el texto no-negro (por ejemplo, los comentarios (verde aquí))
+	showspaces=false,                            % mostrar espacios añadiendo todas partes subrayado particulares; anula 'showstringspaces'
+	showstringspaces=false,                   % subrayar espacios dentro de las cadenas sólo
+	showtabs=false,                                % Mostrar pestañas dentro de las cadenas de subrayado particulares
+	stepnumber=1,                                 % el paso entre dos números de línea. Si es 1, se numerará cada línea
+	stringstyle=\color{red},              % cadena estilo literal
+	tabsize=2,                                         % establece TABSIZE predeterminado a 2 espacios
+	title=\lstname                                   % mostrar el nombre de archivo de los archivos incluidos con \ lstinputlisting; también tratar de leyenda en vez de título
+}
+%------------------------------------------------
+
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\fancyhead[LO]{Solución a Problemas de Abstracción} % No page header - if you want one, create it in the same way as the footers below
+\fancyhead[C]{Tema 2}
+\fancyhead[R]{Carlos de la Torre}
+\fancyfoot[R]{Página \thepage\ de \pageref{UltimaPagina}} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[L]{\hyperlink{Elindice}{Inicio}} % Page numbering for right footer
+\renewcommand{\headrule}{\hbox to\headwidth{\color{red}\leaders\hrule height \headrulewidth\hfill}} % para poner la linea de la parte superior en rojo
+\renewcommand{\sectionmark}[1]{\markboth{#1}{}} % para poder poner solo el nombre de la sección que se muestra en la pagina sin el numero
+\renewcommand{\headrulewidth}{2.0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0.8pt} % Remove footer underlines
+\setlength{\headheight}{13.6pt} % Customize the height of the header
+
+\numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+\newcommand{\win}{Windows\textsuperscript{\textregistered} } % este comando sirve para poner el logotipo de la r en windows
+\newcommand{\ubuntu}{Ubuntu\textsuperscript{\textregistered} } % este comando sirve para poner el logotipo de la r en windows
