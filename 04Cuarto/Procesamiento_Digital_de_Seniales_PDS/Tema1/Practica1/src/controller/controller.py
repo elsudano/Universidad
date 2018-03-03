@@ -8,12 +8,12 @@ se genera un controlador que se encarga de todas las vistas del programa.
 
 from abc import ABC, abstractmethod
 
-
 class Controller(ABC):
     """Clase controlador."""
 
     _window = None  # Tipo ventana y se crea vacío.
     _model = None  # Esto almacena la lógica de la aplicación
+    _view = None # Esto es para almacenar la vista y poder acceder a los diferentes objetos desde la vista
 
     def __init__(self, window, model):
         """Constructor por defecto."""
@@ -23,6 +23,13 @@ class Controller(ABC):
     @abstractmethod
     def back(self, event):
         pass
+
+    def set_view(self, view):
+        """Asignar la vista del controlador.
+
+        Con esto asignamos la vista al controlador para poder utilizarla
+        """
+        self._view = view
 
     def menu_item_new(self):
         """Crear un nuevo Objeto.

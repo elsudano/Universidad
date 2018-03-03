@@ -57,11 +57,19 @@ class Window:
         Como esta función se puede llamar desde cualquier lado para inicializar
         la ventana se pone pública
         """
+        # ponemos la ventana en el centro de la pantalla
         x = (self.__root.winfo_screenwidth() // 2) - (self.__width // 2)
         y = (self.__root.winfo_screenheight() // 2) - (self.__height // 2)
+        # Ponemos el tamaño de la ventana
         self.__root.geometry('{}x{}+{}+{}'.format(self.__width, self.__height, x, y))
+        # Le asignamos un titulo
         self.__root.title(self.__title)
+        # Configuramos cual es el tamaño minimo
         self.__root.minsize(width=self.__width, height=self.__height)
+        # Configuramos las columnas y las filas de la ventana donde
+        # vamos a colocar el frame se ponen a 0 para que ocupe toda la ventana
+        self.__root.rowconfigure(0, weight=1)
+        self.__root.columnconfigure(0, weight=1)
 
     def size(self, width, height):
         """Asignación del tamaño de la ventana.

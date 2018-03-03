@@ -7,7 +7,7 @@ mas fácil encontrar en donde se encuentra cada parte del programa.
 """
 
 from abc import ABC, abstractmethod
-
+import sys
 
 class Model(ABC):
     """Clase controlador."""

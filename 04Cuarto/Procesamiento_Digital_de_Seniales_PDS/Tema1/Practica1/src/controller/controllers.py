@@ -24,6 +24,7 @@ class MainController(Controller):
         model = FirstModel()
         controller = FirstController(self._window, model)
         view = FirstView(self._window, controller)
+        controller.set_view(view)
         view.init_view()
 
     def practica2(self, event):
@@ -33,6 +34,7 @@ class MainController(Controller):
         model = SecondModel()
         controller = SecondController(self._window, model)
         view = SecondView(self._window, controller)
+        controller.set_view(view)
         view.init_view()
 
 class FirstController(Controller):
@@ -44,7 +46,18 @@ class FirstController(Controller):
         view.init_view()
 
     def open_wav_file(self, event):
-        pass
+        filename = filedialog.askopenfilename(initialdir='$USER',
+                               title="Select file",
+                               filetypes=(("Sound files", "*.wav"),
+                                          ("all files", "*.*"))
+                               )
+        if filename:
+            if filename.find('.wav') > 1:
+                x, framerate = self._model.leer_wave(filename)
+                self._model.representa_espectrograma(x, 256, framerate, 128)
+            elif len(filename) > 1:
+                messagebox.showerror("Open file", "Cannot open this file\n(%s)" % filename)
+                return
 
 class SecondController(Controller):
 
