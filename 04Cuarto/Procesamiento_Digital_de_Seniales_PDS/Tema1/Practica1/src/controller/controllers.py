@@ -53,6 +53,7 @@ class FirstController(Controller):
                                )
         if filename:
             if filename.find('.wav') > 1:
+                self._model.reproducir(filename)
                 x, framerate = self._model.leer_wave(filename)
                 self._model.representa_espectrograma(x, 256, framerate, 128)
             elif len(filename) > 1:

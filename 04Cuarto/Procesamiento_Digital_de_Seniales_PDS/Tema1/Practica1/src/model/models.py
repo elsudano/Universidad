@@ -7,6 +7,8 @@ que se pueden usar para nuestro programa.
 """
 
 from src.model.model import Model
+from pydub import AudioSegment as mix
+from pydub.playback import play
 import matplotlib.pyplot as plt
 import numpy as np
 import wave
@@ -40,6 +42,8 @@ class FirstModel(Model):
         plt.xlabel('Tiempo [seg]')
         return Pxx, freqs
 
+    def reproducir(self, filename):
+        play(mix.from_wav(filename))
 
 class SecondModel(Model):
 
