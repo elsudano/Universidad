@@ -6,10 +6,9 @@ En este fichero podemos encontrarnos todos los controladores,
 de todas las vistas de nuestro programa.
 """
 
-from src.controller.controller import Controller
+from src.controller.controller import *
 from src.model.models import *
 from src.view_app.views import *
-
 
 class MainController(Controller):
 
@@ -17,11 +16,32 @@ class MainController(Controller):
         # FIXME: implementar esta función para regresar al menu anterior
         pass
 
-    def practica1(self, event):
+    def eje_teo_tema1(self, event):
         """Cambia la vista de la ventana.
         pasamos a crear todos los componentes para la primera practica
         """
-        model = FirstModel()
+        model = EjerciciosTema1Model()
+        controller = EjerciciosTema1Controller(self._window, model)
+        view = EjerciciosTema1View(self._window, controller)
+        controller.set_view(view)
+        view.init_view()
+
+    def practica1(self, event):
+        """Cambia la vista de la ventana.
+        creamos todos los elementos para los ejercicios del tema 1
+        que salen en las transparencias
+        """
+        model = Practica1Model()
+        controller = FirstController(self._window, model)
+        view = FirstView(self._window, controller)
+        controller.set_view(view)
+        view.init_view()
+
+    def eje_teo_tema2(self, event):
+        """Cambia la vista de la ventana.
+        pasamos a crear todos los componentes para la primera practica
+        """
+        model = EjerciciosTema2Model()
         controller = FirstController(self._window, model)
         view = FirstView(self._window, controller)
         controller.set_view(view)
@@ -36,6 +56,39 @@ class MainController(Controller):
         view = SecondView(self._window, controller)
         controller.set_view(view)
         view.init_view()
+
+class EjerciciosTema1Controller(Controller):
+    """Gestión de eventos para la ventana de los ejercicios del tema 1
+    Con esta controlaremos cada uno de los codigos que tenemos en las
+    diapositivas del tema 1
+    """
+    def back(self, event):
+        model = MainModel()
+        controller = MainController(self._window, model)
+        view = MainView(self._window, controller)
+        view.init_view()
+
+    def pag8(self, event):
+        """El ejercicio que hay para mostrar y reproducir un fichero wav
+
+        Ponemos un archivo por defecto pero si ese archivo no esta
+        se abre una ventana en la que se solicita un fichero"""
+        filename = Path('/home/usuario/nextCloud/Facultad/03_Procesamiento_Digital_de_Señales_PDS_5to/Ejemplos_Python/This_is_a_test.wav')
+        if not filename.is_file():
+            filename = Path(filedialog.askopenfilename(initialdir='$USER',
+                                                  title="Selecciona el fichero a estudiar",
+                                                  filetypes=(("Sound files", "*.wav"),
+                                                             ("all files", "*.*"))
+                                                  ))
+        if filename:
+            if filename.suffix == '.wav':
+                self._model.reproducir(str(filename))
+                plt, x, framerate = self._model.leer_wave(str(filename))
+                plt, Pxx, freqs = self._model.representa_espectrograma(x, 256, framerate, 128)
+                plt.show()
+            elif len(filename) > 1:
+                messagebox.showerror("Open file", "Cannot open this file\n(%s)" % filename)
+                return
 
 class FirstController(Controller):
 
