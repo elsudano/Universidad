@@ -7,6 +7,11 @@ mas fácil encontrar en donde se encuentra cada parte del programa.
 """
 
 from abc import ABC, abstractmethod
+from pydub import AudioSegment as mix
+from pydub.playback import play
+import matplotlib.pyplot as plt
+import numpy
+import wave
 import sys
 
 class Model(ABC):

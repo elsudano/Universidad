@@ -6,8 +6,16 @@ A partir de esta clase se crearán todas las vistas que tendnrá el programa
 """
 try:
     from Tkinter import Menu
+    from Tkinter import ttk
+    from Tkinter import tkFileDialog
+    from Tkinter import tkMessageBox
 except ImportError:
     from tkinter import Menu
+    # for python 3.x
+    from tkinter import ttk
+    from tkinter import messagebox
+    from tkinter import filedialog
+from PIL import Image, ImageTk
 from abc import ABC, abstractmethod
 
 

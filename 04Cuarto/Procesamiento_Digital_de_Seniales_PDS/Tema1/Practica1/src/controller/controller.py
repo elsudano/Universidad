@@ -7,6 +7,7 @@ se genera un controlador que se encarga de todas las vistas del programa.
 """
 
 from abc import ABC, abstractmethod
+from pathlib import Path
 
 class Controller(ABC):
     """Clase controlador."""
