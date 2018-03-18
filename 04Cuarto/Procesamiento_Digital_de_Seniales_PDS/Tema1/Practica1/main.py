@@ -12,7 +12,7 @@ from src.view_app.views import MainView
 
 if __name__ == '__main__':
     # Creamos la Ventana
-    myWindow = Window("Ventana Principal", 500, 300)
+    myWindow = Window("Ejercicios y Practicas de PDS", 350, 150)
     # Creamos el modelo
     myModel = MainModel()
     # Creamos el controlador de la vista principal y le añadimos la ventana y el modelo
