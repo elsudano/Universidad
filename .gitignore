@@ -26,3 +26,5 @@ debug/
 *.out
 
 *.toc
+
+*.bak

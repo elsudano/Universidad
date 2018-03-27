@@ -4,20 +4,20 @@
 
 A partir de esta clase se crearán todas las vistas que tendnrá el programa
 """
+
 try:
-    from Tkinter import Menu
-    from Tkinter import ttk
-    from Tkinter import tkFileDialog
-    from Tkinter import tkMessageBox
+    from Tkinter import Menu as menu
+    from Tkinter import ttk as ttk
+    from Tkinter import tkFileDialog as filediag
+    from Tkinter import tkMessageBox as msgbox
 except ImportError:
-    from tkinter import Menu
     # for python 3.x
-    from tkinter import ttk
-    from tkinter import messagebox
-    from tkinter import filedialog
+    from tkinter import Menu as menu
+    from tkinter import ttk as ttk
+    from tkinter import messagebox as msgbox
+    from tkinter import filedialog as filediag
 from PIL import Image, ImageTk
 from abc import ABC, abstractmethod
-
 
 class View(ABC):
     """Clase Vista Principal."""
@@ -40,7 +40,7 @@ class View(ABC):
         super(View, self).__init__()
         self._window = window
         self._controller = controller
-        self._menu_bar = Menu(self._window.get())
+        self._menu_bar = menu(self._window.get())
         self._menus = list()
         self._window.get().config(menu=self._menu_bar)
 
@@ -50,7 +50,7 @@ class View(ABC):
 
     def _add_menu(self, name):
         """Añade un menú a la barra de menus"""
-        menu_aux = Menu(self._menu_bar)
+        menu_aux = menu(self._menu_bar)
         menu_aux.config(title=name)
         # FIXME: arreglar la inclusión de posicionamiento del menú
         # si queremos cambiar para que se pueda añadir un menu en la posicón

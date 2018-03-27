@@ -10,7 +10,6 @@ try:
 except ImportError:
     import tkinter as gui_library
 
-
 class Window:
     """Clase Ventana.
 
