@@ -4,7 +4,7 @@
 
 A partir de esta clase se crearán todas las vistas que tendnrá el programa
 """
-
+# para la interfaz gráfica
 try:
     from Tkinter import Menu as menu
     from Tkinter import ttk as ttk
@@ -16,8 +16,16 @@ except ImportError:
     from tkinter import ttk as ttk
     from tkinter import messagebox as msgbox
     from tkinter import filedialog as filediag
+# otro paquete de tratamiento de imagenes
 from PIL import Image, ImageTk
+# trabajar con imagenes
+from skimage import data, img_as_float, exposure, filters, color
+from skimage.morphology import disk
+from skimage.filters.rank import gradient
+# para crear clases con padres e hijos
 from abc import ABC, abstractmethod
+# datasheet para señales biometricas
+import wfdb
 
 class View(ABC):
     """Clase Vista Principal."""

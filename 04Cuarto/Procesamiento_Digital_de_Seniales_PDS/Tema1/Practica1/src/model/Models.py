@@ -7,7 +7,8 @@ En este fichero podemos encontrarnos todos los modelos,
 que se pueden usar para nuestro programa.
 """
 
-from src.model.Model import Model, play, mix, wave, plt, numpy
+from src.model.Model import Model, play, mix, wave, plt, numpy, matplotlib
+from src.view_app.View import img_as_float, exposure
 
 class EjerciciosTema1Model(Model):
 
@@ -38,6 +39,30 @@ class EjerciciosTema1Model(Model):
 
     def reproducir(self, filename):
         play(mix.from_wav(filename))
+
+    def plot_img_and_hist(self, img, axes, bins=256):
+        img = img_as_float(img)
+        ax_img, ax_hist = axes
+        ax_cdf = ax_hist.twinx()
+
+        # Visualización de imagen
+        ax_img.imshow(img, cmap=plt.cm.gray)
+        ax_img.set_axis_off()
+        ax_img.set_adjustable('box-forced')
+
+        # Visualización del histograma
+        ax_hist.hist(img.ravel(), bins=bins, histtype='step', color='black')
+        ax_hist.ticklabel_format(axis='y', style='scien-fic', scilimits=(0, 0))
+        ax_hist.set_xlabel('Pixel intensity')
+        ax_hist.set_xlim(0, 1)
+        ax_hist.set_yticks([])
+
+        # Visualización de la distribución acumulada
+        img_cdf, bins = exposure.cumulative_distribution(img, bins)
+        ax_cdf.plot(bins, img_cdf, 'r')
+        ax_cdf.set_yticks([])
+
+        return ax_img, ax_hist, ax_cdf
 
 class Practica1Model(Model):
 

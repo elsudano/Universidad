@@ -6,7 +6,9 @@ Con esto se pretende abstraer la parte de la vista del programa así pues,
 se genera un controlador que se encarga de todas las vistas del programa.
 """
 
+# para crear clases con padres e hijos
 from abc import ABC, abstractmethod
+# para el analisis de rutas del sistema
 from pathlib import Path
 
 class Controller(ABC):

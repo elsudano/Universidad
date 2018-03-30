@@ -6,7 +6,7 @@ Aqui es donde se pondrán los menus de la aplicación junto con los botones,
 necesarios para que funcione la primera vista de la aplicación.
 """
 
-from src.view_app.View import View, ttk, filediag, msgbox
+from src.view_app.View import *
 
 class EjerciciosTema1View(View):
     """Ventana que muestra todos los ejercicios que hay en las diapositivas del tema 1 de PDS UGR"""
@@ -35,6 +35,12 @@ class EjerciciosTema1View(View):
         self.b_pag13 = ttk.Button(self._principal_frame, text="Ejercicio Pagina 13")
         self.b_pag13.grid(column=0, row=1, sticky='NW')
         self.b_pag13.bind("<Button>", self._controller.pag13)
+        self.b_pag15 = ttk.Button(self._principal_frame, text="Ejercicio Pagina 15")
+        self.b_pag15.grid(column=0, row=2, sticky='NW')
+        self.b_pag15.bind("<Button>", self._controller.pag15)
+        self.b_pag18 = ttk.Button(self._principal_frame, text="Ejercicio Pagina 18")
+        self.b_pag18.grid(column=0, row=3, sticky='NW')
+        self.b_pag18.bind("<Button>", self._controller.pag18)
 
 class EjerciciosTema2View(View):
     """Ventana que muestra todos los ejercicios que hay en las diapositivas del tema 2 de PDS UGR"""
