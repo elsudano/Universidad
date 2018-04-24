@@ -106,8 +106,8 @@ class EjerciciosTema1Controller(Controller):
 
         Ponemos un archivo por defecto pero si ese archivo no esta
         se abre una ventana en la que se solicita un fichero"""
-        # filename = "/home/usuario/nextCloud/Facultad/03_Procesamiento_Digital_de_Señales_PDS_5to/Ejercicios/01_Ejercicio_opcional_1/21_training.tif"
-        filename = ""
+        filename = "/home/usuario/nextCloud/Facultad/03_Procesamiento_Digital_de_Señales_PDS_5to/Ejercicios/01_Ejercicio_opcional_1/21_training.tif"
+        # filename = ""
         # configuración especifica para matplotlib
         matplotlib.rcParams['font.size'] = 8
         if not filename:
@@ -169,6 +169,56 @@ class EjerciciosTema1Controller(Controller):
             msgbox.showerror("Open file", "Cannot open this file\n(%s)" % str(filename))
             return
 
+    def pag56(self, event):
+        """Ejercicio de la pagina 54 que se encarga de calcular la SQNR de un sonido
+
+        Ponemos un archivo por defecto pero si ese archivo no esta
+        se abre una ventana en la que se solicita un fichero"""
+        filename = "/home/usuario/nextCloud/Facultad/03_Procesamiento_Digital_de_Señales_PDS_5to/Ejercicios/04_Python_SQNR_tema1_trans54/OSR_us_000_0010_8k.wav"
+        if not filename:
+            filename = filediag.askopenfilename(initialdir='$USER',
+                                                title="Selecciona el fichero a estudiar",
+                                                filetypes=(("Sound files", "*.wav"),
+                                                           ("all files", "*.*"))
+                                                )
+        filename = Path(filename)
+        if filename.suffix == '.wav':
+            # leemos el fichero
+            plt, x, framerate = self._model.leer_wave(str(filename))
+            # calculamos y mostramos el espectograma
+            plt, Pxx, freqs = self._model.representa_espectrograma(x, 256, framerate, 128)
+            # calculamos el tiempo del fichero
+            t = numpy.arange(start=0, stop=1.0 * x.size/framerate, step=1./framerate)
+            plt.figure(2)
+            plt.plot(t, x)
+            plt.xlabel('t (s)')
+            x = x / 2.0**15
+            # array con los valores de la SQNR para diferentes valores de Bits
+            ASQNR = []
+            # Cuantización de 8, 7, 6, 5, 4 y 3 bits
+            for bits in range(3, 9):
+                output, q = self._model.quantization(x, 2**bits)
+                error = x - output
+                # Añadimos cada valor de SQNR al array
+                ASQNR.append(10 * numpy.log10(numpy.var(x) / numpy.var(error)))
+                plt.figure(bits)
+                plt.title('Cuantización %s bits' % str(bits))
+                plt.ylabel('Amplitud')
+                plt.xlabel('t (s)')
+                plt.plot(t, x, t, error)
+            plt.figure(10)
+            plt.plot(range(3, 9), ASQNR, 'bo-')
+            plt.xlabel('Bits')
+            plt.ylabel('SQNR(dB)')
+            plt.grid()
+            plt.show()
+            # reproducimos el fichero
+            #self._model.reproducir(str(filename))
+        if not filename.exists():
+            msgbox.showerror("Open file", "Cannot open this file\n(%s)" % str(filename))
+            return
+
+
 class EjerciciosTema2Controller(Controller):
     """Gestión de eventos para la ventana de los ejercicios del tema 2
     Con esta controlaremos cada uno de los codigos que tenemos en las
@@ -181,7 +231,7 @@ class EjerciciosTema2Controller(Controller):
         view = MainView(self._window, controller)
         view.init_view()
 
-class FirstController(Controller):
+class Practica1Controller(Controller):
 
     def back(self, event):
         model = MainModel()
@@ -190,19 +240,129 @@ class FirstController(Controller):
         view.init_view()
 
     def open_wav_file(self, event):
-        filename = filediag.askopenfilename(initialdir='$USER',
-                               title="Select file",
-                               filetypes=(("Sound files", "*.wav"),
-                                          ("all files", "*.*"))
-                               )
-        if filename:
-            if filename.find('.wav') > 1:
-                self._model.reproducir(filename)
-                x, framerate = self._model.leer_wave(filename)
-                self._model.representa_espectrograma(x, 256, framerate, 128)
-            elif len(filename) > 1:
-                msgbox.showerror("Open file", "Cannot open this file\n(%s)" % filename)
-                return
+        filename = "/home/usuario/nextCloud/Facultad/03_Procesamiento_Digital_de_Señales_PDS_5to/Ejemplos_Python/This_is_a_test.wav"
+        if not filename:
+            filename = filediag.askopenfilename(initialdir='$USER',
+                                                title="Selecciona el fichero a estudiar",
+                                                filetypes=(("Sound files", "*.wav"),
+                                                           ("all files", "*.*"))
+                                                )
+        filename = Path(filename)
+        if filename.suffix == '.wav':
+            self._model.reproducir(str(filename))
+            x, framerate = self._model.leer_wave(str(filename))
+            self._model.representa_espectrograma(x, 256, framerate, 128)
+            plt.show()
+        if not filename.exists():
+            msgbox.showerror("Open file", "Cannot open this file\n(%s)" % str(filename))
+            return
+
+class Practica2Controller(Controller):
+
+    # Array de enteros que indica cuantas señales sumamos para el calculo del ejercicio 2
+    _num_signal = [0,0,0,0,0,0,0,0]
+    # Parametro de clase para saber cual es el fichero a estudiar
+    _filename = "/home/usuario/nextCloud/Facultad/03_Procesamiento_Digital_de_Señales_PDS_5to/Practicas/Practica2_Series_y_Transformada_de_Fourier/digitos.wav"
+    #_filename = None
+
+    def back(self, event):
+        # Modificamos el tamaño de la ventana al tamaño original
+        self._window.size(400, 170)
+        model = MainModel()
+        controller = MainController(self._window, model)
+        view = MainView(self._window, controller)
+        view.init_view()
+
+    def ejercicio2(self, event):
+        time, signal_result = self._model.sin_signal(1, numpy.pi)
+        if self._num_signal[0].get():
+            time, amp = self._model.sin_signal(3, numpy.pi)
+            signal_result = amp + signal_result
+        if self._num_signal[1].get():
+            time, amp = self._model.sin_signal(5, numpy.pi)
+            signal_result = amp + signal_result
+        if self._num_signal[2].get():
+            time, amp = self._model.sin_signal(7, numpy.pi)
+            signal_result = amp + signal_result
+        if self._num_signal[3].get():
+            time, amp = self._model.sin_signal(9, numpy.pi)
+            signal_result = amp + signal_result
+        if self._num_signal[4].get():
+            time, amp = self._model.sin_signal(11, numpy.pi)
+            signal_result = amp + signal_result
+        if self._num_signal[5].get():
+            time, amp = self._model.sin_signal(13, numpy.pi)
+            signal_result = amp + signal_result
+        if self._num_signal[6].get():
+            time, amp = self._model.sin_signal(15, numpy.pi)
+            signal_result = amp + signal_result
+        if self._num_signal[7].get():
+            time, amp = self._model.sin_signal(17, numpy.pi)
+            signal_result = amp + signal_result
+        plt.figure(1)
+        plt.figure(1).clf()
+        plt.grid()
+        plt.xlabel('Tiempo: $-\pi$ - $\pi$')
+        plt.ylabel('Amplitud')
+        plt.plot(time,signal_result)
+        plt.show()
+
+    def ejercicio3(self, event):
+        time, signal_result = self._model.square_signal(1, numpy.pi)
+        plt.figure(1)
+        plt.figure(1).clf()
+        plt.grid()
+        plt.xlabel('Tiempo: $-\pi$ - $\pi$')
+        plt.ylabel('Amplitud')
+        plt.plot(time, signal_result)
+        plt.show()
+
+    def select_audio_file(self, event):
+        if not self._filename:
+            self._filename = filediag.askopenfilename(initialdir='$USER',
+                                                title="Selecciona el fichero a estudiar",
+                                                filetypes=(("Sound files", "*.wav"),
+                                                           ("all files", "*.*"))
+                                                )
+        self._filename = Path(self._filename)
+        if self._filename.suffix == '.wav':
+            plt.figure(1, figsize=(9, 9))
+            plt.subplot(211)
+            plt.title('Onda de:\n' + str(self._filename))
+            plt.ylabel('Amplitud')
+            plt.xlabel('Tiempo [mseg]')
+            x, framerate = self._model.leer_wave(str(self._filename))
+            plt.plot(x)
+            plt.subplot(212)
+            plt.title('Espectograma')
+            plt.ylabel('Frequencia [Hz]')
+            plt.xlabel('Tiempo [seg]')
+            self._model.representa_espectrograma(x, 256, framerate, 128)
+            plt.show()
+            self._model.reproducir(str(self._filename))
+        if not self._filename.exists():
+            msgbox.showerror("Open file", "Cannot open this file\n(%s)" % str(self._filename))
+            return
+
+    def myencode(self, event):
+        digits = self._view.e_digits.get()
+        framerate = 8000
+        # audio_data = self._model.sin_signal(667,1236,framerate)
+        audio_data = self._model.DTMF_encode(digits, framerate)
+        plt.figure(1)
+        plt.title('Espectograma')
+        plt.ylabel('Frequencia [Hz]')
+        plt.xlabel('Tiempo [seg]')
+        self._model.representa_espectrograma(audio_data, 256, framerate, 128)
+        plt.show()
+
+    def mydecode(self, event):
+        if not self._filename:
+            msgbox.showinfo("Warning", "First, select the file")
+        else:
+            data, framerate = self._model.leer_wave(str(self._filename))
+            digits = self._model.DTMF_decode(data)
+            self._view.e_digits.insert(0, str(digits))
 
 class SecondController(Controller):
 
@@ -258,8 +418,8 @@ class MainController(Controller):
         que salen en las transparencias
         """
         model = Practica1Model()
-        controller = FirstController(self._window, model)
-        view = FirstView(self._window, controller)
+        controller = Practica1Controller(self._window, model)
+        view = Practica1View(self._window, controller)
         controller.set_view(view)
         view.init_view()
 
@@ -277,9 +437,9 @@ class MainController(Controller):
         """Cambia la vista de la ventana.
         pasamos a crear todos los componentes para la segunda practica
         """
-        model = OtherModel()
-        controller = OtherController(self._window, model)
-        view = OtherView(self._window, controller)
+        model = Practica2Model()
+        controller = Practica2Controller(self._window, model)
+        view = Practica2View(self._window, controller)
         controller.set_view(view)
         view.init_view()
 
