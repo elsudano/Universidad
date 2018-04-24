@@ -9,4 +9,5 @@ se usa para poner los imports necesarios para la aplicación
 from src.model.Models import EjerciciosTema1Model
 from src.model.Models import EjerciciosTema2Model
 from src.model.Models import Practica1Model
+from src.model.Models import Practica2Model
 from src.model.Models import OtherModel
