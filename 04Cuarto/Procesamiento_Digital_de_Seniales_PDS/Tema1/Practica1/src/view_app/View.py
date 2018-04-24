@@ -10,12 +10,15 @@ try:
     from Tkinter import ttk as ttk
     from Tkinter import tkFileDialog as filediag
     from Tkinter import tkMessageBox as msgbox
+    from Tkinter import IntVar
 except ImportError:
     # for python 3.x
     from tkinter import Menu as menu
     from tkinter import ttk as ttk
     from tkinter import messagebox as msgbox
     from tkinter import filedialog as filediag
+    from tkinter import IntVar
+
 # otro paquete de tratamiento de imagenes
 from PIL import Image, ImageTk
 # trabajar con imagenes

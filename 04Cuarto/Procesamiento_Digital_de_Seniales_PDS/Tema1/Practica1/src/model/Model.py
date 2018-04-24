@@ -22,7 +22,8 @@ class Model(ABC):
 
     def __init__(self):
         """Constructor por defecto."""
-        pass
+        # para la represntación interactiva
+        plt.ion()
 
     @abstractmethod
     def hacer_algo(self):
