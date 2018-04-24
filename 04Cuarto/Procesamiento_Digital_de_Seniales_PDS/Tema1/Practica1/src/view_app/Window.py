@@ -108,6 +108,14 @@ class Window:
         """Devuelve la root de la ventana."""
         return self.__root
 
+    def get_height (self):
+        """Devuelve la altura de la ventana"""
+        return self.__height
+
+    def get_width (self):
+        """Devuelve el ancho de la ventana"""
+        return self.__width
+
     def start(self):
         """Poner en funcionamiento la vista.
 
