@@ -28,3 +28,7 @@ debug/
 *.toc
 
 *.bak
+/04Cuarto/Redes_MultiServicio_RMS/02_Server_sockets_threads/nbproject/private/
+*.class
+
+04Cuarto/Redes_MultiServicio_RMS/02_Server_Client_Sockets_Threads/lib/
