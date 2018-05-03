@@ -261,9 +261,11 @@ class Practica2Controller(Controller):
 
     # Array de enteros que indica cuantas señales sumamos para el calculo del ejercicio 2
     _num_signal = [0,0,0,0,0,0,0,0]
+    # Variable para meter o no meter ruido en la señal
+    _noise_signal = False
     # Parametro de clase para saber cual es el fichero a estudiar
-    _filename = "/home/usuario/nextCloud/Facultad/03_Procesamiento_Digital_de_Señales_PDS_5to/Practicas/Practica2_Series_y_Transformada_de_Fourier/digitos.wav"
-    #_filename = None
+    #_filename = "/home/usuario/nextCloud/Facultad/03_Procesamiento_Digital_de_Señales_PDS_5to/Practicas/Practica2_Series_y_Transformada_de_Fourier/digitos.wav"
+    _filename = "/tmp/test.wav"
 
     def back(self, event):
         # Modificamos el tamaño de la ventana al tamaño original
@@ -309,6 +311,8 @@ class Practica2Controller(Controller):
 
     def ejercicio3(self, event):
         time, signal_result = self._model.square_signal(1, numpy.pi)
+        signal_result = signal_result * 63
+        #signal_result = numpy.fft.fft(signal_result)
         plt.figure(1)
         plt.figure(1).clf()
         plt.grid()
@@ -346,23 +350,43 @@ class Practica2Controller(Controller):
 
     def myencode(self, event):
         digits = self._view.e_digits.get()
+        print(digits)
         framerate = 8000
-        # audio_data = self._model.sin_signal(667,1236,framerate)
-        audio_data = self._model.DTMF_encode(digits, framerate)
-        plt.figure(1)
+        audio_data = self._model.DTMF_encode(digits, framerate, self._noise_signal.get())
+        plt.figure(1, figsize=(9, 9))
+        plt.subplot(211)
+        plt.title('Onda Generada desde programa')
+        plt.ylabel('Amplitud')
+        plt.xlabel('Muestras')
+        plt.plot(audio_data)
+        plt.subplot(212)
         plt.title('Espectograma')
         plt.ylabel('Frequencia [Hz]')
         plt.xlabel('Tiempo [seg]')
         self._model.representa_espectrograma(audio_data, 256, framerate, 128)
         plt.show()
+        print(self._model.escribir_wave("/tmp/test.wav", framerate, audio_data))
 
     def mydecode(self, event):
         if not self._filename:
             msgbox.showinfo("Warning", "First, select the file")
         else:
-            data, framerate = self._model.leer_wave(str(self._filename))
-            digits = self._model.DTMF_decode(data)
+            audio_data, framerate = self._model.leer_wave(str(self._filename))
+            print(len(audio_data))
+            digits = self._model.DTMF_decode(audio_data, framerate)
             self._view.e_digits.insert(0, str(digits))
+            plt.figure(1, figsize=(9, 9))
+            plt.subplot(211)
+            plt.title('Onda de:\n' + str(self._filename))
+            plt.ylabel('Amplitud')
+            plt.xlabel('Muestras')
+            plt.plot(audio_data)
+            plt.subplot(212)
+            plt.title('Espectograma')
+            plt.ylabel('Frequencia [Hz]')
+            plt.xlabel('Tiempo [seg]')
+            self._model.representa_espectrograma(audio_data, 256, framerate, 128)
+            self._model.reproducir(str(self._filename))
 
 class SecondController(Controller):
 

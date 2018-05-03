@@ -7,7 +7,7 @@ En este fichero podemos encontrarnos todos los modelos,
 que se pueden usar para nuestro programa.
 """
 
-from src.model.Model import Model, play, mix, wave, plt, numpy, matplotlib
+from src.model.Model import Model, play, mix, wavfile, plt, numpy, matplotlib, signal, random, struct
 from src.view_app.View import img_as_float, exposure
 
 class EjerciciosTema1Model(Model):
@@ -23,19 +23,14 @@ class EjerciciosTema1Model(Model):
         """Lectura de un fichero de audio para representación gráfica
 
         - filename, cadena de texto, es la ruta donde se encuentra el fichero a analizar"""
-        spf = wave.open(filename, 'r')
-        params = spf.getparams()
-        framerate = params[2]
-        x = spf.readframes(-1)
-        x = numpy.fromstring(x, 'Int16')
-        t = numpy.arange(start=0, stop=1.0 * x.size / framerate, step=1. / framerate)
+        framerate, data = wavfile.read(filename)
+        t = numpy.arange(start=0, stop=1.0 * data.size / framerate, step=1. / framerate)
         plt.figure(1)
         plt.subplot(211)
         plt.title('Onda de:\n' + filename)
         plt.xlabel('Tiempo (seg)')
-        plt.plot(x)
-        spf.close()
-        return plt, x, framerate
+        plt.plot(data)
+        return plt, data, framerate
 
     def representa_espectrograma(self, x, NFFT, Fs, noverlap):
         """Representacion del espectograma de un fichero de audio
@@ -123,18 +118,14 @@ class Practica1Model(Model):
         Salidas:
         - x, array, datos en bruto del fichero leido
         - framerate, entero, frecuencia de muestreo del audio"""
-        spf = wave.open(filename, 'r')
-        params = spf.getparams()
-        framerate = params[2]
-        x = spf.readframes(-1)
-        x = numpy.fromstring(x, 'Int16')
+        framerate, data = wavfile.read(filename)
         plt.figure(1, figsize=(9, 9))
         plt.subplot(211)
         plt.title('Onda de:\n' + filename)
         plt.ylabel('Amplitud')
         plt.xlabel('Tiempo [muestras]')
-        plt.plot(x)
-        return x, framerate
+        plt.plot(data)
+        return data, framerate
 
     def representa_espectrograma(self, x, NFFT, Fs, noverlap):
         """Representacion del espectograma de un fichero de audio
@@ -174,6 +165,17 @@ class Practica2Model(Model):
 
     Se trata de diseñar un programa que sea capaz de hacer mover una ventana a tráves de la onda
     de un audio y se vaya calculando dicha transformada en todo el espectro de la onda"""
+
+    # digitos posibles para codificar
+    _keys = '123A' \
+           '456B' \
+           '789C' \
+           '*0#D'
+    # frequencias de fila
+    _row_freq = [697, 770, 852, 941]
+    # frecuencias de columnas
+    _col_freq = [1209, 1336, 1477, 1633]
+
     def hacer_algo(self):
         pass
 
@@ -187,13 +189,21 @@ class Practica2Model(Model):
         Salidas:
         - x, array, datos en bruto del fichero leido
         - framerate, entero, frecuencia de muestreo del audio"""
-        spf = wave.open(filename, 'r')
-        params = spf.getparams()
-        framerate = params[2]
-        x = spf.readframes(-1)
-        x = numpy.fromstring(x, 'Int16')
-        spf.close()
-        return x, framerate
+        framerate, data = wavfile.read(filename)
+        return data, framerate
+
+    def escribir_wave(self, filename, framerate, data):
+        """Escribe los datos en un fichero de audio y muestra en la salida
+        si se ha grabado o no
+
+        Entrada:
+        - filename, cadena de texto, ruta del fichero que queremos leer
+        -
+        Salidas:
+        - success, boolean, 1 todo Ok, 0 algo mal"""
+        data_bytes = numpy.array(data)
+        success = wavfile.write(filename, framerate, data_bytes)
+        return success
 
     def representa_espectrograma(self, x, NFFT, Fs, noverlap):
         """Representacion del espectograma de un fichero de audio
@@ -227,11 +237,12 @@ class Practica2Model(Model):
         Salida:
         time, array, tiempo en el que se dibuja la señal
         sin_signal, array, valores del seno en cada instante de tiempo"""
-        time = numpy.arange(-distance, distance, 0.1);
+        time = numpy.linspace(-distance, distance, endpoint=False)
+        #time = numpy.arange(-distance, distance, 0.1);
         sin_signal = (numpy.sin(frequency*time))/frequency
         return time, sin_signal
 
-    def square_signal(self, frecuency, distance):
+    def square_signal(self, frequency, distance):
         """Genera una señal seno con los parametros necesarios
         Entradas:
         frecuency, int, la frecuencia que queremos dibujar
@@ -241,34 +252,106 @@ class Practica2Model(Model):
         Salida:
         time, array, tiempo en el que se dibuja la señal
         square_signal, array, valores de señal en cada instante de tiempo"""
-        x = numpy.arange(-distance, distance, 0.1)
-        y = [random.choice([0, 1]) for i in x]
+        time = numpy.linspace(-distance, distance, 12*distance, endpoint=False)
+        square_signal = signal.square(frequency*time)
+        return time, square_signal
 
-    def DTMF_encode(self, digits, framerate):
-        data = [framerate]
-        scale = 32767  # 16-bit unsigned short
-        keys = '123A' \
-               '456B' \
-               '789C' \
-               '*0#D'
-        row_freq = [697, 770, 852, 941]
-        col_freq = [1209, 1336, 1477, 1633]
-        for digit in range(0,len(digits)):
-            symbol = keys.index(digits[digit])
-            if symbol > -1:
-                row_freq_val = row_freq[symbol % 4]
-                col_freq_val = col_freq[symbol % 4]
-                for i in range(framerate):
-                    time_tone = i * 200.0 / framerate
-                    tone1 = numpy.sin(time_tone * row_freq_val * numpy.pi)
-                    tone2 = numpy.sin(time_tone * col_freq_val * numpy.pi)
-                    # fulltone = scale + tone1 + tone2
-                    # data[i] = int(fulltone / 2 * scale)
+    def DTMF_encode(self, digits, framerate, noise=False):
+        """Función para codificar un digito dado como un tono de telefóno
+
+        Entradas:
+            digits, string, cadena de caracteres con los digitos a codificar
+            framerate, entero, numero de muestras que se usaran por cada tono
+            noise, boolean, genera la señal con ruido o sin el
+        Salida:
+            data, array, con los datos completos de todos los tonos
+
+        Notas:
+            Si cada tono tiene que tener el framerate especificado, se utilizara
+            la mitad del framerate para los espacios entre tonos"""
+        # amplitud de la señal
+        amplitude = 1
+        # cantidad de digitos a codificar
+        digi_cant = len(digits)
+        # tamaño del espacio
+        space = int(framerate/4)
+        # vector con la información de la señal
+        data = []
+
+        for digit in range(digi_cant):
+            pos_symbol = self._keys.index(digits[digit])
+            if pos_symbol > -1:
+                row_freq_val = self._row_freq[int(pos_symbol / 4)]
+                col_freq_val = self._col_freq[pos_symbol % 4]
+                # espacio en blanco
+                for i in range(space):
+                    tone3 = 0
+                    if noise:
+                        tone3 = random.random()
+                    data.append(amplitude * tone3)
+                # tono
+                for frame in range(1000):
+                    time = frame * (1.0 / framerate)
+                    tone1 = numpy.sin(time * row_freq_val * 2 * numpy.pi)
+                    tone2 = numpy.cos(time * col_freq_val * 2 * numpy.pi)
+                    tone3 = 0
+                    if noise:
+                        tone3 = random.random()
+                    data.append(amplitude * (tone1 + tone2 + tone3))
+        # espacio en blanco del final
+        for i in range(space):
+            tone3 = 0
+            if noise:
+                tone3 = random.random()
+            data.append(amplitude * tone3)
         return data
 
-    def DTMF_decode(self, tones):
-        # TODO tienes que implementar la DTMF para decodificar
-        digits = tones
+    def DTMF_decode(self, data, framerate):
+        """Función para decodificar un sonido dado como un digito del telefóno
+        Entradas:
+            data, array, datos en bruto con el sonido
+            framerate, entero, numero de muestras que se usaran por cada tono
+        Salida:
+            digits, string, con los digitos correspondientes al sonido
+        """
+        frame_length = 256 # Longitud de la frame.
+        steps = 512 # Desplazamiento.
+        freq_num = 256 # Número de frecuencias.
+        threshold = 100 # Umbral de corte para la selección de frecuencias
+
+        # Numero de ventanas (frames) en las que vamos a trocear los datos
+        nframes = int((len(data) - frame_length) / steps) + 1
+        # Vector de frecuencias posibles, según el framerate y el numero de frecuencias que queremos
+        freq_list = numpy.linspace(0, framerate/2, freq_num/2+1)
+        # frecuencia alta del tono
+        freq_high = None
+        # frecuencia baja del tono
+        freq_low = None
+        # digitos encontrados por sus frecuencias
+        digits = ''
+        for frame in range(nframes):
+            # lista con la cantidad de datos definida por la ventana
+            data_win = data[frame*steps:frame*steps+frame_length]
+            # calculamos la fft a los datos anteriores
+            fft_result = numpy.fft.fft(data_win)
+            # calculamos el angulo para test nada mas
+            #fft_angle = numpy.angle(fft_result)
+            # calculamos el absolute a los datos anteriores
+            fft_result = numpy.absolute(fft_result)
+            # recorremos la lista de frecuencias posibles generadas
+            for pos in range(len(freq_list)):
+                # miramos si esta dentro del umbral
+                if fft_result[pos] > threshold:
+                    # guardamos la frecuencia alta y baja del tono
+                    if freq_list[pos] > 1000:
+                        freq_high = min(self._col_freq, key=lambda x: abs(x - freq_list[pos]))
+                    else:
+                        freq_low = min(self._row_freq, key=lambda x: abs(x - freq_list[pos]))
+                    # cuando tenemos las dos frecuencias calculamos la posición del digito
+                    if freq_high and freq_low:
+                        # columnas mas filas multiplicado por 4 para la posición del digito
+                        pos_digit = self._col_freq.index(freq_high) + (self._row_freq.index(freq_low) * 4)
+                        digits = digits + self._keys[pos_digit]
         return digits
 
 class OtherModel(Model):

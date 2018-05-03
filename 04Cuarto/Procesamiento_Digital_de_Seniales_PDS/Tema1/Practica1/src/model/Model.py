@@ -10,13 +10,18 @@ from abc import ABC, abstractmethod
 # para la reproducción de sonidos
 from pydub import AudioSegment as mix
 from pydub.playback import play
+# para calculos matematicos
+from scipy import signal
+from scipy.io import wavfile
+# para valores random de las señales
+import random
 #
+import struct
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy
-import wave
 import sys
-
+#
 class Model(ABC):
     """Clase controlador."""
 
