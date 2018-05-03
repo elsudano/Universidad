@@ -1,0 +1,8 @@
+matplotlib==2.0.0
+pydub==0.21.0
+scipy==1.0.1
+numpy==1.13.3
+scikit_image==0.13.1
+wfdb==2.1.1
+Pillow==5.1.0
+skimage==0.0
