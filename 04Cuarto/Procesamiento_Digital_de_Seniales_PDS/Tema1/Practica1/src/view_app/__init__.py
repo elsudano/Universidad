@@ -10,6 +10,7 @@ from src.view_app.Views import EjerciciosTema1View
 from src.view_app.Views import EjerciciosTema2View
 from src.view_app.Views import Practica1View
 from src.view_app.Views import Practica2View
+from src.view_app.Views import Practica3View
 from src.view_app.Views import SecondView
 from src.view_app.Views import OtherView
 from src.view_app.Window import Window

@@ -322,7 +322,7 @@ class Practica2Model(Model):
         # Numero de ventanas (frames) en las que vamos a trocear los datos
         nframes = int((len(data) - frame_length) / steps) + 1
         # Vector de frecuencias posibles, según el framerate y el numero de frecuencias que queremos
-        freq_list = numpy.linspace(0, framerate/2, freq_num/2+1)
+        freq_list = numpy.linspace(0, framerate / 2, freq_num / 2 + 1)
         # frecuencia alta del tono
         freq_high = None
         # frecuencia baja del tono
@@ -353,6 +353,29 @@ class Practica2Model(Model):
                         pos_digit = self._col_freq.index(freq_high) + (self._row_freq.index(freq_low) * 4)
                         digits = digits + self._keys[pos_digit]
         return digits
+
+class Practica3Model(Model):
+    """Se trata la creación de filtros
+
+    En esta practica se realizan los calculos a mano y utilizando diferentes
+    herramientas de matlab para poder calcular los filtros a partir de unos
+    coeficientes dados."""
+    def hacer_algo(self):
+        pass
+
+    def make_signal_in(self, first_element, others_elements, size):
+        x = [first_element]
+        for i in range(1,size-1):
+            x.append(others_elements)
+        return x
+
+    def filter(self,signal_in, coef_a, coef_b):
+        signal_out = signal.lfilter(coef_b,coef_a,signal_in)
+        return signal_out
+
+    def convolution(self,signal_in, coef_b):
+        signal_out = signal.convolve(coef_b,signal_in,'full')
+        return signal_out
 
 class OtherModel(Model):
 

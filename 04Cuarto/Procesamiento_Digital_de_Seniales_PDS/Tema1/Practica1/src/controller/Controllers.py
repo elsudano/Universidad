@@ -385,8 +385,95 @@ class Practica2Controller(Controller):
             plt.title('Espectograma')
             plt.ylabel('Frequencia [Hz]')
             plt.xlabel('Tiempo [seg]')
+            plt.show()
             self._model.representa_espectrograma(audio_data, 256, framerate, 128)
             self._model.reproducir(str(self._filename))
+
+class Practica3Controller(Controller):
+
+    def back(self, event):
+        # Modificamos el tamaño de la ventana al tamaño original
+        self._window.size(400, 170)
+        model = MainModel()
+        controller = MainController(self._window, model)
+        view = MainView(self._window, controller)
+        view.init_view()
+
+    def iir1(self, event):
+        signal_in = self._model.make_signal_in(1,0,30)
+        a = [1.0,0.0,0.9]
+        b = [0.3,0.6,0.3]
+        xn = [0.0, 0.0, 0.0]
+        yn = [0.0, 0.0, 0.0]
+        signal_out = []
+        for n in range(0,len(signal_in)):
+            xn[2] = xn[1]
+            xn[1] = xn[0]
+            xn[0] = signal_in[n]
+            yn[2] = yn[1]
+            yn[1] = yn[0]
+            yn[0] = 0.
+            a_temp = numpy.multiply(-1, a)
+            temp1 = numpy.sum(numpy.multiply(a_temp, yn))
+            temp2 = numpy.sum(numpy.multiply(b,xn))
+            signal_out.append(temp1+temp2)
+            yn[0] = signal_out[n]
+        plt.stem(signal_out)
+
+    def iir2(self, event):
+        signal_in = self._model.make_signal_in(1,0,30)
+        coef_a = [1.0,0.0,0.9]
+        coef_b = [0.3,0.6,0.3]
+        signal_out = self._model.filter(signal_in, coef_a, coef_b)
+        plt.stem(signal_out)
+
+    def iir3(self, event):
+        signal_in = self._model.make_signal_in(0,1,30)
+        coef_a = [1.0,0.0,0.9]
+        coef_b = [0.3,0.6,0.3]
+        signal_out = self._model.filter(signal_in, coef_a, coef_b)
+        plt.stem(signal_out)
+
+    def iir4(self, event):
+        signal_in = self._model.make_signal_in(1,0,30)
+        coef_a = [1.0,0.0,0.9]
+        coef_b = [0.3,0.6,0.3]
+        signal_out = self._model.filter(signal_in, coef_a, coef_b)
+        plt.stem(signal_out)
+
+    def iir5(self, event):
+        signal_in = self._model.make_signal_in(1, 0, 30)
+        a = [1.0, -2.5, 1.0]
+        b = [4.0, 0.0, 0.0]
+        xn = [0.0, 0.0, 0.0]
+        yn = [0.0, 0.0, 0.0]
+        signal_out = []
+        for n in range(0, len(signal_in)):
+            xn[2] = xn[1]
+            xn[1] = xn[0]
+            xn[0] = signal_in[n]
+            yn[2] = yn[1]
+            yn[1] = yn[0]
+            yn[0] = 0.
+            a_temp = numpy.multiply(-1, a)
+            temp1 = numpy.sum(numpy.multiply(a_temp, yn))
+            temp2 = numpy.sum(numpy.multiply(b, xn))
+            signal_out.append(temp1 + temp2)
+            yn[0] = signal_out[n]
+        plt.stem(signal_out)
+
+    def fir1(self, event):
+        signal_in = self._model.make_signal_in(1, 0, 30)
+        coef_a = [1.0]
+        coef_b = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
+        signal_out = self._model.filter(signal_in, coef_a, coef_b)
+        plt.stem(signal_out)
+
+    def fir2(self, event):
+        signal_in = self._model.make_signal_in(1, 1, 30)
+        coef_b = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
+        signal_out = self._model.convolution(signal_in, coef_b)
+        plt.stem(signal_out)
 
 class SecondController(Controller):
 
@@ -464,6 +551,16 @@ class MainController(Controller):
         model = Practica2Model()
         controller = Practica2Controller(self._window, model)
         view = Practica2View(self._window, controller)
+        controller.set_view(view)
+        view.init_view()
+
+    def practica3(self, event):
+        """Cambia la vista de la ventana.
+        pasamos a crear todos los componentes para la tercera practica
+        """
+        model = Practica3Model()
+        controller = Practica3Controller(self._window, model)
+        view = Practica3View(self._window, controller)
         controller.set_view(view)
         view.init_view()
 

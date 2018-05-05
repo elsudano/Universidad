@@ -23,7 +23,7 @@ class EjerciciosTema1View(View):
         # cantidad de filas que tiene el marco
         self._principal_frame.rowconfigure(0, weight=1)
         # crea bóton dentro de marco
-        self.b_back = ttk.Button(self._principal_frame, text="Back")
+        self.b_back = ttk.Button(self._principal_frame, text="Atras")
         # ponemos en la posición 0,0 y que se expanda a SurEste
         self.b_back.grid(column=6, row=6, sticky='SE')
         # agregamos el comando del bóton
@@ -60,7 +60,7 @@ class EjerciciosTema2View(View):
         # cantidad de filas que tiene el marco
         self._principal_frame.rowconfigure(0, weight=1)
         # crea bóton dentro de marco
-        self.b_back = ttk.Button(self._principal_frame, text="Back")
+        self.b_back = ttk.Button(self._principal_frame, text="Atras")
         # ponemos en la posición 0,0 y que se expanda a SurEste
         self.b_back.grid(column=12, row=12, sticky='SE')
         # agregamos el comando del bóton
@@ -86,7 +86,7 @@ class Practica1View(View):
         # cantidad de filas que tiene el marco
         self._principal_frame.rowconfigure(0, weight=1)
         # crea bóton dentro de marco
-        self.b_back = ttk.Button(self._principal_frame, text="Back")
+        self.b_back = ttk.Button(self._principal_frame, text="Atras")
         # ponemos en la posición 0,0 y que se expanda a SurEste
         self.b_back.grid(column=12, row=12, sticky='SE')
         # agregamos el comando del bóton
@@ -129,7 +129,7 @@ class Practica2View(View):
         # cantidad de filas que tiene el marco
         self._principal_frame.rowconfigure(0, weight=1)
         # crea bóton dentro de marco
-        self.b_back = ttk.Button(self._principal_frame, text="Back")
+        self.b_back = ttk.Button(self._principal_frame, text="Atras")
         # ponemos en la posición 0,0 y que se expanda a SurEste
         self.b_back.grid(column=12, row=12, sticky='SE')
         # agregamos el comando del bóton
@@ -174,6 +174,55 @@ class Practica2View(View):
         self.b_ejercicio3 = ttk.Button(self._principal_frame, text="Ejercicio 3")
         self.b_ejercicio3.grid(column=0, columnspan=4, row=3, sticky='NESW')
         self.b_ejercicio3.bind("<Button>", self._controller.ejercicio3)
+
+class Practica3View(View):
+    """Ventana que muestra los componente de la Prctica 2"""
+
+    def _init_view(self):
+        """Método de creación de vista.
+
+        En este método es donde realmente se genera la vista de la,
+        ventana pues es donde se crean todos los widgets y se colocán,
+        en su lugar correspondiente.
+        """
+        # Modificamos el tamaño de la ventana en esta vista
+        #self._window.size(425,170)
+        # Creamos el marco
+        self._principal_frame = ttk.Frame(self._window.get(), padding="3 3 12 12")
+        # El marco está en la posición 0,0 de la ventana en el centro
+        self._principal_frame.grid(column=0, row=0, sticky='NESW')
+        # cantidad de columnas que tiene el marco
+        self._principal_frame.columnconfigure(0, weight=1)
+        # cantidad de filas que tiene el marco
+        self._principal_frame.rowconfigure(0, weight=1)
+        # crea bóton dentro de marco
+        self.b_back = ttk.Button(self._principal_frame, text="Atras")
+        # ponemos en la posición 0,0 y que se expanda a SurEste
+        self.b_back.grid(column=12, row=12, sticky='SE')
+        # agregamos el comando del bóton
+        self.b_back.bind("<Button>", self._controller.back)
+        # --------------------------------------------------------------------------------
+        self.b_ejercicio1 = ttk.Button(self._principal_frame, text="IIR Punto 1")
+        self.b_ejercicio1.grid(column=0, row=0, sticky='NESW')
+        self.b_ejercicio1.bind("<Button>", self._controller.iir1)
+        self.b_ejercicio2 = ttk.Button(self._principal_frame, text="IIR Punto 2")
+        self.b_ejercicio2.grid(column=0, row=1, sticky='NESW')
+        self.b_ejercicio2.bind("<Button>", self._controller.iir2)
+        self.b_ejercicio3 = ttk.Button(self._principal_frame, text="IIR Punto 3")
+        self.b_ejercicio3.grid(column=0, row=2, sticky='NESW')
+        self.b_ejercicio3.bind("<Button>", self._controller.iir3)
+        self.b_ejercicio4 = ttk.Button(self._principal_frame, text="IIR Punto 4")
+        self.b_ejercicio4.grid(column=0, row=3, sticky='NESW')
+        self.b_ejercicio4.bind("<Button>", self._controller.iir4)
+        self.b_ejercicio5 = ttk.Button(self._principal_frame, text="IIR Punto 5")
+        self.b_ejercicio5.grid(column=0, row=4, sticky='NESW')
+        self.b_ejercicio5.bind("<Button>", self._controller.iir5)
+        self.b_ejercicio6 = ttk.Button(self._principal_frame, text="FIR Punto 1")
+        self.b_ejercicio6.grid(column=1, row=0, sticky='NESW')
+        self.b_ejercicio6.bind("<Button>", self._controller.fir1)
+        self.b_ejercicio7 = ttk.Button(self._principal_frame, text="FIR Punto 2")
+        self.b_ejercicio7.grid(column=1, row=1, sticky='NESW')
+        self.b_ejercicio7.bind("<Button>", self._controller.fir2)
 
 class SecondView(View):
     """Vista de Utilidades para la Practica."""
@@ -269,6 +318,9 @@ class MainView(View):
         self.b_practica2 = ttk.Button(self._principal_frame, text="Practica 2")
         self.b_practica2.grid(column=1, row=1, sticky='NESW')
         self.b_practica2.bind("<Button>", self._controller.practica2)
+        self.b_practica2 = ttk.Button(self._principal_frame, text="Practica 3")
+        self.b_practica2.grid(column=1, row=3, sticky='NESW')
+        self.b_practica2.bind("<Button>", self._controller.practica3)
         self.b_other = ttk.Button(self._principal_frame, text="Other Case")
         self.b_other.grid(column=0, row=3, sticky='NESW')
         self.b_other.bind("<Button>", self._controller.other)

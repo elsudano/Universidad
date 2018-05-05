@@ -10,4 +10,5 @@ from src.model.Models import EjerciciosTema1Model
 from src.model.Models import EjerciciosTema2Model
 from src.model.Models import Practica1Model
 from src.model.Models import Practica2Model
+from src.model.Models import Practica3Model
 from src.model.Models import OtherModel

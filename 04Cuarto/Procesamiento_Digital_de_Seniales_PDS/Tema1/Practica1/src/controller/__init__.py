@@ -11,6 +11,7 @@ from src.controller.Controllers import EjerciciosTema1Controller
 from src.controller.Controllers import EjerciciosTema2Controller
 from src.controller.Controllers import Practica1Controller
 from src.controller.Controllers import Practica2Controller
+from src.controller.Controllers import Practica3Controller
 from src.controller.Controllers import SecondController
 from src.controller.Controllers import OtherController
 
