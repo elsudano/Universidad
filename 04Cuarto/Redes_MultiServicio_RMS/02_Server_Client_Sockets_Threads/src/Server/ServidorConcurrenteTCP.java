@@ -1,22 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Server;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.time.LocalDateTime;
-import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author usuario
  */
-class ServidorConcurrenteTCP extends Thread {
+public class ServidorConcurrenteTCP extends Thread {
 
     Socket id;
 
@@ -28,21 +25,21 @@ class ServidorConcurrenteTCP extends Thread {
     public void run() {
         try {
             PrintWriter out = new PrintWriter(this.id.getOutputStream(), true);
-            while (true) {
+            BufferedReader in = new BufferedReader(new InputStreamReader(this.id.getInputStream()));
+            while (!this.id.isClosed()) {
+                ServidorConcurrenteTCP.sleep((long) (Math.random()*3000));
                 int horas = LocalDateTime.now().getHour();
                 int minutos = LocalDateTime.now().getMinute();
                 int segundos = LocalDateTime.now().getSecond();
                 out.println(horas + ":" + minutos + ":" + segundos);
-                Thread.sleep(2000);
+                if (in.ready()) {
+                    out.close();
+                    in.close();
+                    this.id.close();
+                }
             }
-        } catch (IOException | InterruptedException e) {
-        }
-    }
-
-    public static void main(String args[]) throws IOException {
-        ServerSocket ss = new ServerSocket(9999);
-        while (true) {
-            new ServidorConcurrenteTCP(ss.accept()).start();
+        } catch (IOException | InterruptedException ex) {
+            Logger.getLogger(ServidorConcurrenteTCP.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
