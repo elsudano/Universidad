@@ -7,8 +7,9 @@ En este fichero podemos encontrarnos todos los modelos,
 que se pueden usar para nuestro programa.
 """
 
-from src.model.Model import Model, play, mix, wavfile, plt, numpy, matplotlib, signal, random, struct
+from src.model.Model import Model, play, mix, wavfile, plt, patches, numpy, matplotlib, signal, random, struct
 from src.view_app.View import img_as_float, exposure
+
 
 class EjerciciosTema1Model(Model):
     """Funciones necesarias para los ejercicios del tema 1
@@ -91,12 +92,13 @@ class EjerciciosTema1Model(Model):
         """
         high = numpy.ceil(max(input))
         low = numpy.floor(min(input))
-        qstep = (high-low)/levels
-         # Paso de cuantización.
-        q = numpy.floor((input-low)/qstep)
-        low = low + qstep/2
-        output = low + qstep*q
-        return output,q
+        qstep = (high - low) / levels
+        # Paso de cuantización.
+        q = numpy.floor((input - low) / qstep)
+        low = low + qstep / 2
+        output = low + qstep * q
+        return output, q
+
 
 class Practica1Model(Model):
     """Primera practica de PDS
@@ -105,6 +107,7 @@ class Practica1Model(Model):
     se implementa en Matlab una versión que produce eco en el sonido, gracias al retardo
     producido por un componente.
     Tambien se presentan los histogramas de los sonidos al digital el audio."""
+
     def hacer_algo(self):
         pass
 
@@ -155,10 +158,12 @@ class Practica1Model(Model):
         filename: cadena de texto, fichero a reproducir."""
         play(mix.from_wav(filename))
 
+
 class EjerciciosTema2Model(Model):
 
     def hacer_algo(self):
         pass
+
 
 class Practica2Model(Model):
     """Se trata de la utilización de la transformada de Fourier
@@ -168,9 +173,9 @@ class Practica2Model(Model):
 
     # digitos posibles para codificar
     _keys = '123A' \
-           '456B' \
-           '789C' \
-           '*0#D'
+            '456B' \
+            '789C' \
+            '*0#D'
     # frequencias de fila
     _row_freq = [697, 770, 852, 941]
     # frecuencias de columnas
@@ -238,8 +243,8 @@ class Practica2Model(Model):
         time, array, tiempo en el que se dibuja la señal
         sin_signal, array, valores del seno en cada instante de tiempo"""
         time = numpy.linspace(-distance, distance, endpoint=False)
-        #time = numpy.arange(-distance, distance, 0.1);
-        sin_signal = (numpy.sin(frequency*time))/frequency
+        # time = numpy.arange(-distance, distance, 0.1);
+        sin_signal = (numpy.sin(frequency * time)) / frequency
         return time, sin_signal
 
     def square_signal(self, frequency, distance):
@@ -252,8 +257,8 @@ class Practica2Model(Model):
         Salida:
         time, array, tiempo en el que se dibuja la señal
         square_signal, array, valores de señal en cada instante de tiempo"""
-        time = numpy.linspace(-distance, distance, 12*distance, endpoint=False)
-        square_signal = signal.square(frequency*time)
+        time = numpy.linspace(-distance, distance, 12 * distance, endpoint=False)
+        square_signal = signal.square(frequency * time)
         return time, square_signal
 
     def DTMF_encode(self, digits, framerate, noise=False):
@@ -274,7 +279,7 @@ class Practica2Model(Model):
         # cantidad de digitos a codificar
         digi_cant = len(digits)
         # tamaño del espacio
-        space = int(framerate/4)
+        space = int(framerate / 4)
         # vector con la información de la señal
         data = []
 
@@ -314,10 +319,10 @@ class Practica2Model(Model):
         Salida:
             digits, string, con los digitos correspondientes al sonido
         """
-        frame_length = 256 # Longitud de la frame.
-        steps = 512 # Desplazamiento.
-        freq_num = 256 # Número de frecuencias.
-        threshold = 100 # Umbral de corte para la selección de frecuencias
+        frame_length = 256  # Longitud de la frame.
+        steps = 512  # Desplazamiento.
+        freq_num = 256  # Número de frecuencias.
+        threshold = 100  # Umbral de corte para la selección de frecuencias
 
         # Numero de ventanas (frames) en las que vamos a trocear los datos
         nframes = int((len(data) - frame_length) / steps) + 1
@@ -331,11 +336,11 @@ class Practica2Model(Model):
         digits = ''
         for frame in range(nframes):
             # lista con la cantidad de datos definida por la ventana
-            data_win = data[frame*steps:frame*steps+frame_length]
+            data_win = data[frame * steps:frame * steps + frame_length]
             # calculamos la fft a los datos anteriores
             fft_result = numpy.fft.fft(data_win)
             # calculamos el angulo para test nada mas
-            #fft_angle = numpy.angle(fft_result)
+            # fft_angle = numpy.angle(fft_result)
             # calculamos el absolute a los datos anteriores
             fft_result = numpy.absolute(fft_result)
             # recorremos la lista de frecuencias posibles generadas
@@ -354,28 +359,176 @@ class Practica2Model(Model):
                         digits = digits + self._keys[pos_digit]
         return digits
 
+
+class EjerciciosTema3Model(Model):
+
+    def hacer_algo(self):
+        pass
+
+
 class Practica3Model(Model):
     """Se trata la creación de filtros
 
     En esta practica se realizan los calculos a mano y utilizando diferentes
     herramientas de matlab para poder calcular los filtros a partir de unos
     coeficientes dados."""
+
     def hacer_algo(self):
         pass
 
     def make_signal_in(self, first_element, others_elements, size):
         x = [first_element]
-        for i in range(1,size-1):
+        for i in range(1, size - 1):
             x.append(others_elements)
         return x
 
-    def filter(self,signal_in, coef_a, coef_b):
-        signal_out = signal.lfilter(coef_b,coef_a,signal_in)
+    def filter(self, signal_in, coef_a, coef_b):
+        signal_out = signal.lfilter(coef_b, coef_a, signal_in)
         return signal_out
 
-    def convolution(self,signal_in, coef_b):
-        signal_out = signal.convolve(coef_b,signal_in,'full')
+    def convolution(self, signal_in, coef_b):
+        signal_out = signal.convolve(coef_b, signal_in, 'full')
         return signal_out
+
+
+class EjerciciosTema4Model(Model):
+
+    def hacer_algo(self):
+        pass
+
+
+class Practica4Model(Model):
+    """Se trata de entender correctamente la transformada Z
+
+    Para ello seguiremos utilizando los filtros y la convolución
+    pero esta vez tenemos que pintar el diagrama de cero y polos"""
+
+    def hacer_algo(self):
+        pass
+
+    def pulse(self, initial_steps, ending_steps):
+        """Genera un array con los datos de una señal de pulso
+
+        Entrada:
+        - initial_steps, entero, numero entero desde donde comienzan
+        los valores del array, con la cantidad especificada
+        - ending_steps, entero, numero entero hasta donde llega el array
+        note: todos estos valores serán de valor 0 menos el valor del
+        pulso que será 1 en la posicion intermedia entre los dos valores
+        antes dados.
+
+        Salidas:
+        - x, ndarray, array con todas las posiciones a 0 menos 1
+        que se encuentra en initial_steps > pos > ending_esteps"""
+        if (initial_steps == 0 or initial_steps == 1):
+            initial_steps = 1
+            ending_steps -= 1
+        x = numpy.array(numpy.zeros(numpy.abs(initial_steps)))
+        x[numpy.abs(initial_steps)-1] = 1
+        signal_out = numpy.concatenate((x, numpy.array(numpy.zeros(numpy.abs(ending_steps)))))
+        return signal_out
+
+    def unit_step(self, initial_steps, ending_steps):
+        """Genera un array con los datos de una señal de escalon unitario
+
+        Entrada:
+        - initial_steps, entero, numero entero desde donde comienzan
+        los valores del array, con la cantidad especificada
+        - ending_steps, entero, numero entero hasta donde llega el array
+        note: todos estos valores serán de valor 0 menos el valor del
+        pulso que será 1 en la posicion intermedia entre los dos valores
+        antes dados.
+
+        Salidas:
+        - x, ndarray, array con todas las posiciones a 0 menos 1
+        que se encuentra en initial_steps > pos > ending_esteps"""
+        x = numpy.array(numpy.zeros(numpy.abs(initial_steps)))
+        x[numpy.abs(initial_steps)-1] = 1
+        signal_out = numpy.concatenate((x, numpy.array(numpy.ones(numpy.abs(ending_steps)))))
+        return signal_out
+
+    def filter(self, signal_in, coef_a, coef_b):
+        signal_out = signal.lfilter(coef_b, coef_a, signal_in)
+        return signal_out
+
+    def convolution(self, signal_in, coef_b):
+        signal_out = signal.convolve(coef_b, signal_in, 'full')
+        return signal_out
+
+    def impz(self, signal_in, a, b):
+        impulse = numpy.repeat(0., len(signal_in))
+        impulse[numpy.where(signal_in == 1)] = 1.
+        response = signal.lfilter(b, a, impulse)
+        return response
+
+    def stepz(self, signal_in, a, b):
+        step = numpy.repeat(0., len(signal_in))
+        step[numpy.where(n >= 0)] = 1.
+        response = signal.lfilter(b, a, step)
+        return response
+        # plt.stem(n, response)
+        # plt.ylabel('Amplitud')
+        # plt.xlabel('n (muestras)')
+        # plt.title('Respuesta al escalon')
+        # plt.show()
+
+    def zplane(self, a, b):
+        # Fix axes
+        ax = plt.gca()
+        ax.spines['left'].set_position('zero')
+        ax.spines['bottom'].set_position('zero')
+        ax.spines['right'].set_visible(False)
+        ax.spines['top'].set_visible(False)
+
+        # Draw circle
+        circle = patches.Circle((0, 0), radius=1, color='black', ls='dashed', fill=False)
+        ax.add_patch(circle)
+
+        # Make a and b of equal length
+        a = numpy.append(a, numpy.repeat(0, max(len(a), len(b)) - len(a)))
+        b = numpy.append(b, numpy.repeat(0, max(len(a), len(b)) - len(b)))
+
+        # Plot poles
+        p = numpy.roots(a)
+        plt.plot(p.real, p.imag, 'kx', ms=7)
+
+        # Plot zeros
+        z = numpy.roots(b)
+        plt.plot(z.real, z.imag, 'ko', ms=7)
+
+        plt.axis('scaled')
+        plt.show()
+
+    def plot_freq_resp(self, a, b, worN=None):
+        w, h = signal.freqz(b, a, worN)
+        plt.plot(w, 20 * numpy.log10(abs(h)), 'b')
+        plt.ylabel('Amplitud [dB]', color='b')
+        plt.xlabel('Frecuencia [rad/muestra]')
+        plt.gca().twinx()
+        angles = numpy.unwrap(numpy.angle(h))
+        plt.plot(w, angles, 'g')
+        plt.ylabel('Fase (rad)', color='g')
+        plt.title('Respuesta en frecuencia')
+        plt.grid()
+        plt.show()
+
+    def plot_group_delay(self, a, b):
+        w, gd = signal.group_delay((b, a))
+        plt.plot(w, numpy.round(gd, 5))
+        plt.ylabel('Retardo de grupo [muestras]')
+        plt.xlabel('Frecuencia [rad/muestra]')
+        plt.title('Retardo de grupo')
+        plt.show()
+
+
+class Practica5Model(Model):
+    """Se trata de entender correctamente la creación de filtros
+
+    """
+
+    def hacer_algo(self):
+        pass
+
 
 class OtherModel(Model):
 
@@ -400,7 +553,7 @@ class OtherModel(Model):
 
         párametros de salida:
         entero, la posición de comienzo de la lectura."""
-        return int(num/1589)
+        return int(num / 1589)
 
     def text(self, string, pos):
         """Función que devuelve los 10 siguiente caracteres de la cadena
@@ -414,7 +567,8 @@ class OtherModel(Model):
         párametros de salida:
         cadena de texto, los 10 caracteres que están justo a continuación de pos."""
 
-        return string[pos:pos+10]
+        return string[pos:pos + 10]
+
 
 class MainModel(Model):
 

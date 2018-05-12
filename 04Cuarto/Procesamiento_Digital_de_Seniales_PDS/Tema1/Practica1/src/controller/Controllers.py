@@ -11,11 +11,13 @@ from src.model.Models import *
 from src.controller.Controllers import *
 from src.view_app.Views import *
 
+
 class EjerciciosTema1Controller(Controller):
     """Gestión de eventos para la ventana de los ejercicios del tema 1
     Con esta controlaremos cada uno de los codigos que tenemos en las
     diapositivas del tema 1
     """
+
     def back(self, event):
         model = MainModel()
         controller = MainController(self._window, model)
@@ -30,10 +32,10 @@ class EjerciciosTema1Controller(Controller):
         filename = "/home/usuario/nextCloud/Facultad/03_Procesamiento_Digital_de_Señales_PDS_5to/Ejemplos_Python/This_is_a_test.wav"
         if not filename:
             filename = filediag.askopenfilename(initialdir='$USER',
-                                                  title="Selecciona el fichero a estudiar",
-                                                  filetypes=(("Sound files", "*.wav"),
-                                                             ("all files", "*.*"))
-                                                  )
+                                                title="Selecciona el fichero a estudiar",
+                                                filetypes=(("Sound files", "*.wav"),
+                                                           ("all files", "*.*"))
+                                                )
         filename = Path(filename)
         if filename.suffix == '.wav':
             self._model.reproducir(str(filename))
@@ -98,8 +100,10 @@ class EjerciciosTema1Controller(Controller):
         con una base de datos de bioseñales"""
         # se ha cambiado la siguiente linea de codigo por la siguiente por que la api ha avanzado
         # sig, fields = wfdb.rdsamp('/home/usuario/nextCloud/Facultad/03_Procesamiento_Digital_de_Señales_PDS_5to/Ejemplos_Python/b001')
-        record = wfdb.rdrecord('/home/usuario/nextCloud/Facultad/03_Procesamiento_Digital_de_Señales_PDS_5to/Ejemplos_Python/b001', sampto=30000)
-        wfdb.plot_wfdb(record, figsize=(10,7), title='Registro b001 de la base de datos Physionet CEBS')
+        record = wfdb.rdrecord(
+            '/home/usuario/nextCloud/Facultad/03_Procesamiento_Digital_de_Señales_PDS_5to/Ejemplos_Python/b001',
+            sampto=30000)
+        wfdb.plot_wfdb(record, figsize=(10, 7), title='Registro b001 de la base de datos Physionet CEBS')
 
     def pag18(self, event):
         """El ejercicio que hay para mejorar el contraste de las imagenes
@@ -112,11 +116,11 @@ class EjerciciosTema1Controller(Controller):
         matplotlib.rcParams['font.size'] = 8
         if not filename:
             filename = filediag.askopenfilename(initialdir='$USER',
-                                                       title="Selecciona el fichero a estudiar",
-                                                       filetypes=(("JPG Files", "*.jpg"),
-                                                                  ("GIF Files", "*.gif"),
-                                                                  ("TIFF Files", "*.tif"))
-                                                       )
+                                                title="Selecciona el fichero a estudiar",
+                                                filetypes=(("JPG Files", "*.jpg"),
+                                                           ("GIF Files", "*.gif"),
+                                                           ("TIFF Files", "*.tif"))
+                                                )
         filename = Path(filename)
         if filename.exists() and filename.suffix == '.tif':
             # msgbox.showinfo("Acceso a fichero", "Tenemos este fichero para trabajar con el\n(%s)" % str(filename))
@@ -188,16 +192,16 @@ class EjerciciosTema1Controller(Controller):
             # calculamos y mostramos el espectograma
             plt, Pxx, freqs = self._model.representa_espectrograma(x, 256, framerate, 128)
             # calculamos el tiempo del fichero
-            t = numpy.arange(start=0, stop=1.0 * x.size/framerate, step=1./framerate)
+            t = numpy.arange(start=0, stop=1.0 * x.size / framerate, step=1. / framerate)
             plt.figure(2)
             plt.plot(t, x)
             plt.xlabel('t (s)')
-            x = x / 2.0**15
+            x = x / 2.0 ** 15
             # array con los valores de la SQNR para diferentes valores de Bits
             ASQNR = []
             # Cuantización de 8, 7, 6, 5, 4 y 3 bits
             for bits in range(3, 9):
-                output, q = self._model.quantization(x, 2**bits)
+                output, q = self._model.quantization(x, 2 ** bits)
                 error = x - output
                 # Añadimos cada valor de SQNR al array
                 ASQNR.append(10 * numpy.log10(numpy.var(x) / numpy.var(error)))
@@ -213,27 +217,17 @@ class EjerciciosTema1Controller(Controller):
             plt.grid()
             plt.show()
             # reproducimos el fichero
-            #self._model.reproducir(str(filename))
+            # self._model.reproducir(str(filename))
         if not filename.exists():
             msgbox.showerror("Open file", "Cannot open this file\n(%s)" % str(filename))
             return
 
 
-class EjerciciosTema2Controller(Controller):
-    """Gestión de eventos para la ventana de los ejercicios del tema 2
-    Con esta controlaremos cada uno de los codigos que tenemos en las
-    diapositivas del tema 2
-    """
-
-    def back(self, event):
-        model = MainModel()
-        controller = MainController(self._window, model)
-        view = MainView(self._window, controller)
-        view.init_view()
-
 class Practica1Controller(Controller):
 
     def back(self, event):
+        # Modificamos el tamaño de la ventana al tamaño original
+        self._window.size(300, 170)
         model = MainModel()
         controller = MainController(self._window, model)
         view = MainView(self._window, controller)
@@ -257,19 +251,32 @@ class Practica1Controller(Controller):
             msgbox.showerror("Open file", "Cannot open this file\n(%s)" % str(filename))
             return
 
-class Practica2Controller(Controller):
 
+class EjerciciosTema2Controller(Controller):
+    """Gestión de eventos para la ventana de los ejercicios del tema 2
+    Con esta controlaremos cada uno de los codigos que tenemos en las
+    diapositivas del tema 2
+    """
+
+    def back(self, event):
+        model = MainModel()
+        controller = MainController(self._window, model)
+        view = MainView(self._window, controller)
+        view.init_view()
+
+
+class Practica2Controller(Controller):
     # Array de enteros que indica cuantas señales sumamos para el calculo del ejercicio 2
-    _num_signal = [0,0,0,0,0,0,0,0]
+    _num_signal = [0, 0, 0, 0, 0, 0, 0, 0]
     # Variable para meter o no meter ruido en la señal
     _noise_signal = False
     # Parametro de clase para saber cual es el fichero a estudiar
-    #_filename = "/home/usuario/nextCloud/Facultad/03_Procesamiento_Digital_de_Señales_PDS_5to/Practicas/Practica2_Series_y_Transformada_de_Fourier/digitos.wav"
+    # _filename = "/home/usuario/nextCloud/Facultad/03_Procesamiento_Digital_de_Señales_PDS_5to/Practicas/Practica2_Series_y_Transformada_de_Fourier/digitos.wav"
     _filename = "/tmp/test.wav"
 
     def back(self, event):
         # Modificamos el tamaño de la ventana al tamaño original
-        self._window.size(400, 170)
+        self._window.size(300, 170)
         model = MainModel()
         controller = MainController(self._window, model)
         view = MainView(self._window, controller)
@@ -306,13 +313,13 @@ class Practica2Controller(Controller):
         plt.grid()
         plt.xlabel('Tiempo: $-\pi$ - $\pi$')
         plt.ylabel('Amplitud')
-        plt.plot(time,signal_result)
+        plt.plot(time, signal_result)
         plt.show()
 
     def ejercicio3(self, event):
         time, signal_result = self._model.square_signal(1, numpy.pi)
         signal_result = signal_result * 63
-        #signal_result = numpy.fft.fft(signal_result)
+        # signal_result = numpy.fft.fft(signal_result)
         plt.figure(1)
         plt.figure(1).clf()
         plt.grid()
@@ -324,10 +331,10 @@ class Practica2Controller(Controller):
     def select_audio_file(self, event):
         if not self._filename:
             self._filename = filediag.askopenfilename(initialdir='$USER',
-                                                title="Selecciona el fichero a estudiar",
-                                                filetypes=(("Sound files", "*.wav"),
-                                                           ("all files", "*.*"))
-                                                )
+                                                      title="Selecciona el fichero a estudiar",
+                                                      filetypes=(("Sound files", "*.wav"),
+                                                                 ("all files", "*.*"))
+                                                      )
         self._filename = Path(self._filename)
         if self._filename.suffix == '.wav':
             plt.figure(1, figsize=(9, 9))
@@ -389,24 +396,38 @@ class Practica2Controller(Controller):
             self._model.representa_espectrograma(audio_data, 256, framerate, 128)
             self._model.reproducir(str(self._filename))
 
+
+class EjerciciosTema3Controller(Controller):
+    """Gestión de eventos para la ventana de los ejercicios del tema 3
+    Con esta controlaremos cada uno de los codigos que tenemos en las
+    diapositivas del tema 3
+    """
+
+    def back(self, event):
+        model = MainModel()
+        controller = MainController(self._window, model)
+        view = MainView(self._window, controller)
+        view.init_view()
+
+
 class Practica3Controller(Controller):
 
     def back(self, event):
         # Modificamos el tamaño de la ventana al tamaño original
-        self._window.size(400, 170)
+        self._window.size(300, 170)
         model = MainModel()
         controller = MainController(self._window, model)
         view = MainView(self._window, controller)
         view.init_view()
 
     def iir1(self, event):
-        signal_in = self._model.make_signal_in(1,0,30)
-        a = [1.0,0.0,0.9]
-        b = [0.3,0.6,0.3]
+        signal_in = self._model.make_signal_in(1, 0, 30)
+        a = [1.0, 0.0, 0.9]
+        b = [0.3, 0.6, 0.3]
         xn = [0.0, 0.0, 0.0]
         yn = [0.0, 0.0, 0.0]
         signal_out = []
-        for n in range(0,len(signal_in)):
+        for n in range(0, len(signal_in)):
             xn[2] = xn[1]
             xn[1] = xn[0]
             xn[0] = signal_in[n]
@@ -415,29 +436,29 @@ class Practica3Controller(Controller):
             yn[0] = 0.
             a_temp = numpy.multiply(-1, a)
             temp1 = numpy.sum(numpy.multiply(a_temp, yn))
-            temp2 = numpy.sum(numpy.multiply(b,xn))
-            signal_out.append(temp1+temp2)
+            temp2 = numpy.sum(numpy.multiply(b, xn))
+            signal_out.append(temp1 + temp2)
             yn[0] = signal_out[n]
         plt.stem(signal_out)
 
     def iir2(self, event):
-        signal_in = self._model.make_signal_in(1,0,30)
-        coef_a = [1.0,0.0,0.9]
-        coef_b = [0.3,0.6,0.3]
+        signal_in = self._model.make_signal_in(1, 0, 30)
+        coef_a = [1.0, 0.0, 0.9]
+        coef_b = [0.3, 0.6, 0.3]
         signal_out = self._model.filter(signal_in, coef_a, coef_b)
         plt.stem(signal_out)
 
     def iir3(self, event):
-        signal_in = self._model.make_signal_in(0,1,30)
-        coef_a = [1.0,0.0,0.9]
-        coef_b = [0.3,0.6,0.3]
+        signal_in = self._model.make_signal_in(0, 1, 30)
+        coef_a = [1.0, 0.0, 0.9]
+        coef_b = [0.3, 0.6, 0.3]
         signal_out = self._model.filter(signal_in, coef_a, coef_b)
         plt.stem(signal_out)
 
     def iir4(self, event):
-        signal_in = self._model.make_signal_in(1,0,30)
-        coef_a = [1.0,0.0,0.9]
-        coef_b = [0.3,0.6,0.3]
+        signal_in = self._model.make_signal_in(1, 0, 30)
+        coef_a = [1.0, 0.0, 0.9]
+        coef_b = [0.3, 0.6, 0.3]
         signal_out = self._model.filter(signal_in, coef_a, coef_b)
         plt.stem(signal_out)
 
@@ -475,6 +496,219 @@ class Practica3Controller(Controller):
         signal_out = self._model.convolution(signal_in, coef_b)
         plt.stem(signal_out)
 
+
+class EjerciciosTema4Controller(Controller):
+    """Gestión de eventos para la ventana de los ejercicios del tema 2
+    Con esta controlaremos cada uno de los codigos que tenemos en las
+    diapositivas del tema 2
+    """
+
+    def back(self, event):
+        model = MainModel()
+        controller = MainController(self._window, model)
+        view = MainView(self._window, controller)
+        view.init_view()
+
+
+class Practica4Controller(Controller):
+
+    def back(self, event):
+        # Modificamos el tamaño de la ventana al tamaño original
+        self._window.size(300, 170)
+        model = MainModel()
+        controller = MainController(self._window, model)
+        view = MainView(self._window, controller)
+        view.init_view()
+
+    def eje1_pun1(self, event):
+        a = [1.0, -1.0, 0.9]
+        b = [1.0, 0.0, 0.0]
+        desde = -20
+        hasta = 100
+        signal_in = self._model.pulse(desde,hasta)
+        h = self._model.filter(signal_in, a, b)
+        t = range(desde,hasta)
+        plt.figure(1)
+        plt.plot(t,h)
+        plt.ylabel('Amplitud')
+        plt.xlabel('n (muestras)')
+        plt.title('Respuesta impulsiva con filter')
+        h = self._model.impz(signal_in, a, b)
+        plt.figure(2)
+        plt.plot(t,h)
+        plt.ylabel('Amplitud')
+        plt.xlabel('n (muestras)')
+        plt.title('Respuesta impulsiva con impz')
+        plt.show()
+
+    def eje1_pun2(self, event):
+        a = [1.0, -1.0, 0.9]
+        b = [1.0, 0.0, 0.0]
+        ceros = numpy.roots(b)
+        polos = numpy.roots(a)
+        print("Ceros: " + str(ceros) + " Polos: " + str(polos))
+        plt.title('Diagrama de Ceros y Polos')
+        self._model.zplane(a, b)
+
+    def eje1_pun3(self, event):
+        a = [1.0, -1.0, 0.9]
+        b = [1.0, 0.0, 0.0]
+        self._model.plot_freq_resp(a, b)
+
+    def eje1_pun4(self, event):
+        a = [1.0, -1.0, 0.9]
+        b = [1.0, 0.0, 0.0]
+        desde = -20
+        hasta = 100
+        signal_in = self._model.unit_step(desde, hasta)
+        h = self._model.filter(signal_in, a, b)
+        t = range(desde, hasta)
+        plt.figure(1)
+        plt.plot(t, h)
+        plt.ylabel('Amplitud')
+        plt.xlabel('n (muestras)')
+        plt.title('Respuesta al escalon unitario')
+
+    def eje2_pun1(self, event):
+        a = [-1, -0.5, 0.25]
+        b = [1, 0.5, 0]
+        desde = 0
+        hasta = 100
+        signal_in = self._model.pulse(desde, hasta)
+        t = range(desde, hasta)
+        h = self._model.impz(signal_in, a, b)
+        plt.plot(t, h)
+        plt.ylabel('Amplitud')
+        plt.xlabel('n (muestras)')
+        plt.title('Respuesta impulsiva con impz')
+        plt.show()
+
+    def eje2_pun2(self, event):
+        a = [-1, -0.5, 0.25]
+        b = [1, 0.5, 0]
+        desde = -20
+        hasta = 100
+        signal_in = self._model.pulse(desde, hasta)
+        h = self._model.filter(signal_in, a, b)
+        t = range(desde, hasta)
+        plt.plot(t, h)
+        plt.ylabel('Amplitud')
+        plt.xlabel('n (muestras)')
+        plt.title('Respuesta impulsiva con filter')
+
+    def eje2_pun3(self, event):
+        a = [-1, -0.5, 0.25]
+        b = [1, 0.5, 0]
+        ceros = numpy.roots(b)
+        polos = numpy.roots(a)
+        print("Ceros: " + str(ceros) + " Polos: " + str(polos))
+        plt.title('Diagrama de Ceros y Polos')
+        self._model.zplane(a, b)
+
+    def eje2_pun4(self, event):
+        # TODO tienes que cambiar los parametros a y b
+        # para que tengan esta forma x(n)=2·0.9nu(n)
+        a = [-1, -0.5, 0.25]
+        b = [1, 0.5, 0]
+        desde = -20
+        hasta = 100
+        signal_in = []
+        for x in range(desde, hasta):
+            if (x < 15): # con este if hacemos cumplir el escalon unitario u(n)
+                signal_in.append(2*0.9*x)
+            else:
+                signal_in.append(0)
+        h = self._model.filter(signal_in, a, b)
+        t = range(desde, hasta)
+        plt.plot(t, h)
+        plt.ylabel('Amplitud')
+        plt.xlabel('n (muestras)')
+        plt.title('Respuesta a entrada x(n)=2·0.9·n·u(n)')
+
+    def eje3_pun1(self, event):
+        a = [-1, 0.9, -0.81]
+        b = [1, 1, 0]
+        desde = 0
+        hasta = 100
+        signal_in = self._model.pulse(desde, hasta)
+        t = range(desde, hasta)
+        h = self._model.impz(signal_in, a, b)
+        plt.plot(t, h)
+        plt.ylabel('Amplitud')
+        plt.xlabel('n (muestras)')
+        plt.title('Respuesta impulsiva con impz')
+        plt.show()
+
+    def eje3_pun2(self, event):
+        a = [-1, 0.9, -0.81]
+        b = [1, 1, 0]
+        self._model.plot_freq_resp(a, b)
+
+    def eje3_pun3(self, event):
+        # Señal de entrada x(n) = sin(pi*n/3) + 5 cos(pi*n)
+        a = [-1, 0.9, -0.81]
+        b = [1, 1, 0]
+        desde = 0
+        hasta = 200
+        signal_in = []
+        for x in range(desde, hasta):
+            signal_in.append(numpy.sin(numpy.pi*(x/3))+(5*numpy.cos(numpy.pi*x)))
+        signal_out = self._model.filter(signal_in, a, b)
+        t = range(desde, hasta)
+        plt.plot(t, signal_in, 'b')
+        plt.plot(t, signal_out, 'r')
+        plt.ylabel('Amplitud')
+        plt.xlabel('n (muestras)')
+        plt.title('Señal original (azul) y Señal Filtrada (roja)')
+        plt.show()
+
+    def eje4_pun1(self, event):
+        a = [1]
+        b = [0.0023, 0.0053, 0.0411, -0.1233, -0.2310, 0.3087, 0.3087, -0.2310, -0.1233, 0.0411, 0.0053, 0.0023]
+        signal_in = numpy.linspace(-20,100)
+        signal_out = self._model.filter(signal_in, a, b)
+        plt.plot(signal_in, signal_out)
+        plt.ylabel('Amplitud')
+        plt.xlabel('n (muestras)')
+        plt.title('Filtro FIR')
+        plt.grid()
+        plt.show()
+
+    def eje4_pun2(self, event):
+        a = [1]
+        b = [0.0023, 0.0053, 0.0411, -0.1233, -0.2310, 0.3087, 0.3087, -0.2310, -0.1233, 0.0411, 0.0053, 0.0023]
+        desde = -20
+        hasta = 100
+        t = range(desde, hasta)
+        signal_in = self._model.unit_step(desde, hasta)
+        signal_out = self._model.filter(signal_in, a, b)
+        plt.plot(t, signal_out)
+        plt.ylabel('Amplitud')
+        plt.xlabel('n (muestras)')
+        plt.title('Filtro FIR entrada escalon unitario')
+        plt.grid()
+        plt.show()
+
+    def eje4_pun3(self, event):
+        a = [1]
+        b = [0.0023, 0.0053, 0.0411, -0.1233, -0.2310, 0.3087, 0.3087, -0.2310, -0.1233, 0.0411, 0.0053, 0.0023]
+        self._model.plot_group_delay(a, b)
+
+    def eje4_pun4(self, event):
+        pass
+
+
+class Practica5Controller(Controller):
+
+    def back(self, event):
+        # Modificamos el tamaño de la ventana al tamaño original
+        self._window.size(300, 170)
+        model = MainModel()
+        controller = MainController(self._window, model)
+        view = MainView(self._window, controller)
+        view.init_view()
+
+
 class SecondController(Controller):
 
     def back(self, event):
@@ -486,6 +720,7 @@ class SecondController(Controller):
     def open_wav_file(self, event):
         pass
 
+
 class OtherController(Controller):
 
     def back(self, event):
@@ -496,16 +731,17 @@ class OtherController(Controller):
 
     def reto1(self, event):
         bin_value = self._view.e_bin_num.get()
-        self._view.e_bin_num.delete(0,len(bin_value))
+        self._view.e_bin_num.delete(0, len(bin_value))
         frase = "Con cien cañones por banda, viento en popa a toda vela, no corta el mar sino vuela, un velero bergantín"
         dec_value = self._model.bin_dec(bin_value)
         pos_value = self._model.pos(dec_value)
         text = self._model.text(frase, pos_value)
-        #msgbox.showinfo("Resultados", "Numero Binario: %s\nNumero Decimal: %d\nPosición: %d\nTexto: %s" % (bin_value, dec_value, pos_value, text) )
+        # msgbox.showinfo("Resultados", "Numero Binario: %s\nNumero Decimal: %d\nPosición: %d\nTexto: %s" % (bin_value, dec_value, pos_value, text) )
         self._view.e_bin_num.insert(0, str(text))
 
     def reto2(self, event):
         pass
+
 
 class MainController(Controller):
 
@@ -554,6 +790,16 @@ class MainController(Controller):
         controller.set_view(view)
         view.init_view()
 
+    def eje_teo_tema3(self, event):
+        """Cambia la vista de la ventana.
+        pasamos a crear todos los componentes para la primera practica
+        """
+        model = EjerciciosTema3Model()
+        controller = EjerciciosTema3Controller(self._window, model)
+        view = EjerciciosTema3View(self._window, controller)
+        controller.set_view(view)
+        view.init_view()
+
     def practica3(self, event):
         """Cambia la vista de la ventana.
         pasamos a crear todos los componentes para la tercera practica
@@ -561,6 +807,36 @@ class MainController(Controller):
         model = Practica3Model()
         controller = Practica3Controller(self._window, model)
         view = Practica3View(self._window, controller)
+        controller.set_view(view)
+        view.init_view()
+
+    def eje_teo_tema4(self, event):
+        """Cambia la vista de la ventana.
+        pasamos a crear todos los componentes para la primera practica
+        """
+        model = EjerciciosTema4Model()
+        controller = EjerciciosTema4Controller(self._window, model)
+        view = EjerciciosTema4View(self._window, controller)
+        controller.set_view(view)
+        view.init_view()
+
+    def practica4(self, event):
+        """Cambia la vista de la ventana.
+        pasamos a crear todos los componentes para la tercera practica
+        """
+        model = Practica4Model()
+        controller = Practica4Controller(self._window, model)
+        view = Practica4View(self._window, controller)
+        controller.set_view(view)
+        view.init_view()
+
+    def practica5(self, event):
+        """Cambia la vista de la ventana.
+        pasamos a crear todos los componentes para la tercera practica
+        """
+        model = Practica5Model()
+        controller = Practica5Controller(self._window, model)
+        view = Practica5View(self._window, controller)
         controller.set_view(view)
         view.init_view()
 
