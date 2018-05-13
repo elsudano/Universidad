@@ -14,9 +14,12 @@ import java.net.UnknownHostException;
 public class main {
 
     public static void main(String args[]) throws UnknownHostException, IOException, InterruptedException {
+        /* Modo en el que se lanza el programa como cliente o servidor*/
+        String mode = "CLIENT";
+
         /* Dirección donde esta escuchando el servidor y el cliente */
         String host = "localhost";
-        
+
         /* Puerto donde esta escuchando el servidor */
         int port = 9999;
 
@@ -27,10 +30,15 @@ public class main {
         String protocol = "TCP";
 
         /* si queremos pasar los parametros desde consola */
-        if (args.length == 3) {
-            host = args[0];
-            port = Integer.parseInt(args[1]);
-            protocol = args[2];
+        if (args.length > 0 && args.length < 5) {
+            if (args.length > 0)
+                mode = args[0];
+            if (args.length > 1)
+                host = args[1];
+            if (args.length > 2)
+                port = Integer.parseInt(args[2]);
+            if (args.length > 3)
+                protocol = args[3];
         }
         /* Dirección donde se encuentra el servidor */
         InetAddress address_server = InetAddress.getByName(host);
@@ -38,28 +46,34 @@ public class main {
         /* Número de clientes que quieto lanzar para comprobar que funciona */
         int clients = 5;
 
-        /* Abrimos el puerto del servidor */
-        switch (protocol) {
-            case "TCP": {
-                ServerSocket listener_server = new ServerSocket(port);
+        /* Comprobamos el modo de ejecución */
+        switch (mode.toUpperCase()) {
+            case "CLIENT": {
                 for (int i = 0; i < clients; i++) {
                     new client(address_server, port, protocol).start();
+                    Thread.sleep(2000);
                 }
-                while (true){
-                    new server(listener_server.accept()).start();
-                }
-            }
-            case "UDP": {
-                DatagramSocket listener_server = new DatagramSocket(port);
-                for (int i = 0; i < clients; i++) {
-                    new client(address_server, port, protocol).start();
-                }
-                while (true) {                    
-                    new server(listener_server).start();
-                }
-            }
-            default:
                 break;
+            }
+            case "SERVER": {
+                switch (protocol.toUpperCase()) {
+                    case "TCP": {
+                        ServerSocket listener_server = new ServerSocket(port);
+                        while (true) {
+                            new server(listener_server.accept()).start();
+                        }
+                    }
+                    case "UDP": {
+                        DatagramSocket listener_server = new DatagramSocket(port);
+                        while (true) {
+                            new server(listener_server).start();
+                        }
+                    }
+                    default:
+                        break;
+                }
+                break;
+            }
         }
     }
 }

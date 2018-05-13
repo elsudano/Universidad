@@ -1,9 +1,7 @@
 package client;
 
-import java.io.BufferedReader;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -12,6 +10,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -22,6 +21,7 @@ public class client extends Thread {
     private InetAddress destination_address;
     private int destination_port;
     private String protocol;
+    private window ventana;
 
     public client(InetAddress dest, int port, String protocol) throws UnknownHostException {
         if (protocol.isEmpty()) {
@@ -39,38 +39,15 @@ public class client extends Thread {
         } else {
             this.destination_port = port;
         }
-    }
-
-    private void send(Object data) {
-
-    }
-
-    private Object recive() {
-        Object response = null;
-
-        return response;
+        this.ventana = new window("Cliente " + this.destination_address.getHostName());
     }
 
     private void tcp() {
-        long stop = System.currentTimeMillis() + 5000;
         try (Socket socket_tcp = new Socket(this.destination_address, this.destination_port)) {
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket_tcp.getInputStream()));
-            PrintWriter out = new PrintWriter(socket_tcp.getOutputStream(), true);
-            String data = "";
-            while (true) {
-                if (System.currentTimeMillis() > stop) { /* Este if es donde tenes que poner la condicion de parada */
-                    out.println("exit");
-                    break;
-                } else {
-                    /* Aqui es donde tienes que poner la recepcion de las imagenes */
-                    client.sleep(700); /* es para poder lanzar el servidor despues del cliente */                    
-                    System.out.println("Client: " + socket_tcp.getLocalPort() + " sigue vivo");
-                    out.println("imagen");
-                    data = in.readLine(); /* se bloquea esperando al servidor */
-                    System.out.println("Client: data recive: " + data);
-                }
-            }
-        } catch (InterruptedException | IOException ex) {
+            BufferedImage image = ImageIO.read(socket_tcp.getInputStream());
+            this.ventana.setImage(image);
+            socket_tcp.close();
+        } catch (IOException ex) {
             Logger.getLogger(client.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

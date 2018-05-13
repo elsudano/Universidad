@@ -1,15 +1,17 @@
 package server;
 
-import java.io.BufferedReader;
+import com.github.sarxos.webcam.Webcam;
+import java.awt.Dimension;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -19,47 +21,34 @@ public class server extends Thread {
 
     private Object id_socket;
     private String protocol;
+    private Webcam webcam;
 
     /* Constructor para el servidor TCP */
     public server(Socket id_socket) {
         this.id_socket = id_socket;
         this.protocol = "TCP";
+        this.webcam = Webcam.getDefault();
+        //this.webcam.setViewSize(new Dimension(640, 480));
     }
 
     /* Constructor para el servidor UDP */
     public server(DatagramSocket id_socket) {
         this.id_socket = id_socket;
         this.protocol = "UDP";
-    }
-
-    private void send(Object data) {
-
-    }
-
-    private Object recive() {
-        Object response = null;
-
-        return response;
+        this.webcam = Webcam.getDefault();
+        this.webcam.setViewSize(new Dimension(640, 480));
     }
 
     private void tcp() {
         try (Socket socket_tcp = (Socket) this.id_socket) {
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket_tcp.getInputStream()));
-            PrintWriter out = new PrintWriter(socket_tcp.getOutputStream(), true);
-            String data = "";
-            while (!socket_tcp.isClosed()) {
-                if (data.contains("imagen")) {
-                    out.println("Response by server to: " + socket_tcp.getPort() + " client");
-                    /* Aqui es donde tenes que poner las imagenes de la camara para enviar */
-                } else if (data.contains("exit")) {
-                    in.close();
-                    socket_tcp.close();
-                    break;
-                }
-                data = in.readLine(); /* se bloquea esperando al cliente */
-                System.out.println("Server: " + this.getName() + ":" + socket_tcp.getLocalPort() + " sigue vivo");
-                System.out.println("Server: data recive: " + data);
-            }
+            this.webcam.open();
+            BufferedImage image = this.webcam.getImage();
+            this.webcam.close();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream(image.getHeight() * image.getWidth() * image.getData().getNumBands());
+            ImageIO.write(image, "PNG", baos);
+            baos.writeTo(socket_tcp.getOutputStream());
+            baos.flush();
+            baos.close();
         } catch (IOException ex) {
             Logger.getLogger(server.class.getName()).log(Level.SEVERE, null, ex);
         }
