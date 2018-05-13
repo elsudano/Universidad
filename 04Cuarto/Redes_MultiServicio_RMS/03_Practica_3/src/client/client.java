@@ -1,6 +1,7 @@
 package client;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -11,6 +12,7 @@ import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import utils.utilities;
 
 /**
  *
@@ -52,27 +54,26 @@ public class client extends Thread {
         }
     }
 
-    private void udp(String data) {
-        long stop = System.currentTimeMillis() + 5000;
-        byte[] buf = new byte[256];
-
+    private void udp() {
+        int size_package = 256;
+        byte[] buf = new byte[size_package];
+        buf = "imag".getBytes();
+        DatagramPacket pack = new DatagramPacket(buf, buf.length, this.destination_address, this.destination_port);
+        
         try (DatagramSocket socket_udp = new DatagramSocket()) {
-            DatagramPacket pack = new DatagramPacket(buf, buf.length, this.destination_address, this.destination_port);
-            while (true) {
-                client.sleep(700);
-                /* Aqui es donde tienes que poner la recepcion de las imagenes */
-                buf = data.getBytes();
-                pack.setData(buf);
-                socket_udp.send(pack);
-                if (System.currentTimeMillis() > stop) {
-                    /* Este if es donde tenes que poner la condicion de parada */
-                }
+            socket_udp.send(pack);
+            socket_udp.receive(pack); // se bloquea hasta recibir un datagrama
+            int num_of_datagrams = utilities.byteArrayToInt(pack.getData());
+            byte[] image_data = new byte[num_of_datagrams*size_package];
+            ByteArrayInputStream bais = new ByteArrayInputStream(image_data);
+            for (int dg = 0; dg < num_of_datagrams; dg++) {
                 socket_udp.receive(pack); // se bloquea hasta recibir un datagrama
-                System.out.write(pack.getData());
+                bais.read(pack.getData());
             }
+            System.out.println(bais.toString());
         } catch (SocketException ex) {
             Logger.getLogger(client.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException | InterruptedException ex) {
+        } catch (IOException ex) {
             Logger.getLogger(client.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -97,7 +98,7 @@ public class client extends Thread {
         if (this.protocol.contains("TCP")) {
             this.tcp();
         } else if (this.protocol.contains("UDP")) {
-            this.udp("Esto es una prueba de udp");
+            this.udp();
         } else {
             this.interrupt();
         }

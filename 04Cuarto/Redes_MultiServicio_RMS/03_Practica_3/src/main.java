@@ -65,9 +65,9 @@ public class main {
                     }
                     case "UDP": {
                         DatagramSocket listener_server = new DatagramSocket(port);
-                        while (true) {
+                        //while (true) {
                             new server(listener_server).start();
-                        }
+                        //}
                     }
                     default:
                         break;

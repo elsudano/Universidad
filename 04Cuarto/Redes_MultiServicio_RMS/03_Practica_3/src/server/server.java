@@ -12,6 +12,7 @@ import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import utils.utilities;
 
 /**
  *
@@ -36,7 +37,7 @@ public class server extends Thread {
         this.id_socket = id_socket;
         this.protocol = "UDP";
         this.webcam = Webcam.getDefault();
-        this.webcam.setViewSize(new Dimension(640, 480));
+        //this.webcam.setViewSize(new Dimension(640, 480));
     }
 
     private void tcp() {
@@ -56,24 +57,52 @@ public class server extends Thread {
 
     private void udp() {
         try (DatagramSocket socket_udp = (DatagramSocket) this.id_socket) {
-            DatagramPacket pack = new DatagramPacket(new byte[256], 256);
-            while (!socket_udp.isClosed()) {
-                socket_udp.receive(pack); // se bloquea hasta que recibe un datagrama
+            int size_package = 256;
+            DatagramPacket pack = new DatagramPacket(new byte[size_package], size_package);
+            this.webcam.open();
+            BufferedImage image = this.webcam.getImage();
+            this.webcam.close();
+            int ancho = image.getWidth();
+            int alto = image.getHeight();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream(ancho * alto + 2);
+            baos.write(alto);
+            baos.write(ancho);
+            for (int w = 0; w < ancho; w++) {
+                for (int h = 0; h < alto; h++) {
+                    baos.write(image.getRGB(w, h));
+                }
+            }
+            byte[] image_data = baos.toByteArray();
+            baos.flush();
+            baos.close();
+            socket_udp.receive(pack);
+            /** las cuatro lineas de a continuación se encargan de crear el primer
+             * paquete UDP que indica el numero de paquetes que se enviarán
+             * primero se pone la dirección
+             * despúes se pone el puerto
+             * despúes se divide la longitud de datos de la imágen por el tamaño del paquete
+             * se convierte ese numero en un array de bytes
+             * y se envia el paquete
+             */
+            pack.setAddress(pack.getAddress());
+            pack.setPort(pack.getPort());
+            int num_of_datagrams = image_data.length / size_package;
+            pack.setData(utilities.toBytes(num_of_datagrams));
+            socket_udp.send(pack);
+            for (int dg = 0; dg < num_of_datagrams; dg++) {
+                byte[] buf = new byte[size_package];
+                for (int b = 0; b < size_package; b++) {
+                    buf[b] = image_data[b + (dg*size_package)];
+                }
                 pack.setAddress(pack.getAddress());
                 pack.setPort(pack.getPort());
-                System.out.println(pack.getData());
-                /*
-                if () {
-                    /* Aqui es donde tienes qeu poner la condicion de parada para el servidor *
-                    in.close();
-                    socket_udp.close();
-                }
-                 */
+                pack.setData(buf);
                 socket_udp.send(pack);
+                server.sleep(200);
             }
         } catch (SocketException ex) {
             Logger.getLogger(server.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        } catch (IOException | InterruptedException ex) {
             Logger.getLogger(server.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
