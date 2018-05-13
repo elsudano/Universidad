@@ -15,7 +15,7 @@ if __name__ == '__main__':
     global DEBUG # Variable para depurar programa
     DEBUG = True
     # Creamos la Ventana
-    myWindow = w("Ejercicios y Practicas de PDS", 400, 170)
+    myWindow = w("Ejercicios y Practicas de PDS", 300, 170)
     # Creamos el modelo
     myModel = MainModel()
     # Creamos el controlador de la vista principal y le añadimos la ventana y el modelo
