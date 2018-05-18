@@ -3,8 +3,6 @@ package utils;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  *
@@ -12,6 +10,13 @@ import java.io.InputStream;
  */
 public class utilities {
 
+    /* esta clase se usa para devolver los 3 enteros necesarios para UDP*/
+    public static class enteros {
+        public int num_of_datagrams = 0;
+        public int alto = 0;
+        public int ancho = 0;
+    };
+    
     /**
      * Variables que sirven para posicionar la aplicación en mirad de la
      * pantalla.
@@ -70,16 +75,57 @@ public class utilities {
         return resultado;
     }
 
-    public static byte[] InputStreamToByteArray(InputStream input, int size) throws IOException {
-        byte[] data = new byte[size];
-        int index = 0;
-        while (index < size) {
-            int bytesRead = input.read(data, index, size - index);
-            if (bytesRead < 0) {
-                throw new IOException("Insufficient data in stream");
+    public static byte[] intsToArrayByte(int num_of_datagrams, int alto, int ancho) {
+        byte[] resultado = new byte[12];
+        resultado[0] = (byte) (num_of_datagrams >> 24);
+        resultado[1] = (byte) (num_of_datagrams >> 16);
+        resultado[2] = (byte) (num_of_datagrams >> 8);
+        resultado[3] = (byte) (num_of_datagrams /*>> 0*/);
+        resultado[4] = (byte) (alto >> 24);
+        resultado[5] = (byte) (alto >> 16);
+        resultado[6] = (byte) (alto >> 8);
+        resultado[7] = (byte) (alto /*>> 0*/);
+        resultado[8] = (byte) (ancho >> 24);
+        resultado[9] = (byte) (ancho >> 16);
+        resultado[10] = (byte) (ancho >> 8);
+        resultado[11] = (byte) (ancho /*>> 0*/);
+        return resultado;
+    }
+
+    public static enteros arrayByteToInts(byte[] array) {
+        byte[] aux = new byte[4];
+        int entero = 0;
+        enteros mis_enteros = new enteros();
+        for (int i = 0; i <= 8; i += 4) {
+            aux[0] = array[i];
+            aux[1] = array[i + 1];
+            aux[2] = array[i + 2];
+            aux[3] = array[i + 3];
+            switch (aux.length) {
+                case 4:
+                    entero = aux[0] << 24 | (aux[1] & 0xff) << 16 | (aux[2] & 0xff) << 8 | (aux[3] & 0xff);
+                    break;
+                case 2:
+                    entero = 0x00 << 24 | 0x00 << 16 | (aux[0] & 0xff) << 8 | (aux[1] & 0xff);
+                    break;
+                case 1:
+                    entero = aux[0];
+                    break;
+                default:
+                    entero = 0;
             }
-            index += bytesRead;
+            switch (i) {
+                case 0:
+                    mis_enteros.num_of_datagrams = entero;
+                    break;
+                case 4:
+                    mis_enteros.alto = entero;
+                    break;
+                case 8:
+                    mis_enteros.ancho = entero;
+                    break;
+            }
         }
-        return data;
+        return mis_enteros;
     }
 }
