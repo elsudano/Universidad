@@ -23,6 +23,7 @@ class EjerciciosTema1Controller(Controller):
         controller = MainController(self._window, model)
         view = MainView(self._window, controller)
         view.init_view()
+        plt.close("all")
 
     def pag8(self, event):
         """El ejercicio que hay para mostrar y reproducir un fichero wav
@@ -47,6 +48,7 @@ class EjerciciosTema1Controller(Controller):
             return
 
     def pag13(self, event):
+        plt.close("all")
         """El ejercicio que hay para mejorar el contraste de las imagenes
 
         la imagen de ejemplo es una datasheet de la luna"""
@@ -94,6 +96,7 @@ class EjerciciosTema1Controller(Controller):
         plt.show()
 
     def pag15(self, event):
+        plt.close("all")
         """Ejemplo de funciones de la pagina 15 del tema 1 de PDS de UGR
 
         Este ejemplo se usa para mostrar una libreria que tabaja
@@ -106,6 +109,7 @@ class EjerciciosTema1Controller(Controller):
         wfdb.plot_wfdb(record, figsize=(10, 7), title='Registro b001 de la base de datos Physionet CEBS')
 
     def pag18(self, event):
+        plt.close("all")
         """El ejercicio que hay para mejorar el contraste de las imagenes
 
         Ponemos un archivo por defecto pero si ese archivo no esta
@@ -232,8 +236,10 @@ class Practica1Controller(Controller):
         controller = MainController(self._window, model)
         view = MainView(self._window, controller)
         view.init_view()
+        plt.close("all")
 
     def open_wav_file(self, event):
+        plt.close("all")
         filename = "/home/usuario/nextCloud/Facultad/03_Procesamiento_Digital_de_Señales_PDS_5to/Ejemplos_Python/This_is_a_test.wav"
         if not filename:
             filename = filediag.askopenfilename(initialdir='$USER',
@@ -263,6 +269,7 @@ class EjerciciosTema2Controller(Controller):
         controller = MainController(self._window, model)
         view = MainView(self._window, controller)
         view.init_view()
+        plt.close("all")
 
 
 class Practica2Controller(Controller):
@@ -281,8 +288,10 @@ class Practica2Controller(Controller):
         controller = MainController(self._window, model)
         view = MainView(self._window, controller)
         view.init_view()
+        plt.close("all")
 
     def ejercicio2(self, event):
+        plt.close("all")
         time, signal_result = self._model.sin_signal(1, numpy.pi)
         if self._num_signal[0].get():
             time, amp = self._model.sin_signal(3, numpy.pi)
@@ -317,6 +326,7 @@ class Practica2Controller(Controller):
         plt.show()
 
     def ejercicio3(self, event):
+        plt.close("all")
         time, signal_result = self._model.square_signal(1, numpy.pi)
         signal_result = signal_result * 63
         # signal_result = numpy.fft.fft(signal_result)
@@ -329,6 +339,7 @@ class Practica2Controller(Controller):
         plt.show()
 
     def select_audio_file(self, event):
+        plt.close("all")
         if not self._filename:
             self._filename = filediag.askopenfilename(initialdir='$USER',
                                                       title="Selecciona el fichero a estudiar",
@@ -356,6 +367,7 @@ class Practica2Controller(Controller):
             return
 
     def myencode(self, event):
+        plt.close("all")
         digits = self._view.e_digits.get()
         print(digits)
         framerate = 8000
@@ -375,6 +387,7 @@ class Practica2Controller(Controller):
         print(self._model.escribir_wave("/tmp/test.wav", framerate, audio_data))
 
     def mydecode(self, event):
+        plt.close("all")
         if not self._filename:
             msgbox.showinfo("Warning", "First, select the file")
         else:
@@ -408,7 +421,7 @@ class EjerciciosTema3Controller(Controller):
         controller = MainController(self._window, model)
         view = MainView(self._window, controller)
         view.init_view()
-
+        plt.close("all")
 
 class Practica3Controller(Controller):
 
@@ -419,8 +432,10 @@ class Practica3Controller(Controller):
         controller = MainController(self._window, model)
         view = MainView(self._window, controller)
         view.init_view()
+        plt.close("all")
 
     def iir1(self, event):
+        plt.close("all")
         signal_in = self._model.make_signal_in(1, 0, 30)
         a = [1.0, 0.0, 0.9]
         b = [0.3, 0.6, 0.3]
@@ -442,6 +457,7 @@ class Practica3Controller(Controller):
         plt.stem(signal_out)
 
     def iir2(self, event):
+        plt.close("all")
         signal_in = self._model.make_signal_in(1, 0, 30)
         coef_a = [1.0, 0.0, 0.9]
         coef_b = [0.3, 0.6, 0.3]
@@ -449,6 +465,7 @@ class Practica3Controller(Controller):
         plt.stem(signal_out)
 
     def iir3(self, event):
+        plt.close("all")
         signal_in = self._model.make_signal_in(0, 1, 30)
         coef_a = [1.0, 0.0, 0.9]
         coef_b = [0.3, 0.6, 0.3]
@@ -456,6 +473,7 @@ class Practica3Controller(Controller):
         plt.stem(signal_out)
 
     def iir4(self, event):
+        plt.close("all")
         signal_in = self._model.make_signal_in(1, 0, 30)
         coef_a = [1.0, 0.0, 0.9]
         coef_b = [0.3, 0.6, 0.3]
@@ -463,6 +481,7 @@ class Practica3Controller(Controller):
         plt.stem(signal_out)
 
     def iir5(self, event):
+        plt.close("all")
         signal_in = self._model.make_signal_in(1, 0, 30)
         a = [1.0, -2.5, 1.0]
         b = [4.0, 0.0, 0.0]
@@ -484,6 +503,7 @@ class Practica3Controller(Controller):
         plt.stem(signal_out)
 
     def fir1(self, event):
+        plt.close("all")
         signal_in = self._model.make_signal_in(1, 0, 30)
         coef_a = [1.0]
         coef_b = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
@@ -491,10 +511,12 @@ class Practica3Controller(Controller):
         plt.stem(signal_out)
 
     def fir2(self, event):
+        plt.close("all")
         signal_in = self._model.make_signal_in(1, 1, 30)
         coef_b = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
         signal_out = self._model.convolution(signal_in, coef_b)
         plt.stem(signal_out)
+
 
 
 class EjerciciosTema4Controller(Controller):
@@ -508,6 +530,7 @@ class EjerciciosTema4Controller(Controller):
         controller = MainController(self._window, model)
         view = MainView(self._window, controller)
         view.init_view()
+        plt.close("all")
 
 
 class Practica4Controller(Controller):
@@ -519,29 +542,32 @@ class Practica4Controller(Controller):
         controller = MainController(self._window, model)
         view = MainView(self._window, controller)
         view.init_view()
+        plt.close("all")
 
     def eje1_pun1(self, event):
+        plt.close("all")
         a = [1.0, -1.0, 0.9]
         b = [1.0, 0.0, 0.0]
         desde = -20
         hasta = 100
-        signal_in = self._model.pulse(desde,hasta)
+        signal_in = self._model.pulse(desde, hasta)
         h = self._model.filter(signal_in, a, b)
-        t = range(desde,hasta)
+        t = range(desde, hasta)
         plt.figure(1)
-        plt.plot(t,h)
+        plt.plot(t, h)
         plt.ylabel('Amplitud')
         plt.xlabel('n (muestras)')
         plt.title('Respuesta impulsiva con filter')
         h = self._model.impz(signal_in, a, b)
         plt.figure(2)
-        plt.plot(t,h)
+        plt.plot(t, h)
         plt.ylabel('Amplitud')
         plt.xlabel('n (muestras)')
         plt.title('Respuesta impulsiva con impz')
         plt.show()
 
     def eje1_pun2(self, event):
+        plt.close("all")
         a = [1.0, -1.0, 0.9]
         b = [1.0, 0.0, 0.0]
         ceros = numpy.roots(b)
@@ -551,11 +577,13 @@ class Practica4Controller(Controller):
         self._model.zplane(a, b)
 
     def eje1_pun3(self, event):
+        plt.close("all")
         a = [1.0, -1.0, 0.9]
         b = [1.0, 0.0, 0.0]
         self._model.plot_freq_resp(a, b)
 
     def eje1_pun4(self, event):
+        plt.close("all")
         a = [1.0, -1.0, 0.9]
         b = [1.0, 0.0, 0.0]
         desde = -20
@@ -570,6 +598,7 @@ class Practica4Controller(Controller):
         plt.title('Respuesta al escalon unitario')
 
     def eje2_pun1(self, event):
+        plt.close("all")
         a = [-1, -0.5, 0.25]
         b = [1, 0.5, 0]
         desde = 0
@@ -584,6 +613,7 @@ class Practica4Controller(Controller):
         plt.show()
 
     def eje2_pun2(self, event):
+        plt.close("all")
         a = [-1, -0.5, 0.25]
         b = [1, 0.5, 0]
         desde = -20
@@ -597,6 +627,7 @@ class Practica4Controller(Controller):
         plt.title('Respuesta impulsiva con filter')
 
     def eje2_pun3(self, event):
+        plt.close("all")
         a = [-1, -0.5, 0.25]
         b = [1, 0.5, 0]
         ceros = numpy.roots(b)
@@ -606,6 +637,7 @@ class Practica4Controller(Controller):
         self._model.zplane(a, b)
 
     def eje2_pun4(self, event):
+        plt.close("all")
         # TODO tienes que cambiar los parametros a y b
         # para que tengan esta forma x(n)=2·0.9nu(n)
         a = [-1, -0.5, 0.25]
@@ -614,8 +646,8 @@ class Practica4Controller(Controller):
         hasta = 100
         signal_in = []
         for x in range(desde, hasta):
-            if (x < 15): # con este if hacemos cumplir el escalon unitario u(n)
-                signal_in.append(2*0.9*x)
+            if (x < 15):  # con este if hacemos cumplir el escalon unitario u(n)
+                signal_in.append(2 * 0.9 ** x)
             else:
                 signal_in.append(0)
         h = self._model.filter(signal_in, a, b)
@@ -623,9 +655,10 @@ class Practica4Controller(Controller):
         plt.plot(t, h)
         plt.ylabel('Amplitud')
         plt.xlabel('n (muestras)')
-        plt.title('Respuesta a entrada x(n)=2·0.9·n·u(n)')
+        plt.title('Respuesta a entrada x(n)=2·0.9^n·u(n)')
 
     def eje3_pun1(self, event):
+        plt.close("all")
         a = [-1, 0.9, -0.81]
         b = [1, 1, 0]
         desde = 0
@@ -640,11 +673,13 @@ class Practica4Controller(Controller):
         plt.show()
 
     def eje3_pun2(self, event):
+        plt.close("all")
         a = [-1, 0.9, -0.81]
         b = [1, 1, 0]
         self._model.plot_freq_resp(a, b)
 
     def eje3_pun3(self, event):
+        plt.close("all")
         # Señal de entrada x(n) = sin(pi*n/3) + 5 cos(pi*n)
         a = [-1, 0.9, -0.81]
         b = [1, 1, 0]
@@ -652,7 +687,7 @@ class Practica4Controller(Controller):
         hasta = 200
         signal_in = []
         for x in range(desde, hasta):
-            signal_in.append(numpy.sin(numpy.pi*(x/3))+(5*numpy.cos(numpy.pi*x)))
+            signal_in.append(numpy.sin(numpy.pi * (x / 3)) + (5 * numpy.cos(numpy.pi * x)))
         signal_out = self._model.filter(signal_in, a, b)
         t = range(desde, hasta)
         plt.plot(t, signal_in, 'b')
@@ -663,9 +698,10 @@ class Practica4Controller(Controller):
         plt.show()
 
     def eje4_pun1(self, event):
+        plt.close("all")
         a = [1]
         b = [0.0023, 0.0053, 0.0411, -0.1233, -0.2310, 0.3087, 0.3087, -0.2310, -0.1233, 0.0411, 0.0053, 0.0023]
-        signal_in = numpy.linspace(-20,100)
+        signal_in = numpy.linspace(-20, 100)
         signal_out = self._model.filter(signal_in, a, b)
         plt.plot(signal_in, signal_out)
         plt.ylabel('Amplitud')
@@ -675,6 +711,7 @@ class Practica4Controller(Controller):
         plt.show()
 
     def eje4_pun2(self, event):
+        plt.close("all")
         a = [1]
         b = [0.0023, 0.0053, 0.0411, -0.1233, -0.2310, 0.3087, 0.3087, -0.2310, -0.1233, 0.0411, 0.0053, 0.0023]
         desde = -20
@@ -690,6 +727,7 @@ class Practica4Controller(Controller):
         plt.show()
 
     def eje4_pun3(self, event):
+        plt.close("all")
         a = [1]
         b = [0.0023, 0.0053, 0.0411, -0.1233, -0.2310, 0.3087, 0.3087, -0.2310, -0.1233, 0.0411, 0.0053, 0.0023]
         self._model.plot_group_delay(a, b)
@@ -707,6 +745,126 @@ class Practica5Controller(Controller):
         controller = MainController(self._window, model)
         view = MainView(self._window, controller)
         view.init_view()
+        plt.close("all")
+
+    def eje0(self, event):
+        plt.close("all")
+        numtaps = 31
+        cutoff = 0.5
+        a = [1.0]
+        b = signal.firwin(numtaps, cutoff)
+        desde = -20
+        hasta = 30
+        t = range(desde, hasta)
+        # Respuesta en frecuencia.
+        plt.figure(1)
+        self._model.plot_freq_resp(a, b)
+        plt.title('Respuesta en frecuencia')
+        # Respuesta impulsiva.
+        signal_in = self._model.pulse(desde, hasta)
+        plt.figure(2)
+        plt.grid()
+        signal_out = self._model.impz(signal_in, a, b)
+        plt.plot(t, signal_out)
+        plt.ylabel('Amplitud')
+        plt.xlabel('n (muestras)')
+        plt.title('Respuesta impulsiva')
+        # Respuesta al escalon.
+        signal_out = self._model.unit_step(desde, hasta)
+        plt.figure(3)
+        plt.grid()
+        self._model.stepz(signal_out, a, b)
+        plt.plot(t, signal_out)
+        plt.ylabel('Amplitud')
+        plt.xlabel('n (muestras)')
+        plt.title('Respuesta al escalon')
+        # Diagrama de ceros y polos
+        plt.figure(4)
+        self._model.zplane(a, b)
+        plt.title('Diagrama de Ceros y Polos')
+        plt.grid()
+        plt.show()
+
+    def eje1_part1(self, event):
+        plt.close("all")
+        Fs = 8000
+        Fc = 2000
+        M = 64
+        freqs, amps = self._model.pass_low_FIR(Fs, Fc)
+        a = [1.0]
+        b = self._model.fir_win_rect(M, freqs, amps)
+        #b = signal.firwin2(M, freqs, amps, window='boxcar', fs=Fs)
+        plt.title('FIR with Manual Rectangle Window')
+        self._model.plot_freq_resp(a, b)
+
+    def eje1_part2(self, event):
+        plt.close("all")
+
+        pass
+
+    def eje2_part1 (self, event):
+        plt.close("all")
+        cutoff = 0.5
+        a = [1.0]
+        plt.figure(1)
+        plt.title('Filtro con 15 Muestras')
+        numtaps = 15
+        b = signal.firwin(numtaps, cutoff)
+        self._model.plot_freq_resp(a, b)
+        plt.figure(2)
+        plt.title('Filtro con 31 Muestras')
+        numtaps = 31
+        b = signal.firwin(numtaps, cutoff)
+        self._model.plot_freq_resp(a, b)
+        plt.figure(3)
+        plt.title('Filtro con 63 Muestras')
+        numtaps = 63
+        b = signal.firwin(numtaps, cutoff)
+        self._model.plot_freq_resp(a, b)
+        print('+--------+--------------------------+------------------------------+')
+        print("|   M    | Anchura banda transición | Atenuación del primer lóbulo |")
+        print("+--------+--------------------------+------------------------------+")
+        print("|   15   |        Fs/2*0,32 Hz      |              -46,715 dB      |")
+        print("|   31   |        Fs/2*0,422 Hz     |              -51,40  dB      |")
+        print("|   63   |        Fs/2*0,241 Hz     |              -53,50  dB      |")
+        print("+--------+--------------------------+------------------------------+")
+
+    def eje2_part2(self, event):
+        plt.close("all")
+        numtaps = 64
+        Fs = 8000
+        Fc = 2000
+        freqs, amps = self._model.pass_low_FIR(Fs, Fc)
+        a = [1.0]
+        plt.figure(1)
+        plt.title('FIR with Rectangle Window')
+        b = signal.firwin2(numtaps, freqs, amps, window='boxcar', fs=Fs)
+        self._model.plot_freq_resp(a, b)
+        plt.figure(2)
+        plt.title('FIR with Hamming')
+        b = signal.firwin2(numtaps, freqs, amps, window='hamming', fs=Fs)
+        self._model.plot_freq_resp(a, b)
+        plt.figure(3)
+        plt.title('FIR with Bartlett')
+        b = signal.firwin2(numtaps, freqs, amps, window='bartlett', fs=Fs)
+        self._model.plot_freq_resp(a, b)
+        print('+-------------+--------------------------+------------------------------+')
+        print("|   Ventana   | Anchura banda transición | Atenuación del primer lóbulo |")
+        print("+-------------+--------------------------+------------------------------+")
+        print("| Rectangular |       Fs/2*0,179 Hz      |               -26,84 dB      |")
+        print("| Bartlett    |       Fs/2*0,38  Hz      |               -43,50 dB      |")
+        print("| Hamming     |       Fs/2*0,28  Hz      |               -60,00 dB      |")
+        print("+-------------+--------------------------+------------------------------+")
+
+    def eje3(self, event):
+        plt.close("all")
+        numtaps = 1024
+        freq = [0, 3999, 4000, 7999, 8000]
+        gains = [0.0, 0.0, 1.0, 1.0, 0.0]
+        a = [1.0]
+        plt.title('FIR with Rectangle Window')
+        b = signal.firwin2(numtaps, freq, gains, nfreqs=1025, window='boxcar',fs=16000)
+        self._model.plot_freq_resp(a, b)
 
 
 class SecondController(Controller):

@@ -354,7 +354,7 @@ class Practica5View(View):
         en su lugar correspondiente.
         """
         # Modificamos el tamaño de la ventana en esta vista
-        self._window.size(480,170)
+        self._window.size(290,145)
         # Creamos el marco
         self._principal_frame = ttk.Frame(self._window.get(), padding="3 3 12 12")
         # El marco está en la posición 0,0 de la ventana en el centro
@@ -366,34 +366,28 @@ class Practica5View(View):
         # crea bóton dentro de marco
         self.b_back = ttk.Button(self._principal_frame, text="Atras")
         # ponemos en la posición 1,12 y que se expanda a SurEste
-        self.b_back.grid(column=1, columnspan=12, row=12, sticky='SE')
+        self.b_back.grid(column=0, columnspan=12, row=12, sticky='SE')
         # agregamos el comando del bóton
         self.b_back.bind("<Button>", self._controller.back)
         # --------------------------------------------------------------------------------
-        self.b_eje1_pun1 = ttk.Button(self._principal_frame, text="Ejercicio 1 Punto 1")
-        self.b_eje1_pun1.grid(column=0, row=0, sticky='NESW')
-        self.b_eje1_pun1.bind("<Button>", self._controller.eje1_pun1)
-        self.b_eje1_pun2 = ttk.Button(self._principal_frame, text="Ejercicio 1 Punto 2")
-        self.b_eje1_pun2.grid(column=0, row=1, sticky='NESW')
-        self.b_eje1_pun2.bind("<Button>", self._controller.eje1_pun2)
-        self.b_eje1_pun3 = ttk.Button(self._principal_frame, text="Ejercicio 1 Punto 3")
-        self.b_eje1_pun3.grid(column=0, row=2, sticky='NESW')
-        self.b_eje1_pun3.bind("<Button>", self._controller.eje1_pun3)
-        self.b_eje1_pun4 = ttk.Button(self._principal_frame, text="Ejercicio 1 Punto 4")
-        self.b_eje1_pun4.grid(column=0, row=3, sticky='NESW')
-        self.b_eje1_pun4.bind("<Button>", self._controller.eje1_pun4)
-        self.b_eje2_pun1 = ttk.Button(self._principal_frame, text="Ejercicio 2 Punto 1")
-        self.b_eje2_pun1.grid(column=1, row=0, sticky='NESW')
-        self.b_eje2_pun1.bind("<Button>", self._controller.eje2_pun1)
-        self.b_eje2_pun2 = ttk.Button(self._principal_frame, text="Ejercicio 2 Punto 2")
-        self.b_eje2_pun2.grid(column=1, row=1, sticky='NESW')
-        self.b_eje2_pun2.bind("<Button>", self._controller.eje2_pun2)
-        self.b_eje2_pun3 = ttk.Button(self._principal_frame, text="Ejercicio 2 Punto 3")
-        self.b_eje2_pun3.grid(column=1, row=2, sticky='NESW')
-        self.b_eje2_pun3.bind("<Button>", self._controller.eje2_pun3)
-        self.b_eje2_pun4 = ttk.Button(self._principal_frame, text="Ejercicio 2 Punto 4")
-        self.b_eje2_pun4.grid(column=1, row=3, sticky='NESW')
-        self.b_eje2_pun4.bind("<Button>", self._controller.eje2_pun4)
+        self.b_eje0 = ttk.Button(self._principal_frame, text="Muestra")
+        self.b_eje0.grid(column=0, columnspan=12, row=0, sticky='NESW')
+        self.b_eje0.bind("<Button>", self._controller.eje0)
+        self.b_eje1_part1 = ttk.Button(self._principal_frame, text="Ejercicio 1 parte 1")
+        self.b_eje1_part1.grid(column=0, row=1, sticky='NESW')
+        self.b_eje1_part1.bind("<Button>", self._controller.eje1_part1)
+        self.b_eje1_part2 = ttk.Button(self._principal_frame, text="Ejercicio 1 parte 2")
+        self.b_eje1_part2.grid(column=0, row=2, sticky='NESW')
+        self.b_eje1_part2.bind("<Button>", self._controller.eje1_part2)
+        self.b_eje2_part1 = ttk.Button(self._principal_frame, text="Ejercicio 2 parte 1")
+        self.b_eje2_part1.grid(column=1, row=1, sticky='NESW')
+        self.b_eje2_part1.bind("<Button>", self._controller.eje2_part1)
+        self.b_eje2_part2 = ttk.Button(self._principal_frame, text="Ejercicio 2 parte 2")
+        self.b_eje2_part2.grid(column=1, row=2, sticky='NESW')
+        self.b_eje2_part2.bind("<Button>", self._controller.eje2_part2)
+        self.b_eje3 = ttk.Button(self._principal_frame, text="Ejercicio 3")
+        self.b_eje3.grid(column=0, columnspan=12, row=3, sticky='NESW')
+        self.b_eje3.bind("<Button>", self._controller.eje3)
 
 class SecondView(View):
     """Vista de Utilidades para la Practica."""

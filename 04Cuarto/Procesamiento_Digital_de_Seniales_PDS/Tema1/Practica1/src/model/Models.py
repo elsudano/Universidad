@@ -424,7 +424,7 @@ class Practica4Model(Model):
             initial_steps = 1
             ending_steps -= 1
         x = numpy.array(numpy.zeros(numpy.abs(initial_steps)))
-        x[numpy.abs(initial_steps)-1] = 1
+        x[numpy.abs(initial_steps) - 1] = 1
         signal_out = numpy.concatenate((x, numpy.array(numpy.zeros(numpy.abs(ending_steps)))))
         return signal_out
 
@@ -443,7 +443,7 @@ class Practica4Model(Model):
         - x, ndarray, array con todas las posiciones a 0 menos 1
         que se encuentra en initial_steps > pos > ending_esteps"""
         x = numpy.array(numpy.zeros(numpy.abs(initial_steps)))
-        x[numpy.abs(initial_steps)-1] = 1
+        x[numpy.abs(initial_steps) - 1] = 1
         signal_out = numpy.concatenate((x, numpy.array(numpy.ones(numpy.abs(ending_steps)))))
         return signal_out
 
@@ -463,7 +463,7 @@ class Practica4Model(Model):
 
     def stepz(self, signal_in, a, b):
         step = numpy.repeat(0., len(signal_in))
-        step[numpy.where(n >= 0)] = 1.
+        step[numpy.where(signal_in >= 0)] = 1.
         response = signal.lfilter(b, a, step)
         return response
         # plt.stem(n, response)
@@ -524,10 +524,147 @@ class Practica4Model(Model):
 class Practica5Model(Model):
     """Se trata de entender correctamente la creación de filtros
 
+    Para ello se van a generar diferentes tipos de filtros con diferentes
+    ventanas de actuación, que es la manera de utilizar la FFT rapida para
+    poder realizar la creación de los mismos.
     """
 
     def hacer_algo(self):
         pass
+
+    def pulse(self, initial_steps, ending_steps):
+        """Genera un array con los datos de una señal de pulso
+
+        Entrada:
+        - initial_steps, entero, numero entero desde donde comienzan
+        los valores del array, con la cantidad especificada
+        - ending_steps, entero, numero entero hasta donde llega el array
+        note: todos estos valores serán de valor 0 menos el valor del
+        pulso que será 1 en la posicion intermedia entre los dos valores
+        antes dados.
+
+        Salidas:
+        - x, ndarray, array con todas las posiciones a 0 menos 1
+        que se encuentra en initial_steps > pos > ending_esteps"""
+        if (initial_steps == 0 or initial_steps == 1):
+            initial_steps = 1
+            ending_steps -= 1
+        x = numpy.array(numpy.zeros(numpy.abs(initial_steps)))
+        x[numpy.abs(initial_steps) - 1] = 1
+        signal_out = numpy.concatenate((x, numpy.array(numpy.zeros(numpy.abs(ending_steps)))))
+        return signal_out
+
+    def unit_step(self, initial_steps, ending_steps):
+        """Genera un array con los datos de una señal de escalon unitario
+
+        Entrada:
+        - initial_steps, entero, numero entero desde donde comienzan
+        los valores del array, con la cantidad especificada
+        - ending_steps, entero, numero entero hasta donde llega el array
+        note: todos estos valores serán de valor 0 menos el valor del
+        pulso que será 1 en la posicion intermedia entre los dos valores
+        antes dados.
+
+        Salidas:
+        - x, ndarray, array con todas las posiciones a 0 menos 1
+        que se encuentra en initial_steps > pos > ending_esteps"""
+        x = numpy.array(numpy.zeros(numpy.abs(initial_steps)))
+        x[numpy.abs(initial_steps) - 1] = 1
+        signal_out = numpy.concatenate((x, numpy.array(numpy.ones(numpy.abs(ending_steps)))))
+        return signal_out
+
+    def pass_low_FIR(self, Fs, Fc):
+        """Genera los 2 arrays que definen las frecuencias y las aplificaciones
+           que tendrán cada una de ellas para aplicarlas a un filtro.
+
+        Entrada:
+        - Fs, entero, numero que indica la frcuencia de muestreo
+        - FC, entero, numero que indica la frcuencia de corte
+
+        Salidas:
+        - freqs, ndarray, 200 frecuencias dentro del rango especificado
+        - amps, ndarray, 200 valores con las amplificaciones de la señal"""
+
+        freqs = numpy.linspace(0, Fs/2, 200)
+        for pos in range(0, len(freqs)):
+            if (freqs[pos] >= Fc):
+                num_of_ones = pos
+                break
+        ones = numpy.ones(num_of_ones, dtype=int)
+        num_of_zeros = 200-num_of_ones
+        zeros = numpy.zeros(num_of_zeros, dtype=int)
+        amps = numpy.concatenate((ones,zeros))
+        return freqs, amps
+
+    def fir_win_rect(self, components, freqs, amps):
+        from math import ceil, log
+        if (len(freqs) != len(amps)):
+            raise ValueError('El tamaño de los vectores tiene que ser igual')
+        ncomps = 1 + 2 ** int(ceil(log(components, 2)))
+        signal_in = numpy.linspace(0.0, freqs[-1], ncomps)
+        signal_out = numpy.interp(signal_in, freqs, amps)
+        shift = numpy.exp(-(components - 1) / 2. * 1.j * numpy.pi * signal_in / freqs[-1])
+        signal_out2 = signal_out * shift
+        b = numpy.fft.irfft(signal_out2)
+        return b
+
+    def filter(self, signal_in, coef_a, coef_b):
+        signal_out = signal.lfilter(coef_b, coef_a, signal_in)
+        return signal_out
+
+    def impz(self, signal_in, a, b):
+        impulse = numpy.repeat(0., len(signal_in))
+        impulse[numpy.where(signal_in == 1)] = 1.
+        response = signal.lfilter(b, a, impulse)
+        return response
+
+    def stepz(self, signal_in, a, b):
+        step = numpy.repeat(0., len(signal_in))
+        step[numpy.where(signal_in >= 0)] = 1.
+        response = signal.lfilter(b, a, step)
+        return response
+
+    def zplane(self, a, b):
+        # Fix axes
+        ax = plt.gca()
+        ax.spines['left'].set_position('zero')
+        ax.spines['bottom'].set_position('zero')
+        ax.spines['right'].set_visible(False)
+        ax.spines['top'].set_visible(False)
+        # Draw circle
+        circle = patches.Circle((0, 0), radius=1, color='black', ls='dashed', fill=False)
+        ax.add_patch(circle)
+        # Make a and b of equal length
+        a = numpy.append(a, numpy.repeat(0, max(len(a), len(b)) - len(a)))
+        b = numpy.append(b, numpy.repeat(0, max(len(a), len(b)) - len(b)))
+        # Plot poles
+        p = numpy.roots(a)
+        plt.plot(p.real, p.imag, 'kx', ms=7)
+        # Plot zeros
+        z = numpy.roots(b)
+        plt.plot(z.real, z.imag, 'ko', ms=7)
+        plt.axis('scaled')
+        plt.show()
+
+    def plot_freq_resp(self, a, b, worN=None):
+        w, h = signal.freqz(b, a, worN)
+        plt.plot(w, 20 * numpy.log10(abs(h)), 'b')
+        plt.ylabel('Amplitud [dB]', color='b')
+        plt.xlabel('Frecuencia [rad/muestra]')
+        plt.gca().twinx()
+        angles = numpy.unwrap(numpy.angle(h))
+        plt.plot(w, angles, 'g')
+        plt.ylabel('Fase (rad)', color='g')
+        plt.grid()
+        plt.show()
+
+    def plot_group_delay(self, a, b):
+        w, gd = signal.group_delay((b, a))
+        plt.plot(w, numpy.round(gd, 5))
+        plt.ylabel('Retardo de grupo [muestras]')
+        plt.xlabel('Frecuencia [rad/muestra]')
+        plt.title('Retardo de grupo')
+        plt.show()
 
 
 class OtherModel(Model):
