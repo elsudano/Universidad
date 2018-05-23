@@ -49,10 +49,10 @@ public class main {
 
         /* Número de clientes que quieto lanzar para comprobar que funciona */
         int clients = 1;
-        
+
         /* Tamaño del paquete que se va a usar para transmitir en UDP */
-        int size_package = 1024;
-        
+        int size_package = 2048;
+
         /* Comprobamos el modo de ejecución */
         switch (mode.toUpperCase()) {
             case "CLIENT": {
@@ -87,7 +87,7 @@ public class main {
                     case "UDP": {
                         DatagramSocket listener_server = new DatagramSocket(port);
                         //while (true) {
-                        new server(listener_server, size_package).start();
+                            new server(listener_server, size_package).start();
                         //}
                     }
                     default:

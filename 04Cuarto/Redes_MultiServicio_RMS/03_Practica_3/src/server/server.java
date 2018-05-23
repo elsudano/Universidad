@@ -60,22 +60,21 @@ public class server extends Thread {
     private void udp(int size_package) {
         try (DatagramSocket socket_udp = (DatagramSocket) this.id_socket) {
             DatagramPacket pack = new DatagramPacket(new byte[size_package], size_package);
-            // while true
             this.webcam.open();
             BufferedImage image = this.webcam.getImage();
             this.webcam.close();
             int ancho = image.getWidth();
             int alto = image.getHeight();
-            ByteArrayOutputStream baos = new ByteArrayOutputStream(ancho * alto);
-            for (int w = 0; w < ancho; w++) {
-                for (int h = 0; h < alto; h++) {
-                    baos.write(image.getRGB(w, h));
+            ByteArrayOutputStream baos = new ByteArrayOutputStream(ancho * alto * 4);
+            for (int h = 0; h < alto; h++) {
+                for (int w = 0; w < ancho; w++) {
+                    baos.write(utilities.toBytes(image.getRGB(w, h)));
                 }
             }
             byte[] image_data = baos.toByteArray();
             int num_of_datagrams = image_data.length / size_package;
             int rest = image_data.length % size_package;
-            System.out.println("Bytes a enviar: " + image_data.length + ", Datagramas: " + num_of_datagrams + ", Alto: " + alto + ", Ancho: " + ancho);
+            System.out.println("Bytes a enviar: " + image_data.length + ", Datagramas: " + num_of_datagrams + ", Alto: " + alto + ", Ancho: " + ancho + ", Resto: " + rest);
             baos.flush();
             baos.close();
             socket_udp.receive(pack);
@@ -94,9 +93,8 @@ public class server extends Thread {
             socket_udp.send(pack);
             buf = new byte[size_package];
             /* 
-            Aquí hay que montar algo para cuando tenemos un resto de la imagen
-            osea si tenemos la variables rest mayor que 0 recorrer hasta el 
-            resto en el ultimo datagrama
+            Si tenemos la variables rest mayor que 0 recorre hasta el 
+            resto de la imagen en el ultimo datagrama y lo envia
              */
             for (int dg = 0; dg <= num_of_datagrams; dg++) {
                 if (rest > 0 && dg == num_of_datagrams) {
@@ -105,7 +103,7 @@ public class server extends Thread {
                     for (int b = 0; b < rest; b++) {
                         buf[b] = image_data[b + (dg * size_package)];
                     }
-                } else if (dg == num_of_datagrams-1){
+                } else if (dg < num_of_datagrams) {
                     for (int b = 0; b < size_package; b++) {
                         buf[b] = image_data[b + (dg * size_package)];
                     }
@@ -116,27 +114,11 @@ public class server extends Thread {
                 socket_udp.send(pack);
                 server.sleep(200);
             }
-            // while true
         } catch (SocketException ex) {
             Logger.getLogger(server.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException | InterruptedException ex) {
             Logger.getLogger(server.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-// Constructor de esta clase
-    private void ServidorUDP(int puerto) {
-        /*
-        1. Creamos el socket
-        2. Esperamos un mensaje
-        3. Almacenamos dir. IP y puerto en el datagrama a enviar
-        4. Abrimos la cámara y capturamos una imagen
-        5. Copiamos la imagen a un stream (ByteArrayOutputStream) Para ello, añadimos primero el número de filas (getHeight),
-        luego el número de columnas (getWidth) y por último los pixeles RGB (getRGB)
-        6. Almacenamos en un array de bytes la información a transmitir
-        7. Transmitimos el número de datagramas que se van a enviar
-        8. Transmitimos los datagramas que contienen los datos de la imagen (se recomienda usar la función sleep entre cada envío) 
-         */
     }
 
     @Override

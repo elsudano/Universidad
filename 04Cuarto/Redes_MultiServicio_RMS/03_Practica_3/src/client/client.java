@@ -78,7 +78,8 @@ public class client extends Thread {
             socket_udp.receive(pack); // se bloquea hasta recibir un datagrama
             byte[] buf = pack.getData();
             utilities.enteros mis_enteros = utilities.arrayByteToInts(buf);
-            ByteArrayOutputStream baos = new ByteArrayOutputStream(mis_enteros.num_of_datagrams * size_package);
+            int rest = (mis_enteros.alto * mis_enteros.ancho * 4) - (size_package * mis_enteros.num_of_datagrams);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream(mis_enteros.num_of_datagrams * size_package + rest);
             BufferedImage image = new BufferedImage(mis_enteros.ancho, mis_enteros.alto, BufferedImage.TYPE_INT_RGB);
             buf = new byte[size_package];
             for (int dg = 0; dg <= mis_enteros.num_of_datagrams; dg++) {
@@ -88,7 +89,6 @@ public class client extends Thread {
                 tiempo para que se transmita la información mas rapido.
                  */
                 if (dg == mis_enteros.num_of_datagrams) {
-                    int rest = (mis_enteros.alto * mis_enteros.ancho) - (size_package * mis_enteros.num_of_datagrams);
                     pack = new DatagramPacket(new byte[rest], rest);
                     socket_udp.receive(pack); // se bloquea hasta recibir un datagrama
                     baos.write(pack.getData());
@@ -109,7 +109,7 @@ public class client extends Thread {
                 imagen_data_int[c] = utilities.byteArrayToInt(buf);
                 c++;
             }
-            System.out.println("Bytes recibidos: " + image_data_byte.length + ", Nums Enteros: " + imagen_data_int.length + ", Datagramas: " + mis_enteros.num_of_datagrams + ", Alto: " + mis_enteros.alto + ", Ancho: " + mis_enteros.ancho);
+            System.out.println("Bytes recibidos: " + image_data_byte.length + ", Nums Enteros: " + imagen_data_int.length + ", Datagramas: " + mis_enteros.num_of_datagrams + ", Alto: " + mis_enteros.alto + ", Ancho: " + mis_enteros.ancho + ", Resto: " + rest);
             image.setRGB(0, 0, mis_enteros.ancho, mis_enteros.alto, imagen_data_int, 0, mis_enteros.ancho);
             this.ventana.setImage(image);
         } catch (SocketException ex) {
@@ -117,21 +117,6 @@ public class client extends Thread {
         } catch (IOException ex) {
             Logger.getLogger(client.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    // Constructor de esta clase
-    private void ClienteUDP(String direccionServidor, int puerto) {
-        /*
-        1. Creamos el socket
-        2. Enviamos un mensaje al servidor para pedir la imagen
-        3. Recibimos el número de datagramas que se va a recibir
-        4. Recibimos y almacenamos la información del servidor
-        5. Creamos un stream de bytes ByteArrayInputStream para ir leyendo la información recibida
-        6. Leemos el primer dato que es el número de filas
-        7. Leemos el segundo dato que es el número de columnas
-        8. Copiamos los pixeles recibidos a un objeto imagen
-        9. Representamos la imagen
-         */
     }
 
     @Override
