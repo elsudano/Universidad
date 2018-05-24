@@ -789,7 +789,7 @@ class Practica5Controller(Controller):
         plt.close("all")
         Fs = 8000
         Fc = 2000
-        M = 64
+        M = 96
         freqs, amps = self._model.pass_low_FIR(Fs, Fc)
         a = [1.0]
         b = self._model.fir_win_rect(M, freqs, amps)
@@ -799,7 +799,15 @@ class Practica5Controller(Controller):
 
     def eje1_part2(self, event):
         plt.close("all")
-
+        Fs = 8000
+        Fc = 2000
+        M = 96
+        freqs, amps = self._model.pass_low_FIR(Fs, Fc)
+        a = [1.0]
+        #b = self._model.fir_win_rect(M, freqs, amps)
+        b = signal.firwin2(M, freqs, amps, window='hamming', fs=Fs)
+        plt.title('FIR with Manual Rectangle Window')
+        self._model.plot_freq_resp(a, b)
         pass
 
     def eje2_part1 (self, event):
@@ -834,7 +842,7 @@ class Practica5Controller(Controller):
         numtaps = 64
         Fs = 8000
         Fc = 2000
-        freqs, amps = self._model.pass_low_FIR(Fs, Fc)
+        freqs, amps = self._model.pass_low_FIR(Fs, Fc, 500)
         a = [1.0]
         plt.figure(1)
         plt.title('FIR with Rectangle Window')

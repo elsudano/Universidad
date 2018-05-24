@@ -573,7 +573,7 @@ class Practica5Model(Model):
         signal_out = numpy.concatenate((x, numpy.array(numpy.ones(numpy.abs(ending_steps)))))
         return signal_out
 
-    def pass_low_FIR(self, Fs, Fc):
+    def pass_low_FIR(self, Fs, Fc, num_of_samples=200):
         """Genera los 2 arrays que definen las frecuencias y las aplificaciones
            que tendrán cada una de ellas para aplicarlas a un filtro.
 
@@ -584,14 +584,13 @@ class Practica5Model(Model):
         Salidas:
         - freqs, ndarray, 200 frecuencias dentro del rango especificado
         - amps, ndarray, 200 valores con las amplificaciones de la señal"""
-
-        freqs = numpy.linspace(0, Fs/2, 200)
+        freqs = numpy.linspace(0, Fs/2, num_of_samples)
         for pos in range(0, len(freqs)):
             if (freqs[pos] >= Fc):
                 num_of_ones = pos
                 break
         ones = numpy.ones(num_of_ones, dtype=int)
-        num_of_zeros = 200-num_of_ones
+        num_of_zeros = num_of_samples-num_of_ones
         zeros = numpy.zeros(num_of_zeros, dtype=int)
         amps = numpy.concatenate((ones,zeros))
         return freqs, amps
@@ -600,11 +599,17 @@ class Practica5Model(Model):
         from math import ceil, log
         if (len(freqs) != len(amps)):
             raise ValueError('El tamaño de los vectores tiene que ser igual')
+        # Calculamos el numero de componentes en una escala logaritmica
         ncomps = 1 + 2 ** int(ceil(log(components, 2)))
+        # Generamos la señal de entrada según el numero de componentes
         signal_in = numpy.linspace(0.0, freqs[-1], ncomps)
+        # Sacamos los puntos interpolados según las frecuencias y la amplitud de cada punto
         signal_out = numpy.interp(signal_in, freqs, amps)
+        # Ejecutamos la función que se refleja en la teoría y luego hacemos lo contrario del logaritmo
         shift = numpy.exp(-(components - 1) / 2. * 1.j * numpy.pi * signal_in / freqs[-1])
+        # para obtener el resultado final multiplicamos la señal de salida por el resulado anterior
         signal_out2 = signal_out * shift
+        # y aplicamos la transformada de furier inversa
         b = numpy.fft.irfft(signal_out2)
         return b
 
