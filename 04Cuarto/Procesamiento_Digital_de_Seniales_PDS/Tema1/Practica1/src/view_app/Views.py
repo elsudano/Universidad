@@ -389,6 +389,61 @@ class Practica5View(View):
         self.b_eje3.grid(column=0, columnspan=12, row=3, sticky='NESW')
         self.b_eje3.bind("<Button>", self._controller.eje3)
 
+class Practica6View(View):
+    """Ventana que muestra los componente de la Prctica 2"""
+
+    def _init_view(self):
+        """Método de creación de vista.
+
+        En este método es donde realmente se genera la vista de la,
+        ventana pues es donde se crean todos los widgets y se colocán,
+        en su lugar correspondiente.
+        """
+        # Modificamos el tamaño de la ventana en esta vista
+        self._window.size(320,200)
+        # Creamos el marco
+        self._principal_frame = ttk.Frame(self._window.get(), padding="3 3 12 12")
+        # El marco está en la posición 0,0 de la ventana en el centro
+        self._principal_frame.grid(column=0, row=0, sticky='NESW')
+        # cantidad de columnas que tiene el marco
+        self._principal_frame.columnconfigure(0, weight=1)
+        # cantidad de filas que tiene el marco
+        self._principal_frame.rowconfigure(0, weight=1)
+        # crea bóton dentro de marco
+        self.b_back = ttk.Button(self._principal_frame, text="Atras")
+        # ponemos en la posición 1,12 y que se expanda a SurEste
+        self.b_back.grid(column=0, columnspan=12, row=12, sticky='SE')
+        # agregamos el comando del bóton
+        self.b_back.bind("<Button>", self._controller.back)
+        # --------------------------------------------------------------------------------
+        self.b_eje0 = ttk.Button(self._principal_frame, text="Muestra")
+        self.b_eje0.grid(column=0, columnspan=12, row=0, sticky='NESW')
+        self.b_eje0.bind("<Button>", self._controller.eje0)
+        self.b_eje1_part1 = ttk.Button(self._principal_frame, text="Ejercicio 1 parte 1")
+        self.b_eje1_part1.grid(column=0, row=1, sticky='NESW')
+        self.b_eje1_part1.bind("<Button>", self._controller.eje1_part1)
+        self.b_eje1_part2 = ttk.Button(self._principal_frame, text="Ejercicio 1 parte 2")
+        self.b_eje1_part2.grid(column=1, row=1, sticky='NESW')
+        self.b_eje1_part2.bind("<Button>", self._controller.eje1_part2)
+        self.b_eje2 = ttk.Button(self._principal_frame, text="Generar Ruido")
+        self.b_eje2.grid(column=0, columnspan=12, row=2, sticky='NESW')
+        self.b_eje2.bind("<Button>", self._controller.eje2)
+        self.b_filtro_lineal = ttk.Button(self._principal_frame, text="Filtro Lineal")
+        self.b_filtro_lineal.grid(column=0, row=3, sticky='NESW')
+        self.b_filtro_lineal.bind("<Button>", self._controller.filtro_lineal)
+        self.b_filtro_no_lineal = ttk.Button(self._principal_frame, text="Filtro No Lineal")
+        self.b_filtro_no_lineal.grid(column=1, row=3, sticky='NESW')
+        self.b_filtro_no_lineal.bind("<Button>", self._controller.filtro_no_lineal)
+        self.b_muestra_cod = ttk.Button(self._principal_frame, text="Muestra de Codificación")
+        self.b_muestra_cod.grid(column=0, columnspan=12, row=4, sticky='NESW')
+        self.b_muestra_cod.bind("<Button>", self._controller.muestra_cod)
+        self.b_cod_ima_1 = ttk.Button(self._principal_frame, text="Codificación Imágen 1")
+        self.b_cod_ima_1.grid(column=0, row=5, sticky='NESW')
+        self.b_cod_ima_1.bind("<Button>", self._controller.cod_ima_1)
+        self.b_cod_ima_2 = ttk.Button(self._principal_frame, text="Codificación Imágen 2")
+        self.b_cod_ima_2.grid(column=1, row=5, sticky='NESW')
+        self.b_cod_ima_2.bind("<Button>", self._controller.cod_ima_2)
+
 class SecondView(View):
     """Vista de Utilidades para la Practica."""
 
@@ -498,6 +553,9 @@ class MainView(View):
         self.b_practica5 = ttk.Button(self._principal_frame, text="Practica 5")
         self.b_practica5.grid(column=1, row=5, sticky='NESW')
         self.b_practica5.bind("<Button>", self._controller.practica5)
+        self.b_practica6 = ttk.Button(self._principal_frame, text="Practica 6")
+        self.b_practica6.grid(column=1, row=6, sticky='NESW')
+        self.b_practica6.bind("<Button>", self._controller.practica6)
         self.b_other = ttk.Button(self._principal_frame, text="Other Case")
         self.b_other.grid(column=0, row=5, sticky='NESW')
         self.b_other.bind("<Button>", self._controller.other)

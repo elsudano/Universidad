@@ -423,6 +423,7 @@ class EjerciciosTema3Controller(Controller):
         view.init_view()
         plt.close("all")
 
+
 class Practica3Controller(Controller):
 
     def back(self, event):
@@ -516,7 +517,6 @@ class Practica3Controller(Controller):
         coef_b = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
         signal_out = self._model.convolution(signal_in, coef_b)
         plt.stem(signal_out)
-
 
 
 class EjerciciosTema4Controller(Controller):
@@ -789,11 +789,11 @@ class Practica5Controller(Controller):
         plt.close("all")
         Fs = 8000
         Fc = 2000
-        M = 96
+        M = 31
         freqs, amps = self._model.pass_low_FIR(Fs, Fc)
         a = [1.0]
         b = self._model.fir_win_rect(M, freqs, amps)
-        #b = signal.firwin2(M, freqs, amps, window='boxcar', fs=Fs)
+        # b = signal.firwin2(M, freqs, amps, window='boxcar', fs=Fs)
         plt.title('FIR with Manual Rectangle Window')
         self._model.plot_freq_resp(a, b)
 
@@ -804,13 +804,13 @@ class Practica5Controller(Controller):
         M = 96
         freqs, amps = self._model.pass_low_FIR(Fs, Fc)
         a = [1.0]
-        #b = self._model.fir_win_rect(M, freqs, amps)
+        # b = self._model.fir_win_rect(M, freqs, amps)
         b = signal.firwin2(M, freqs, amps, window='hamming', fs=Fs)
         plt.title('FIR with Manual Rectangle Window')
         self._model.plot_freq_resp(a, b)
         pass
 
-    def eje2_part1 (self, event):
+    def eje2_part1(self, event):
         plt.close("all")
         cutoff = 0.5
         a = [1.0]
@@ -866,13 +866,151 @@ class Practica5Controller(Controller):
 
     def eje3(self, event):
         plt.close("all")
-        numtaps = 1024
-        freq = [0, 3999, 4000, 7999, 8000]
+        numtaps = 64
+        freq = [0, 3900, 4000, 7999, 8000]
         gains = [0.0, 0.0, 1.0, 1.0, 0.0]
         a = [1.0]
         plt.title('FIR with Rectangle Window')
-        b = signal.firwin2(numtaps, freq, gains, nfreqs=1025, window='boxcar',fs=16000)
+        b = signal.firwin2(numtaps, freq, gains, nfreqs=numtaps + 1, window='boxcar', nyq=8000)
         self._model.plot_freq_resp(a, b)
+
+
+class Practica6Controller(Controller):
+    # Parametro de clase para saber cual es el fichero a estudiar
+    _filename = "/home/usuario/nextCloud/Facultad/03_Procesamiento_Digital_de_Señales_PDS_5to/Practicas/Practica7_Procesamiento_digital_de_imagenes/mandrill.png"
+    _image = None
+    #_filename = ""
+
+    def back(self, event):
+        # Modificamos el tamaño de la ventana al tamaño original
+        self._window.size(300, 170)
+        model = MainModel()
+        controller = MainController(self._window, model)
+        view = MainView(self._window, controller)
+        view.init_view()
+        plt.close("all")
+
+    def eje0(self, event):
+        if not self._filename:
+            self._filename = filediag.askopenfilename(initialdir=os.environ["HOME"],
+                                                      title="Selecciona el fichero a estudiar",
+                                                      filetypes=(("PNG image files", "*.png"),
+                                                                 ("TIFF image files", "*.tiff"),
+                                                                 ("TIFF image files", "*.tif"),
+                                                                 ("all files", "*.*"))
+                                                      )
+        self._filename = Path(self._filename)
+        if (self._filename.suffix == '.png' or self._filename.suffix == '.tif' or self._filename.suffix == '.tiff'):
+            self._imagen = imread(str(self._filename), False, 'RGB')
+            plt.imshow(self._imagen)
+            # Se puede usar este metodo pero hay que setear la variable de entorno SCIPY_PIL_IMAGE_VIEWER
+            # para que indique cual esel programa que se encarga de mostrar las imagenes
+            # imshow(imagen)
+        else:
+            msgbox.showerror("Open file", "This file\n(%s) can't open" % str(self._filename))
+        if not self._filename.exists():
+            msgbox.showerror("Open file", "Don't exist file\n(%s)" % str(self._filename))
+            return
+
+    def eje1_part1(self, event):
+        if not self._filename:
+            self.eje0(1)
+        plt.close("all")
+        self._imagen = imread(str(self._filename), False, 'F')
+        plt.figure(1)
+        plt.title('Imágen Original en Blanco y Negro')
+        plt.imshow(self._imagen)
+        plt.figure(2)
+        plt.title('Histograma de la Imágen Original')
+        plt.xlabel("Valor de intencidad")
+        plt.ylabel("Frecuencia")
+        plt.hist(self._imagen)
+        eq_imagen, fda = self._model.image_equalized_histogram(self._imagen)
+        print(fda)
+        plt.figure(3)
+        plt.title('Imágen Ecualizada en Blanco y Negro')
+        plt.imshow(eq_imagen)
+        plt.figure(4)
+        plt.title('Histograma de la Imágen Ecualizada')
+        plt.xlabel("Valor de intencidad")
+        plt.ylabel("Frecuencia")
+        plt.hist(eq_imagen)
+
+    def eje1_part2(self, event):
+        plt.close("all")
+        print("Como hemos visto en el ejercicio anterior, las imagenes cambian")
+        print("y la manera en la que se destribullen los diferentes niveles de")
+        print("blanco y negro tambien, en el histograma se aprecia que ahora")
+        print("los valores están mas separados pero que son mas unisonos que")
+        print("eso era lo que se pretendía")
+
+    def eje2(self, event):
+        if not self._filename:
+            self.eje0(1)
+        plt.close("all")
+        self._imagen = imread(str(self._filename), False, 'RGB')
+        plt.figure(1)
+        plt.title('Imágen Original')
+        plt.imshow(self._imagen)
+        plt.figure(2)
+        plt.title('Imágen con sal y pimienta')
+        sp_imagen = self._model.salt_and_pepper(self._imagen)
+        plt.imshow(sp_imagen)
+
+    def filtro_lineal(self, event):
+        if not self._filename:
+            self.eje0(1)
+        plt.close("all")
+        self._imagen = imread(str(self._filename), False, 'RGB')
+        plt.figure(1)
+        plt.title('Imágen Original')
+        plt.axis("off")
+        plt.imshow(self._imagen)
+        sp_imagen = self._model.salt_and_pepper(self._imagen)
+        plt.figure(2)
+        plt.title('Imágen con sal y pimienta')
+        plt.axis("off")
+        plt.imshow(sp_imagen)
+        fl_imagen = self._model.linear_filter(sp_imagen)
+        plt.figure(3)
+        plt.title('Imágen filtrada')
+        plt.axis("off")
+        plt.imshow(fl_imagen)
+
+
+    def filtro_no_lineal(self, event):
+        if not self._filename:
+            self.eje0(1)
+        plt.close("all")
+        self._imagen = imread(str(self._filename), False, 'F')
+        plt.figure(1)
+        plt.title('Imágen Original')
+        plt.axis("off")
+        plt.imshow(self._imagen)
+        sp_imagen = self._model.salt_and_pepper(self._imagen)
+        plt.figure(2)
+        plt.title('Imágen con sal y pimienta')
+        plt.axis("off")
+        plt.imshow(sp_imagen)
+        fl_imagen = signal.medfilt2d(sp_imagen, 5)
+        plt.figure(3)
+        plt.title('Imágen filtrada con libreria Signal')
+        plt.axis("off")
+        plt.imshow(fl_imagen)
+        fl_imagen = self._model.median_filter(sp_imagen, 5)
+        plt.figure(4)
+        plt.title('Imágen filtrada con diseño propio')
+        plt.axis("off")
+        plt.imshow(fl_imagen)
+
+    def muestra_cod(self, event):
+        pass
+
+    def cod_ima_1(self, event):
+        pass
+
+    def cod_ima_2(self, event):
+        pass
 
 
 class SecondController(Controller):
@@ -988,7 +1126,7 @@ class MainController(Controller):
 
     def practica4(self, event):
         """Cambia la vista de la ventana.
-        pasamos a crear todos los componentes para la tercera practica
+        pasamos a crear todos los componentes para la cuarta practica
         """
         model = Practica4Model()
         controller = Practica4Controller(self._window, model)
@@ -998,11 +1136,21 @@ class MainController(Controller):
 
     def practica5(self, event):
         """Cambia la vista de la ventana.
-        pasamos a crear todos los componentes para la tercera practica
+        pasamos a crear todos los componentes para la quinta practica
         """
         model = Practica5Model()
         controller = Practica5Controller(self._window, model)
         view = Practica5View(self._window, controller)
+        controller.set_view(view)
+        view.init_view()
+
+    def practica6(self, event):
+        """Cambia la vista de la ventana.
+        pasamos a crear todos los componentes para la sexta practica
+        """
+        model = Practica6Model()
+        controller = Practica6Controller(self._window, model)
+        view = Practica6View(self._window, controller)
         controller.set_view(view)
         view.init_view()
 

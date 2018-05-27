@@ -13,6 +13,8 @@ from pydub.playback import play
 # para calculos matematicos
 from scipy import signal
 from scipy.io import wavfile
+# para tratamiento de imagenes
+from scipy.misc import imread, imsave, imresize, imrotate, imshow
 # para valores random de las señales
 import random
 #
@@ -21,6 +23,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import numpy
+import os
 import sys
 #
 class Model(ABC):

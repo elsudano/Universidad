@@ -7,7 +7,9 @@ En este fichero podemos encontrarnos todos los modelos,
 que se pueden usar para nuestro programa.
 """
 
-from src.model.Model import Model, play, mix, wavfile, plt, patches, numpy, matplotlib, signal, random, struct
+from src.model.Model import Model, os, play, mix, wavfile, \
+    plt, patches, numpy, matplotlib, signal, random, \
+    struct, imread, imsave, imresize, imrotate, imshow
 from src.view_app.View import img_as_float, exposure
 
 
@@ -584,15 +586,15 @@ class Practica5Model(Model):
         Salidas:
         - freqs, ndarray, 200 frecuencias dentro del rango especificado
         - amps, ndarray, 200 valores con las amplificaciones de la señal"""
-        freqs = numpy.linspace(0, Fs/2, num_of_samples)
+        freqs = numpy.linspace(0, Fs / 2, num_of_samples)
         for pos in range(0, len(freqs)):
             if (freqs[pos] >= Fc):
                 num_of_ones = pos
                 break
         ones = numpy.ones(num_of_ones, dtype=int)
-        num_of_zeros = num_of_samples-num_of_ones
+        num_of_zeros = num_of_samples - num_of_ones
         zeros = numpy.zeros(num_of_zeros, dtype=int)
-        amps = numpy.concatenate((ones,zeros))
+        amps = numpy.concatenate((ones, zeros))
         return freqs, amps
 
     def fir_win_rect(self, components, freqs, amps):
@@ -670,6 +672,75 @@ class Practica5Model(Model):
         plt.xlabel('Frecuencia [rad/muestra]')
         plt.title('Retardo de grupo')
         plt.show()
+
+
+class Practica6Model(Model):
+    """Se intenta realizar los mismos filtros que la practica anterior pero en 2 dimensiones
+
+    Aunque los principios son iguales hay que tener cuidadopara realizar los calculos en 2 dimensiones
+    """
+
+    def hacer_algo(self):
+        pass
+
+    def image_equalized_histogram(self, image, number_bins=256):
+        # conseguimos el histograma de la imagen
+        image_histogram, bins = numpy.histogram(image.flatten(), number_bins, normed=True)
+        fda = image_histogram.cumsum()  # función de distribución acumulativa
+        fda = 255 * fda / fda[-1]  # normalizamos
+        # Usamos la interpolación lineal de fda para encontrar los nuevos valores de los pixeles
+        image_equalized = numpy.interp(image.flatten(), bins[:-1], fda)
+        return image_equalized.reshape(image.shape), fda
+
+    def salt_and_pepper(self, image):
+        # Detect if a signed image was input
+        if image.min() < 0:
+            low_clip = -1.
+        else:
+            low_clip = 0.
+
+        out = image.copy()
+        ###
+        # amount : float
+        #     Proportion of image pixels to replace with noise on range [0, 1].
+        #     Used in 'salt', 'pepper', and 'salt & pepper'. Default : 0.05
+        # salt_vs_pepper : float
+        #     Proportion of salt vs. pepper noise for 's&p' on range [0, 1].
+        #     Higher values represent more salt. Default : 0.5 (equal amounts)
+        ###
+        p = 0.15
+        q = 0.7
+        flipped = numpy.random.choice([True, False], size=image.shape, p=[p, 1 - p])
+        salted = numpy.random.choice([True, False], size=image.shape, p=[q, 1 - q])
+        peppered = ~salted
+        out[flipped & salted] = 1
+        out[flipped & peppered] = low_clip
+        return out
+
+    def linear_filter(self, image):
+        pass
+
+    def median_filter(self, image, matriz_size=3):
+        if (matriz_size % 2) != 1:
+            raise ValueError("El tamaño de la matriz tiene que ser impar.")
+        if matriz_size < 3:
+            raise ValueError("El tamaño minimo de la matriz de filtro es 3")
+        pixels_mm = int((matriz_size - 1) / 2)
+        nfil = image.shape[0]
+        ncol = image.shape[1]
+        filter_image = image.copy()
+        matriz = numpy.zeros((matriz_size, matriz_size))
+        for fil in range(nfil - pixels_mm):
+            for col in range(ncol - pixels_mm):
+                if (fil - pixels_mm >= 0 and col - pixels_mm >= 0):
+                    ini_fil = fil - pixels_mm
+                    end_fil = fil + pixels_mm + 1
+                    ini_col = col - pixels_mm
+                    end_col = col + pixels_mm + 1
+                    matriz = image[ini_fil:end_fil, ini_col:end_col]
+                    mediana = numpy.median(matriz)
+                    filter_image[fil][col] = mediana
+        return filter_image
 
 
 class OtherModel(Model):
