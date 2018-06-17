@@ -6,8 +6,6 @@ Este fichero se usa para poder inicializar las diferentes partes del modulo
 se usa para poner los imports necesarios para la aplicación
 """
 
-from src.view_app.Window import Window
-from src.view_app.View import View
-# from src.view_app.Widget import Widget
-from src.view_app.views import *
-
+from src.controller.controllers.Main import MainController
+from src.controller.controllers.Mpls import MplsController
+from src.controller.controllers.Rtp import RtpController

@@ -21,16 +21,8 @@ except ImportError:
     from tkinter import IntVar
     from tkinter import BooleanVar
 
-# otro paquete de tratamiento de imagenes
-from PIL import Image, ImageTk
-# trabajar con imagenes
-from skimage import data, img_as_float, exposure, filters, color
-from skimage.morphology import disk
-from skimage.filters.rank import gradient
 # para crear clases con padres e hijos
 from abc import ABC, abstractmethod
-# datasheet para señales biometricas
-import wfdb
 
 class View(ABC):
     """Clase Vista Principal."""

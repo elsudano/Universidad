@@ -10,6 +10,8 @@ se genera un controlador que se encarga de todas las vistas del programa.
 from abc import ABC, abstractmethod
 # para el analisis de rutas del sistema
 from pathlib import Path
+# para los ficheros de wireshark
+import pcapng
 
 class Controller(ABC):
     """Clase controlador."""
@@ -25,6 +27,10 @@ class Controller(ABC):
 
     @abstractmethod
     def back(self, event):
+        pass
+
+    @abstractmethod
+    def open_pcapng(self, file):
         pass
 
     def set_view(self, view):
