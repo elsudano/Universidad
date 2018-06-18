@@ -6,7 +6,7 @@ En este fichero podemos encontrarnos todos los controladores,
 de todas las vistas de nuestro programa.
 """
 
-from src.controller.Controller import Controller, Path, pcapng
+from src.controller.Controller import Controller, Path, FileScanner
 from src.view_app.View import filediag
 from src.model.models import *
 from src.controller.controllers import *
@@ -27,6 +27,7 @@ class MplsController(Controller):
 
     def open_pcapng(self, event):
         filename = "/home/usuario/nextCloud/Facultad/02_Redes_MultiServicio_RMS-17-18/Trabajos_entregados/09_Identificar_fuentes_(servidores)_y_tipo_de_trafico/capture.pcapng"
+        #filename = ""
         if not filename:
             filename = filediag.askopenfilename(initialdir='$USER',
                                                 title="Selecciona el fichero a estudiar",
@@ -34,6 +35,7 @@ class MplsController(Controller):
                                                            ("all files", "*.*"))
                                                 )
         filename = Path(filename)
-        pcap_fp = open(filename, 'wb')
-        print (pcap_fp)
-        #shb_opts = [pcapng.option.ShbHardware("Dell"), pcapng.option.ShbOs("Ubuntu"), pcapng.option.ShbUserAppl("IntelliJ Idea")]
+        with open(filename, 'rb') as fp:
+            scanner = FileScanner(fp)
+            for block in scanner:
+                print(block)

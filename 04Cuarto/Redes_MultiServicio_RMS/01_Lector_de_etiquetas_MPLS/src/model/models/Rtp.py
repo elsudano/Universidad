@@ -10,13 +10,6 @@ que se pueden usar para nuestro programa.
 from src.model.Model import Model
 
 class RtpModel(Model):
-    """Funciones necesarias para los ejercicios del tema 1
-
-    Estas funciones ayudan a la realización de los diferentes apartados
-    de los ejemplos del tema 1"""
-
-    def open_pcapng(self):
-        pass
 
     def search(self, filename):
         """Lectura de un fichero de audio para representación gráfica

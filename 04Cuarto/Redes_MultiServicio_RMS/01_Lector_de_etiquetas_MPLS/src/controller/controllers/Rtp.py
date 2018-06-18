@@ -6,7 +6,7 @@ En este fichero podemos encontrarnos todos los controladores,
 de todas las vistas de nuestro programa.
 """
 
-from src.controller.Controller import Controller, Path, pcapng
+from src.controller.Controller import Controller, Path, FileScanner
 from src.model.models import *
 from src.controller.controllers import *
 from src.view_app.views import *
@@ -33,8 +33,10 @@ class RtpController(Controller):
                                                            ("all files", "*.*"))
                                                 )
         filename = Path(filename)
-        pcap_fp = open(filename, 'wb')
-        print(pcap_fp)
+        with open(filename, 'rb') as fp:
+            scanner = FileScanner(fp)
+            for block in scanner:
+                print(block)
 
     def search(self, event):
         pass

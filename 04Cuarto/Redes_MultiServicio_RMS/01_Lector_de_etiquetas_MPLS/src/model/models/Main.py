@@ -13,6 +13,3 @@ class MainModel(Model):
 
     def hacer_algo(self):
         pass
-
-    def open_pcapng(self):
-        pass

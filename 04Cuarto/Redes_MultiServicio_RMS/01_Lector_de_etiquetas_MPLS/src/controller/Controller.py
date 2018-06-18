@@ -11,7 +11,8 @@ from abc import ABC, abstractmethod
 # para el analisis de rutas del sistema
 from pathlib import Path
 # para los ficheros de wireshark
-import pcapng
+from pcapng import FileScanner
+import scapy
 
 class Controller(ABC):
     """Clase controlador."""

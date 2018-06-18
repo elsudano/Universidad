@@ -15,7 +15,3 @@ class Model(ABC):
     def __init__(self):
         """Constructor por defecto."""
         # para la represntación interactiva
-
-    @abstractmethod
-    def open_pcapng(self):
-        pass
