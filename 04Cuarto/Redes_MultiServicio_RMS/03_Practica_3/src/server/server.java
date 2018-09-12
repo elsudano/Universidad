@@ -1,7 +1,6 @@
 package server;
 
 import com.github.sarxos.webcam.Webcam;
-import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -47,11 +46,11 @@ public class server extends Thread {
             this.webcam.open();
             BufferedImage image = this.webcam.getImage();
             this.webcam.close();
-            ByteArrayOutputStream baos = new ByteArrayOutputStream(image.getHeight() * image.getWidth() * image.getData().getNumBands());
-            ImageIO.write(image, "PNG", baos);
-            baos.writeTo(socket_tcp.getOutputStream());
-            baos.flush();
-            baos.close();
+            try (ByteArrayOutputStream baos = new ByteArrayOutputStream(image.getHeight() * image.getWidth() * image.getData().getNumBands())) {
+                ImageIO.write(image, "PNG", baos);
+                baos.writeTo(socket_tcp.getOutputStream());
+                baos.flush();
+            }
         } catch (IOException ex) {
             Logger.getLogger(server.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -65,18 +64,20 @@ public class server extends Thread {
             this.webcam.close();
             int ancho = image.getWidth();
             int alto = image.getHeight();
-            ByteArrayOutputStream baos = new ByteArrayOutputStream(ancho * alto * 4);
-            for (int h = 0; h < alto; h++) {
-                for (int w = 0; w < ancho; w++) {
-                    baos.write(utilities.toBytes(image.getRGB(w, h)));
-                }
+            byte[] image_data;
+            int num_of_datagrams;
+            int rest;
+            try (ByteArrayOutputStream baos = new ByteArrayOutputStream(ancho * alto * 4)) {
+                for (int h = 0; h < alto; h++) {
+                    for (int w = 0; w < ancho; w++) {
+                        baos.write(utilities.toBytes(image.getRGB(w, h)));
+                    }
+                }   image_data = baos.toByteArray();
+                num_of_datagrams = image_data.length / size_package;
+                rest = image_data.length % size_package;
+                System.out.println("Bytes a enviar: " + image_data.length + ", Datagramas: " + num_of_datagrams + ", Alto: " + alto + ", Ancho: " + ancho + ", Resto: " + rest);
+                baos.flush();
             }
-            byte[] image_data = baos.toByteArray();
-            int num_of_datagrams = image_data.length / size_package;
-            int rest = image_data.length % size_package;
-            System.out.println("Bytes a enviar: " + image_data.length + ", Datagramas: " + num_of_datagrams + ", Alto: " + alto + ", Ancho: " + ancho + ", Resto: " + rest);
-            baos.flush();
-            baos.close();
             socket_udp.receive(pack);
             /**
              * las cuatro lineas de a continuación se encargan de crear el
