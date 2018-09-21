@@ -1,0 +1,15 @@
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+    config.vm.box = "virtualbox"
+    config.vm.box="generic/fedora28"
+    config.vm.communicator = "ssh"
+    config.ssh.username = "usuario"
+    config.ssh.private_key_path = '~/.ssh/id_rsa_deploying'
+    config.vm.hostname = "develop-machine"
+    
+    # Provisionamiento con ansible
+    config.vm.provision :ansible do |ansible|
+        ansible.playbook = "./provision/playbook.yml"
+    end
+end

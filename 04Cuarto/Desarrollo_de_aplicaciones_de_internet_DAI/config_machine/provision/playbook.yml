@@ -1,0 +1,27 @@
+ ---
+
+- hosts: all
+  remote_user: usuario
+  # environment:
+  #  GOPATH: "/home/usuario/go"
+  tasks:
+  - name: Actualizacion
+    command: dnf update
+    become: true
+  # - name: Instalar Git
+  #   command: apt -y install git
+  #   become: true
+  # - name: Instalar GoLang
+  #   command: apt -y install golang-go
+  #   become: true
+  # - name: Imprimir variables de Entorno
+  #   command: env
+  #   register: env_vars
+  # - debug: msg="{{ env_vars.stdout }}"
+  # - name: Crear directorios de aplicación
+  #   file:
+  #   path: /home/$USER/go
+  #   state: directory
+  #   mode: 0755
+  # - name: Instalar Middleware
+  #   command: go get github.com/elsudano/MiddleWare_NextCloud
