@@ -14,6 +14,9 @@ EXT = py
 ###############################################################################
 # ruta del comando cliente para el despliegue en Zeit.co
 NOW_COMMAND = /home/usuario/now-linux
+VAGRANT_COMMAND = vagrant
+FABRIC_COMMAND = fab
+ANSIBLE_COMMAND = ansible
 SSH_COMMAND = ssh
 SED_COMMAND = sed
 
@@ -23,7 +26,7 @@ WEBCLI = curl
 
 ###############################################################################
 # Configuración para las configuraciones remotas
-WEB_LOCAL_SRV = localhost:# pruebas en local
+WEB_LOCAL_SRV = localhost # pruebas en local
 URL_ZEIT = middlewarenextcloud-ysiglvkfgt.now.sh
 WEB_ZEIT_SRV = https://${URL_ZEIT}#Pruebas en remoto
 ID_RSA_FILE = ~/.ssh/id_rsa_deploying
@@ -32,6 +35,7 @@ KNOWN_FILE = ~/.ssh/known_hosts
 ###############################################################################
 # Nombre del programa Principal
 NAME = main
+USER = vagrant
 
 ###############################################################################
 # Comando para eliminar los ficheros
@@ -46,53 +50,33 @@ COMPILER = python3.6
 
 all: clean help
 
+run: provision_local
+
 makedir:
 	@mkdir ./$(BIN_DIR)
 
-run:
-	$(COMPILER) $(SRC_DIR)$(NAME).$(EXT)
+connect:
+	@$(SED_COMMAND) '/$(WEB_LOCAL_SRV)/d' $(KNOWN_FILE) > $(KNOWN_FILE)
+	@$(SSH_COMMAND) -i $(ID_RSA_FILE) $(USER)@$(WEB_LOCAL_SRV) -p 2222
+	
+stop:
+	$(VAGRANT_COMMAND) halt
+	
+deploy_local: clean
+	$(VAGRANT_COMMAND) up --no-provision
 
-build: clean makedir 
-	$(COMPILER) build -o $(BIN_DIR)$(NAME) $(SRC_DIR)*.$(EXT)
+provision_local: clean deploy_local
+	$(VAGRANT_COMMAND) provision
 
-deploy: clean
+clean_local_deploy: clean
+	$(VAGRANT_COMMAND) destroy --force
+
+deploy_ext: clean
 	$(NOW_COMMAND) -e USER_NEXTCLOUD=${USER_NEXTCLOUD} -e PASS_NEXTCLOUD=${PASS_NEXTCLOUD} -e DOMAIN=${DOMAIN} -e URL_BASE=${URL_BASE} -e PORT=${PORT} --public
 
-connect:
-	@$(SED_COMMAND) '/$(URL_AZURE)/d' $(KNOWN_FILE) > $(KNOWN_FILE)
-	@$(SSH_COMMAND) -i $(ID_RSA_FILE) $(URL_AZURE)
-
-
-clean_deploy: clean
+clean_ext_deploy: clean
 	$(NOW_COMMAND) rm $(NAME) -y
 
-tests: clean
-	$(COMPILER) test $(SRC_DIR)*_test.$(EXT)
-
-test_status: clean
-	@echo "LOCAL"
-	$(WEBCLI) $(WEB_LOCAL_SRV)${PORT}/status
-	@echo "HEROKU"
-	$(WEBCLI) $(WEB_HEROKU_SRV)/status
-	@echo "ZEIT"
-	$(WEBCLI) $(WEB_ZEIT_SRV)/status
-	@echo "AZURE"
-	$(WEBCLI) $(WEB_AZURE_SRV)/status
-
-test_list: clean
-	$(WEBCLI) $(WEB_LOCAL_SRV)${PORT}/list | jq
-
-test_show: clean
-	$(WEBCLI) $(WEB_LOCAL_SRV)${PORT}/show/$(ID) | jq
-
-test_new: clean
-	$(WEBCLI) $(WEB_LOCAL_SRV)${PORT}/new $(STRING2)
-
-test_update: clean
-	$(WEBCLI) $(WEB_LOCAL_SRV)${PORT}/update $(ID)
-
-test_delete: clean
-	$(WEBCLI) $(WEB_LOCAL_SRV):${PORT}/delete $(STRING1)
 
 docu:
 	@doxygen ./doc/doxys/dox_config
@@ -105,19 +89,15 @@ touch:
 
 help:
 	@echo "Available targets:"
-	@echo "- run          Run Application whitout compile"
-	@echo "- build        Generate bin file on directory $(BIN_DIR)"
-	@echo "- deploy       Execute now for deploy on Zeit.co"
-	@echo "- connect      Connect by ssh to Azure Virtual Machine"
-	@echo "- clean_deploy Clean all instances of Zeit.co"
-	@echo "- tests        Run tests"
-	@echo "- test_status  Run test for status command in all containers"
-	@echo "- test_list    Run test for list command of webservice"
-	@echo "- test_show    Run test for show command of webservice"
-	@echo "- test_new     Run test for new command of webservice"
-	@echo "- test_update  Run test for update command of webservice"
-	@echo "- test_delete  Run test for delete command of webservice"
-	@echo "- docu         Create a documentation of project"
-	@echo "- clean        Clean up the source directory $(SRC_DIR) and bin directory $(BIN_DIR)"
-	@echo "- help         This info"
+	@echo "- run		    Run Application whitout compile"
+	@echo "- stop		    Stop machine and application"
+	@echo "- connect	    Connect by ssh to Azure Virtual Machine"
+	@echo "- deploy_local       Deploy machine and execute program in local instance"
+	@echo "- provision_local    Provisioning software with ansible"
+	@echo "- clean_local_deploy Clean all objects, machine and software to the local instance"
+	@echo "- clean              Clean up bin directory $(BIN_DIR)"
+	@echo "- deploy_ext         Execute now for deploy on Zeit.co"
+	@echo "- clean_ext_deploy   Clean all instances of Zeit.co"
+	@echo "- docu		    Create a documentation of project"
+	@echo "- help               This info"
 	@echo 

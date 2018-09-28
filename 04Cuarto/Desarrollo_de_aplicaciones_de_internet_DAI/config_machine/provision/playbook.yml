@@ -1,27 +1,58 @@
- ---
-
+---
 - hosts: all
-  remote_user: usuario
+  remote_user: vagrant
   # environment:
   #  GOPATH: "/home/usuario/go"
   tasks:
-  - name: Actualizacion
-    command: dnf update
-    become: true
-  # - name: Instalar Git
-  #   command: apt -y install git
-  #   become: true
-  # - name: Instalar GoLang
-  #   command: apt -y install golang-go
-  #   become: true
-  # - name: Imprimir variables de Entorno
-  #   command: env
-  #   register: env_vars
-  # - debug: msg="{{ env_vars.stdout }}"
-  # - name: Crear directorios de aplicación
-  #   file:
-  #   path: /home/$USER/go
-  #   state: directory
-  #   mode: 0755
-  # - name: Instalar Middleware
-  #   command: go get github.com/elsudano/MiddleWare_NextCloud
+    - name: upgrade all packages
+      become: yes
+      dnf:
+        name: "*"
+        state: latest
+    - name: Install requeriments of disable selinux
+      become: yes
+      dnf:
+        name: "libselinux-python"
+        state: latest
+    - name: Disable SeLinux
+      become: yes
+      selinux:
+        state: disabled
+    - name: Stoping FirewallD
+      become: yes
+      systemd:
+        name: firewalld
+        state: stopped
+    - name: Install htop
+      become: yes
+      dnf:
+        name: "htop"
+        state: latest
+    - name: Install nano
+      become: yes
+      dnf:
+        name: "nano"
+        state: latest
+    - name: Install Flask
+      become: yes
+      dnf:
+        name: "python3-flask"
+        state: latest
+    #- name: Print on screen envirotments vars
+    #  command: env
+    #  register: env_vars
+    #- debug: msg="{{ env_vars.stdout }}"
+    - name: Make directory of develop
+      file:
+        path: "/home/$USER/src"
+        state: directory
+        mode: 0755
+    - name: Copy Source Code to remote machine
+      copy:
+        src: ~/GitHub/Universidad/04Cuarto/Desarrollo_de_aplicaciones_de_internet_DAI/config_machine/src/
+        dest: ~/src/
+        owner: vagrant
+        group: vagrant
+        mode: 0744
+    - name: Run Application
+      command: python3.6 ~/src/holaMundo.py &
