@@ -1,0 +1,6 @@
+.vagrant
+.nofile
+*.retry
+.nofile
+*.pyc
+__pycache__/

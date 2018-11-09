@@ -1,8 +1,8 @@
 ---
 - hosts: all
   remote_user: vagrant
-  # environment:
-  #  GOPATH: "/home/usuario/go"
+  environment:
+    FLASK_APP: "/home/$USER/src/main.py"
   tasks:
     - name: upgrade all packages
       become: yes
@@ -33,26 +33,48 @@
       dnf:
         name: "nano"
         state: latest
+    - name: Install net tools basic
+      become: yes
+      dnf:
+        name: "net-tools"
+        state: latest
     - name: Install Flask
       become: yes
       dnf:
         name: "python3-flask"
         state: latest
-    #- name: Print on screen envirotments vars
-    #  command: env
-    #  register: env_vars
-    #- debug: msg="{{ env_vars.stdout }}"
-    - name: Make directory of develop
-      file:
-        path: "/home/$USER/src"
-        state: directory
-        mode: 0755
-    - name: Copy Source Code to remote machine
-      copy:
-        src: ~/GitHub/Universidad/04Cuarto/Desarrollo_de_aplicaciones_de_internet_DAI/config_machine/src/
-        dest: ~/src/
-        owner: vagrant
-        group: vagrant
-        mode: 0744
-    - name: Run Application
-      command: python3.6 ~/src/holaMundo.py &
+    - name: Install PIL library for images
+      become: yes
+      dnf:
+        name: "python3-pillow"
+        state: latest
+    - name: Setting environment var FLASK_APP
+      become: yes
+      lineinfile:
+        path: /etc/profile
+        create: yes
+        line: 'export FLASK_APP="/home/$USER/src/main.py"'
+    - name: Setting environment var FLASK_ENV
+      become: yes
+      lineinfile:
+        path: /etc/profile
+        create: yes
+        line: 'export FLASK_ENV=development'
+#    - name: Copy Source Code to remote machine
+#      copy:
+#        src: ~/GitHub/Universidad/04Cuarto/Desarrollo_de_aplicaciones_de_internet_DAI/config_machine/src/
+#        dest: ~/src/
+#        owner: vagrant
+#        group: vagrant
+#        mode: 0744
+#    - name: Print on screen envirotments vars
+#      command: env
+#      register: env_vars
+#    - debug: msg="{{ env_vars.stdout }}"
+#    - name: Make directory of develop
+#      file:
+#        path: "/home/$USER/src"
+#        state: directory
+#        mode: 0755
+#    - name: Run Application
+#      command: "ifconfig"
