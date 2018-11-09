@@ -6,7 +6,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # Para que esta linea funcione es necesario instalar el plugin de vagrant
     # Con esta linea sincronizamos el directorio de desarrollo con la maquina virtuaĺ
     # vagrant plugin install vagrant-vbguest
-    config.vm.synced_folder 'src/', '/home/vagrant/src', SharedFoldersEnableSymlinksCreate: false, disabled: true
+    config.vm.synced_folder 'src/', '/home/vagrant/src', SharedFoldersEnableSymlinksCreate: false#, disabled: true
     config.vm.communicator = "ssh"
     config.ssh.username = "vagrant"
     config.ssh.password = "vagrant"

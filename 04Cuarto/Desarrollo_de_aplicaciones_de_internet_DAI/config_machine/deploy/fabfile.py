@@ -47,7 +47,7 @@ def remove():
     poweroff()
     local('vagrant destroy --force')
 
-def tests_for_app():
+def tests_app():
     run('env')
 
 def test():
