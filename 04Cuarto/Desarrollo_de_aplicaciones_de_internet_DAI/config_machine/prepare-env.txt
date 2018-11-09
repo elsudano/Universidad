@@ -1,10 +1,10 @@
 Copy and paste this lines into to .bashrc file on you user, and later restart you terminal
 
 # FABRIC COMMANDS{{{
-    alias fab-poweron='fab -f deploy/fabfile.py poweron'
-    alias fab-poweroff='fab -f deploy/fabfile.py poweroff'
-    alias fab-restart='fab -f deploy/fabfile.py restart'
     alias fab-remove='fab -f deploy/fabfile.py remove'
-    alias fab-test-app='fab -f deploy/fabfile.py test_app'
+    alias fab-restart='fab -f deploy/fabfile.py restart'
+    alias fab-start='fab -f deploy/fabfile.py start'
+    alias fab-stop='fab -f deploy/fabfile.py stop'
+    alias fab-tests-app='fab -f deploy/fabfile.py tests_app'
 #}}}
 

@@ -28,27 +28,30 @@ def _topost():
     run('mkdir -p ~/src')
     put('~/GitHub/Universidad/04Cuarto/Desarrollo_de_aplicaciones_de_internet_DAI/config_machine/src', '~/')
 
-def poweron():
+def start():
     _levantar_maquina()
     _configurar_maquina()
-
-def abracadabra():
-    #_topost()
     _ejecutar_aplicacion()
     
 def restart():
     _configurar_maquina()
     _ejecutar_aplicacion()
     
-def poweroff():
+def stop():
     _detener_maquina()
 
 def remove():
-    poweroff()
+    stop()
     local('vagrant destroy --force')
 
 def tests_app():
-    run('env')
+    local('curl localhost:8080')
+    local('curl localhost:8080/static')
+    local('curl localhost:8080/var/Carlos_de_la_Torre')
+    local('curl localhost:8080/static-data')
+    local('curl localhost:8080/random-image --output -')
+    local('curl localhost:8080/dynamic-image/2/2/-2/-2/300/75/0 --output -')
+    local('curl localhost:8080/error')
 
 def test():
     run('env')
