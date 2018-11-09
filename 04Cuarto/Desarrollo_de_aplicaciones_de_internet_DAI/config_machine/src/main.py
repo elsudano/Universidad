@@ -3,8 +3,9 @@
 
 from PIL import Image
 from flask import Flask, send_file
+from random import randint
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="static_dir")
 
 # paleta es una lista de 3-tuplas con los valores RGB de cada color de la paleta
 def getColorPaleta(paleta, nColoresPaleta, color):
@@ -62,7 +63,42 @@ def hello_world():
 
 @app.route('/static')
 def static_content():
-    return 'static content'
+    data = """<html xmlns="http://www.w3.org/1999/xhtml"> \
+    <head> \
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> \
+        <title>Mantenimiento</title> \
+        <style type="text/css"> \
+            body, html  { height: 100%; }html, body, div, span, applet, object, iframe,/*h1,2, h3, h4, h5, h6,*/ p, blockquote, pre,a, abbr, acronym, address,del, dfn, em, font, img, ins, kbd, q, s, samp,small, strike, strong, sub, sup, tt, var,b, u, i, center,dl, dt, dd, ol, ul, li,fieldset, form, label, legend,table, caption, tbody, tfoot, thead, tr, th, td {margin: 0;padding: 0;border: 0;outline: 0;font-size: 100%;vertical-align: baseline;background: transparent;}body { line-height: 1; }ol, ul { list-style: none; }blockquote, q { quotes: none; }blockquote:before, blockquote:after, q:before, q:after { content: ''; content: none; }:focus { outline: 0; }del { text-decoration: line-through; }table {border-spacing: 0; } \
+            .clear {clear: both;display: block;overflow: hidden;visibility: hidden;width: 0;height: 0;} \
+            body{ \
+                color: #e9e2ee; \
+                font-size: 14px; \
+                font-family: sans-serif; \
+                line-height: 20px; \
+                background: #55575c; \
+                text-shadow: 0 1px 1px rgba(0,0,0,0.75); \
+                -webkit-box-shadow: inset 0 0 300px rgba(0,0,0,0.5); \
+                -moz-box-shadow: inset 0 0 300px rgba(0,0,0,0.5); \
+                        box-shadow: inset 0 0 300px rgba(0,0,0,0.5); \
+            } \
+            h1{ \
+                text-align: center;
+                font-size: 40px;
+            } \
+            p{ \
+                margin-bottom: 0.3em;
+                text-align: center;\
+            } \
+        </style> \
+        <link rel="stylesheet" href="style.css"> \
+    </head> \
+    <body> \
+        <br>
+        <h1>Mantenimeinto</h1> \
+        <p>Volvemos en breve, estamos de mantenimiento, gracias por esperarnos</p> \
+    </body> \
+    </html>"""
+    return data
 
 @app.route('/var/<var>')
 def var_name(var):
@@ -72,9 +108,21 @@ def var_name(var):
 def page_not_found(e):
     return 'Error 404 página no encontrada'
 
-@app.route('/static-image')
-def static_image():
-    return 'dynamic image'
+@app.route('/static-data')
+def static_data():
+    return send_file("/home/vagrant/src/static.html", mimetype='text/html')
+
+@app.route('/random-image')
+def dynamic_image_random():
+    npaleta=randint(0,2)
+    if (npaleta == 1):
+        paleta = [(96,111,140), (80,55,0), (0,100,25)] #cambiar colores
+    elif (npaleta == 2):
+        paleta = [(0,0,0), (255,255,255)]
+    else:
+        paleta = [(255,0,0), (0,255,0), (0,0,255)]
+    renderizaMandelbrotBonito(2.0, 2.0, -2.0, -2.0, 400, randint(50,200), "/home/vagrant/src/imagen.png", paleta, 6)
+    return send_file("/home/vagrant/src/imagen.png", mimetype='image/png')
 
 @app.route('/dynamic-image/<x1>/<y1>/<x2>/<y2>/<w>/<i>/<p>')
 def dynamic_image(x1,y1,x2,y2,w,i,p):
