@@ -4,7 +4,7 @@
   environment:
     FLASK_APP: "/home/$USER/src/practica3-4.py"
   pre_tasks:
- 
+
   tasks:
 #    - name: Upgrade all packages
 #      become: yes

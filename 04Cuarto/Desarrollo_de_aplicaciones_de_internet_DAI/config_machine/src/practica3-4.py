@@ -54,19 +54,19 @@ def hello_world():
 
 @app.route('/hello')
 def hello_template():
-    
+    return "Hola"
 
 @app.route('/var/<myvar>')
 def var_name(myvar):
-
+    return "Hola"
 
 @app.route('/static-data')
 def static_data():
-
+    return "Hola"
 
 @app.route('/random-image')
 def dynamic_image_random():
-
+    return "Hola"
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -102,5 +102,5 @@ def page_not_found(e):
     return data
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', ssl_context='adhoc')
 

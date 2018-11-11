@@ -4,9 +4,10 @@ import os, sys
 from fabric.api import env, local, run, sudo
 from fabric.operations import put
 
+env.user = 'vagrant'
+env.key_filename = "~/.ssh/id_rsa_deploying"
+
 def _set_env(envirotment):
-    env.user = 'vagrant'
-    env.password = 'vagrant'
     if envirotment == "local":
         env.host_string = 'localhost:2222'
     elif envirotment == "remote":
@@ -36,7 +37,7 @@ def _configurar_maquina(envirotment):
         local('vagrant provision remote')
 
 def _ejecutar_aplicacion(envirotment):
-    run('flask-3.7 run -h 0.0.0.0 -p 5000')
+    run('flask-3.6 run -h 0.0.0.0 -p 8080')
 
 def _eliminar_maquina(envirotment):
     if envirotment == "local":
@@ -44,19 +45,33 @@ def _eliminar_maquina(envirotment):
     elif envirotment == "remote":
         local('vagrant destroy remote --force')
 
+def _create_floating_ip():
+    print "En esta funcion creamos la ip publica y la presentamos por pantalla para que se pueda asignar al dominio que nosostros queremos ademas se guarda en una variable global para que la podamos asignar luego a la maquina que hemos creado"
+
+def _assing_floating_ip():
+    fip = os.environ['DO_FIP']
+    print "Tienes que asignar la ip publica %s que se ha creado antes a la maquina que queremos que responda" % fip
+
 # Esto es para poder copiar la aplicación al servidor remoto cuando
 # no tengamos la opción de sincronizar carpetas locales con la maquina
 # de desarrollo
-def _topost():
+def _toput():
     run('mkdir -p ~/src')
     put('~/GitHub/Universidad/04Cuarto/Desarrollo_de_aplicaciones_de_internet_DAI/config_machine/src', '~/')
 
 def start(envirotment):
     _set_env(envirotment)
     _levantar_maquina(envirotment)
+    if envirotment == "remote":
+        _assing_floating_ip()
 
 def play(envirotment):
     _set_env(envirotment)
+    if envirotment == "local":
+        local('ssh-copy-id -i /home/usuario/.ssh/id_rsa_deploying vagrant@127.0.0.1 -p 2222')
+        _toput()
+    elif envirotment == "remote":
+        local('vagrant ssh remote -c "sudo dnf install python2.x86_64 firewalld.noarch -y"')
     _configurar_maquina(envirotment)
     _ejecutar_aplicacion(envirotment)
 
