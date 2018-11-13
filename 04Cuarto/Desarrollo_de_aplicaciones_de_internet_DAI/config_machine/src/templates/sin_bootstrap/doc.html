@@ -1,0 +1,37 @@
+{% extends "sin_bootstrap/body.html" %}
+
+{% block content %}
+<section>
+    <header id="artheader">
+        <h2>Documentación de la Aplicación</h2>
+    </header>
+    <article>
+        <p>La siguiente aplicación solamente responde a una serie de URLs, de entre las que se destacan las siguientes:</p>
+        <header>
+            <h4>Index Principal /</h4>
+        </header>
+        <p>Muestra la primera plantilla utilizada con Jinja32</p>
+        <header>
+            <h4>Recogiendo Variables /var/(nombre)</h4>
+        </header>
+        <p>En esta dirección nos saldrá un saludo personalizado en el cual sustituirá lo que pongamos en la URL en el lugar donde se encuentra (nombre) por un valor dado, es una forma de probar la entrada de datos a la aplicación</p>
+        <header>
+            <h4>Datos Estáticos /static-data</h4>
+        </header>
+        <p>En esta dirección lo que vamos a encontrar es una página estática pero esta vez será leida desde un fichero HTML</p>
+        <header>
+            <h4>Imágen Aleatoria /random-image</h4>
+        </header>
+        <p>Generá una imágen fractal y la muestra en el navegador</p>
+        <header>
+            <h4>Imágen Dinámica /dynamic-image/(x1)/(y1)/(x2)/(y2)/(w)/(i)/(p)</h4>
+        </header>
+        <p>Generá una imágen fractal y la muestra en el navegador, pero en está ocasión hay que poner los párametros que queremos para la imágen, quedando de la siguiente manera los datos a pasar: coordenada x1, coordenada y1, coordenada x2, coordenada y2, ancho de la imágen, cantidad de itraciones para el fractal y paleta de colores</p>
+        <header>
+            <h4>Página de Error 404</h4>
+        </header>
+        <p>Por último si no encuentra la página que el usuario esta buscando, la aplicación mostrará una pagina de error personalizada</p>
+    </article>
+</section>
+{% endblock %}
+ 

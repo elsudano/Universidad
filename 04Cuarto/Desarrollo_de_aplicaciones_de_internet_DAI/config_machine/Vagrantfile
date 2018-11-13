@@ -9,11 +9,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         # Para que esta linea funcione es necesario instalar el plugin de vagrant
         # Con esta linea sincronizamos el directorio de desarrollo con la maquina virtuaĺ
         # vagrant plugin install vagrant-vbguest
-        config.vm.synced_folder 'src/', '/home/vagrant/src', SharedFoldersEnableSymlinksCreate: false, disabled: true
+        config.vm.synced_folder 'src/', '/home/vagrant/src', SharedFoldersEnableSymlinksCreate: false#, disabled: true
         config.vm.communicator = "ssh"
         config.ssh.username = "vagrant"
-        config.ssh.insert_key = true
-        config.ssh.private_key_path = '~/.ssh/id_rsa_deploying'
+        config.ssh.password = "vagrant"
+        #config.ssh.insert_key = true
+        #config.ssh.private_key_path = '~/.ssh/id_rsa_deploying'
         config.vm.hostname = "local-dev-machine"
         config.vm.network "forwarded_port", guest: 8080, host: 8080
     end
@@ -40,7 +41,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
     # Provisionamiento con ansible
     config.vm.provision :ansible do |ansible|
-        ansible.playbook = "./provision/playbook.yml"
+        ansible.playbook = "./provision/playbook_practica1-4.yml"
     end
 end
 

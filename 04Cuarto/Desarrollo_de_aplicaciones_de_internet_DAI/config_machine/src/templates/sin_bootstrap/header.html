@@ -1,0 +1,45 @@
+{#% extends "sin_bootstrap/body.html" %#}
+
+{% block header %}
+<header id="top">
+    <table id="maintable">
+        <tr>
+            <td>
+                <a href="index"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo"></a>
+            </td>
+            <td>
+                <h1>Applicación Flask</h1>
+            </td>
+            <td>
+                {% if user %}
+                <div>
+                    <h2>Welcome {{user}}</h2>
+                    <a href="/logout">Log out</a>
+                </div>
+                {% else %}
+                    <div>
+                        <form method=get action="/">
+                            <dl>
+                                User: <input type="text" name="user">
+                                Password: <input type="password" name="pass">
+                            </dl>
+                            <p><input type=submit value=Register></p>
+                        </form>
+                    </div>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+</header>
+<nav>
+    <ul>
+        {% include 'sin_bootstrap/navigator.html' %}
+        {% if not user %}
+            <li>
+                <a href="register">Register/Login</a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>  
+{% endblock %}
+

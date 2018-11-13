@@ -1,0 +1,10 @@
+{% extends "con_bootstrap/base.html" %}
+
+{% block body %}
+{% include 'con_bootstrap/header.html' %}
+    <div id="wrapper">
+    {% block content %}{% endblock %}
+    </div>
+    <!-- /#wrapper -->
+{% include 'con_bootstrap/footer.html' %}
+{% endblock %}

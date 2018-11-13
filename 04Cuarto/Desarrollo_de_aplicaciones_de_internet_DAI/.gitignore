@@ -4,3 +4,8 @@
 .nofile
 *.pyc
 __pycache__/
+secure/
+less/
+pages/
+vendor/
+*.rb

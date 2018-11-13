@@ -9,6 +9,7 @@ env.key_filename = "~/.ssh/id_rsa_deploying"
 
 def _set_env(envirotment):
     if envirotment == "local":
+        env.password = 'vagrant'
         env.host_string = 'localhost:2222'
     elif envirotment == "remote":
         env.host_string = 'dai.sudano.net:22'
@@ -37,7 +38,7 @@ def _configurar_maquina(envirotment):
         local('vagrant provision remote')
 
 def _ejecutar_aplicacion(envirotment):
-    run('flask-3.6 run -h 0.0.0.0 -p 8080')
+    run('flask-3.6 run --debugger -h 0.0.0.0 -p 8080')
 
 def _eliminar_maquina(envirotment):
     if envirotment == "local":
@@ -67,16 +68,18 @@ def start(envirotment):
 
 def play(envirotment):
     _set_env(envirotment)
-    if envirotment == "local":
-        local('ssh-copy-id -i /home/usuario/.ssh/id_rsa_deploying vagrant@127.0.0.1 -p 2222')
-        _toput()
-    elif envirotment == "remote":
+    if envirotment == "remote":
         local('vagrant ssh remote -c "sudo dnf install python2.x86_64 firewalld.noarch -y"')
     _configurar_maquina(envirotment)
+    #if envirotment == "local":
+        #local('ssh-copy-id -i /home/usuario/.ssh/id_rsa_deploying vagrant@localhost -p 2222')
+        #_toput()
     _ejecutar_aplicacion(envirotment)
 
 def restart(envirotment):
+    _detener_maquina(envirotment)
     _set_env(envirotment)
+    _levantar_maquina(envirotment)
     _configurar_maquina(envirotment)
     _ejecutar_aplicacion(envirotment)
     
