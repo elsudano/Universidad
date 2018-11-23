@@ -1,17 +1,33 @@
 {% extends "sin_bootstrap/body.html" %}
-
 {% block content %}
 <section>
     <header id="artheader">
-        <h2>Intentando registrar al Usuario: {{name}}</h2>
+        <h2>Intentando registrar al Usuario: {{user}}</h2>
     </header>
+    {% if not user %}
     <article>
-    {% if reg %}
-        <p>El registro se a procesado con éxito</p>
-    {% else %}
-        <p>Ocurrio algún fallo y no se ha podido registrar al usuario</p>
-    {% endif %}
+        <form action='/session' method='POST'>
+            {% if ocupado %}
+            <p>Este usuario ya está registrado, introduzca un nuevo usuario.</p><br>
+            {% endif %}
+            {% if camposVacios %}
+            <p>Debes rellenar todos los campos </p>
+            {% endif %}
+            {% if reg %}
+            <p>El registro se a procesado con éxito</p>
+            {% else %}
+            <p>Ocurrio algún fallo y no se ha podido registrar al usuario</p>
+            {% endif %}
+            <dl>
+                <imput type="hidden" id="action" name="action" value="register">
+                User: <input type="text" id="user" name="user">
+                Password: <input type="password" id="pass" name="passwd">
+                <input type=submit value=Registrar>
+            </dl>
+        </form>
     </article>
+    {% else %}
+    <p>Muchas gracias por usar nuestra página, hasta la próxima</p>
+    {% endif %}
 </section>
 {% endblock %}
- 

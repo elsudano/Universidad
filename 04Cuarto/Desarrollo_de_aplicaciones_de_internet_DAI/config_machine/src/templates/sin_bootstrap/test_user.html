@@ -1,16 +1,24 @@
 {% extends "sin_bootstrap/body.html" %}
-
 {% block content %}
 <section>
     <header id="artheader">
-        <h2>Comprobando la existencia del Usuario: {{name}}</h2>
+        <h2>Comprobando la existencia del Usuario: {{user}}</h2>
     </header>
     <article>
-    {% if exist %}
-        <p>El usuario existe en el sistema</p>
-    {% else %}
-        <p>El usuario <strong>NO</strong> existe en el sistema, o la contraseña no es la adecuada</p>
-    {% endif %}
+        {% if exist %}
+            <p>El usuario <strong>{{user}}</strong> existe en el sistema</p>
+        {% else %}
+            <p>El usuario {{user}} <strong>NO</strong> existe en el sistema, o la contraseña no es la adecuada</p>
+        {% endif %}
+        <div>
+            <form action='/test_user' method='POST'>
+                <dl>
+                    User: <input type="text" id="user" name="user">
+                    Password: <input type="password" id="pass" name="passwd">
+                    <input type=submit value=Register>
+                </dl>
+            </form>
+        </div>
     </article>
 </section>
 {% endblock %}

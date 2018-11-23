@@ -3,7 +3,7 @@
     <table id="maintable">
         <tr>
             <td>
-                <a href="index"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" height="100" width="100"></a>
+                <a href="index"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" height="150" width="150"></a>
             </td>
             <td>
                 <h1>Applicación Flask</h1>
@@ -11,19 +11,22 @@
             <td>
                 {% if user %}<div>
                     <h2>Welcome {{user}}</h2>
-                    <a href="/session">Log out</a>
+                    <form action='/session' method='POST'>
+                        <input type="hidden" name="action" value="logout">
+                        <p><input type=submit value=Logout></p>
+                    </form>
                 </div>
                 {% else %}<div>
-                    <form action='/register' method='POST'>
+                    <form action='/session' method='POST'>
                         <dl>
+                            <input type="hidden" name="action" value="login">
                             User: <input type="text" name="user">
-                            Password: <input type="password" name="pass">
+                            Password: <input type="password" name="passwd">
                         </dl>
-                        <p><input type=submit value=Register></p>
+                        <p><input type=submit value=Login></p>
                     </form>
                 </div>{% endif %}
             </td>
         </tr>
     </table>
 </header>{% endblock %}
-

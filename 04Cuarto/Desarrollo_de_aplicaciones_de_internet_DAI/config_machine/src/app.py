@@ -21,13 +21,13 @@ def db_manage(action,user,passwd=None):
     db = PickleShareDB('~/src/database')
     md5 = hashlib.md5()
     salt = 'sal&pimienta'
-    if action == 'read' and user in db:
+    if action == 'read' and user != None and user in db:
         if passwd == None or passwd == '':
             result = False
         else:
             passwd = salt + passwd
             passwd = passwd.encode('utf-8')
-            passwd = md5.update(passwd)
+            md5.update(passwd)
             if md5.hexdigest() == db[user].get("passwd"):
                 result = True
             else:
@@ -35,7 +35,7 @@ def db_manage(action,user,passwd=None):
     elif action == 'write':
         passwd = salt + passwd
         passwd = passwd.encode('utf-8')
-        passwd = md5.update(passwd)
+        md5.update(passwd)
         passwd = md5.hexdigest()
         db[user] = {'passwd': passwd}
         db[user] = db[user]
@@ -64,7 +64,6 @@ def make_menu():
         {'href':'/about','caption':'Sobre mi..'},
         {'href':'/doc','caption':'Documentación'},
         {'href':'/var/test','caption':'Test de variable'},
-        {'href':'/register','caption':'Registro de Usuario'},
         {'href':'/test_user','caption':'Test para el Usuario'},
     ]
     return menu_items
@@ -72,10 +71,10 @@ def make_menu():
 # ---------------------- Parte pública ---------------------------
 @app.route('/', methods=['GET', 'POST'])
 def index():
-#    if session['auth']:
-#        result = render_template('sin_bootstrap/index.html', user=session['user'], navigation=make_menu())
-#    else:
-    result = render_template('sin_bootstrap/index.html', navigation=make_menu())
+    if session.get('auth') == True:
+        result = render_template('sin_bootstrap/index.html', user=session['user'], navigation=make_menu())
+    else:
+        result = render_template('sin_bootstrap/index.html', navigation=make_menu())
     return result
 
 @app.route('/doc')
@@ -86,49 +85,64 @@ def doc():
         {'deno':'Manejo de Sesiones /session','desc':'Desde esta página podemos controlar a los usuarios que se conectan o que se quieren dar de alta en la página'},
         {'deno':'Página de Error 404','desc':'Por último si no encuentra la página que el usuario esta buscando, la aplicación mostrará una pagina de error personalizada'}
     ]
-    return render_template('sin_bootstrap/doc.html', docitems=docitems, navigation=make_menu())
+    if session.get('auth') == True:
+        result = render_template('sin_bootstrap/doc.html', user=session['user'], docitems=docitems, navigation=make_menu())
+    else:
+        result = render_template('sin_bootstrap/doc.html', navigation=make_menu())
+    return result
 
 @app.route('/var/<name>')
 def var(name):
-    return render_template('sin_bootstrap/var.html', name=name, navigation=make_menu())
+    if session.get('auth') == True:
+        result = render_template('sin_bootstrap/var.html', user=session['user'], name=name, navigation=make_menu())
+    else:
+        result = render_template('sin_bootstrap/var.html', navigation=make_menu())
+    return result
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    if register_user(request.form['user'], request.form['passwd']):
-        result = render_template('sin_bootstrap/register.html', reg=True, name=name, navigation=make_menu())
+    user = request.form.get('user')
+    passwd = request.form.get('passwd')
+    if register_user(user, passwd):
+        result = render_template('sin_bootstrap/register.html', reg=True, user=session['user'], navigation=make_menu())
     else:
-        result = render_template('sin_bootstrap/register.html', reg=False, name=name, navigation=make_menu())
+        result = render_template('sin_bootstrap/register.html', reg=False, user=user, navigation=make_menu())
     return result
 
-@app.route('/test_user', methods=['GET', 'POST'])
+@app.route('/test_user', methods=['GET','POST'])
 def test_user():
-    if exist_user(request.form['user'], request.form['passwd']):
-        result = render_template('sin_bootstrap/test_user.html', exist=True, name=name, navigation=make_menu())
+    user = request.form.get('user')
+    passwd = request.form.get('passwd')
+    if request.method == 'GET' and session.get('auth') == True:
+        result = render_template('sin_bootstrap/test_user.html', exist=True, user=session['user'], navigation=make_menu())
+    elif request.method == 'POST' and exist_user(user, passwd):
+        result = render_template('sin_bootstrap/test_user.html', exist=True, user=user, navigation=make_menu())
     else:
-        result = render_template('sin_bootstrap/test_user.html', exist=False, name=name, navigation=make_menu())
+        result = render_template('sin_bootstrap/test_user.html', navigation=make_menu())
     return result
 
 @app.route('/session', methods=['GET', 'POST'])
-def session():
+def session_user():
     result = None
-    if request.form['action'] == 'login':
-        if exist_user(request.form['user'], request.form['passwd']) != False:
-            # aquí tenemos que abrir la session
-            print ('Open session')
+    user = request.form.get('user')
+    passwd = request.form.get('passwd')
+    action = request.form.get('action')
+    if action == 'login':
+        if exist_user(user, passwd) != False:
             session['auth'] = True
-            result = render_template('sin_bootstrap/index.html', user=user, navigation=make_menu())
+            session['user'] = user
+            result = render_template('sin_bootstrap/index.html', user=session['user'], navigation=make_menu())
         else:
-            result = render_template('sin_bootstrap/session.html', navigation=make_menu())
-    elif request.form['action'] == 'logout':
-        # aquí tenemos que cerrar la session
+            result = render_template('sin_bootstrap/session.html', fail=True, navigation=make_menu())
+    elif action == 'logout':
         session['auth'] = False
         session.clear()
-        print ('Close session')
-    elif request.form['action'] == 'register':
-        register_user(request.form['user'], request.form['passwd'])
-        # aquí tenemos que abrir la session
-        print ('Open session')
-        result = render_template('sin_bootstrap/index.html', user=user, navigation=make_menu())
+        result = render_template('sin_bootstrap/index.html', navigation=make_menu())
+    elif action == 'register':
+        register_user(user, passwd)
+        session['auth'] = True
+        session['user'] = user
+        result = render_template('sin_bootstrap/index.html', user=session['user'], navigation=make_menu())
     else:
         result = render_template('sin_bootstrap/session.html', navigation=make_menu())
     return result

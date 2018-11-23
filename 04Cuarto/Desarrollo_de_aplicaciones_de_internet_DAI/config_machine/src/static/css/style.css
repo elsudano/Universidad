@@ -20,7 +20,10 @@ p{
     margin-left: 1em;
 }
 header{
-    background-color: #8f8;
+    background-color: #55575c;
+}
+footer{
+    background-color: #55575c;
 }
 table,th,td {
     border: 0;
@@ -31,16 +34,16 @@ table#maintable {
     width: 100%;
 }
 table#maintable td:nth-child(1) {
-    width: 10em;
-    background-color: #fcf;
+    width: 15em;
+    background-color: #55575c;
 }
 table#maintable td:nth-child(2) {
     width: auto;
-    background-color: #cfc;
+    background-color: #55575c;
 }
 table#maintable td:nth-child(3) {
-    width: 10em;
-    background-color: #dff;
+    width: 15em;
+    background-color: #55575c;
 }
 /* Esto es para un menu Vertical */
 ul {
@@ -48,7 +51,7 @@ ul {
     margin: 0;
     padding: 0;
     width: 200px;
-    background-color: #f1f1f1;
+/*    background-color: #f1f1f1;*/
 }
 li a {
     display: block;
@@ -57,7 +60,7 @@ li a {
     text-decoration: none;
 }
 li a:hover {
-    background-color: #555;
+    background-color: #333;
     color: white;
 }
 li a.active {
