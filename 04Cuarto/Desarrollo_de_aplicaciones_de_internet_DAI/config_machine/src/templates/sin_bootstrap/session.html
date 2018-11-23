@@ -1,0 +1,23 @@
+{% extends "sin_bootstrap/body.html" %}
+{% block content %}
+<section>
+    {% if not user %}
+    <h1>Alta de Usuarios</h1>
+    <form action='/session' method='POST'>
+        {% if ocupado %}
+        <p>Este usuario ya está registrado, introduzca un nuevo usuario.</p><br>
+        {% endif %}
+        {% if camposVacios %}
+        <p>Debes rellenar todos los campos </p>
+        {% endif %}
+        <input type="hidden" name="action" value="login">
+        <label for="user">Usuario:<input type="text" name="user"><br>
+        <label for="passwd">Contraseña:<input type="password" name="passwd"><br>
+        <input type="submit" value="Registrarme">
+    </form>
+    {% else %}
+    <p>Muchas gracias por usar nuestra página, hasta la próxima</p>
+    {% endif %}
+</section>
+{% endblock %}
+ 

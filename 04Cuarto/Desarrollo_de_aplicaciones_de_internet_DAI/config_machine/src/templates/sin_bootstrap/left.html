@@ -1,13 +1,14 @@
-{#% extends "sin_bootstrap/body.html" %#}
-
 {% block left %}
 <aside>
-    <ul>
-        <li>Left</li>
-        <li>Left</li>
-        <li>Left</li>
-        <li>Left</li>
-        <li>Left</li>
-    </ul>
+    <nav>
+        <ul>
+            {% include 'sin_bootstrap/navigator.html' %}
+            {% if not user %}
+                <li>
+                    <a href="/session">Register/Login</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
 </aside>
 {% endblock %}

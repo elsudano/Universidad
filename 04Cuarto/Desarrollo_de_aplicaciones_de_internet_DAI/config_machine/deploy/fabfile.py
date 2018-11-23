@@ -17,7 +17,7 @@ def _set_env(envirotment):
         print "Por favor indique una maquina valida para desplegar"
         sys.exit()
     #print "Connect to Host: %s" %(env.host_string)
-            
+
 def _levantar_maquina(envirotment):
     if envirotment == "local":
         local('vagrant up --no-provision --provider=virtualbox local')
@@ -33,12 +33,22 @@ def _detener_maquina(envirotment):
 def _configurar_maquina(envirotment):
     if envirotment == "local":
         local('vagrant provision local')
-        local('sed "/localhost/d" ~/.ssh/known_hosts > ~/.ssh/known_hosts')
+        #local('sed "/localhost/d" ~/.ssh/known_hosts > ~/.ssh/known_hosts')
     elif envirotment == "remote":
         local('vagrant provision remote')
+#    if run('echo $DOMAIN') == '':
+#        sudo('echo DOMAIN="' + os.environ['DOMAIN'] + '" >> /etc/environment')
+#    if run('echo $URL_BASE') == '':
+#        sudo('echo URL_BASE="' + os.environ['URL_BASE'] + '" >> /etc/environment')
+#    if run('echo $USER_NEXTCLOUD') == '':
+#        sudo('echo USER_NEXTCLOUD="' + os.environ['USER_NEXTCLOUD'] + '" >> /etc/environment')
+#    if run('echo $PASS_NEXTCLOUD') == '':
+#        sudo('echo PASS_NEXTCLOUD="' + os.environ['PASS_NEXTCLOUD'] + '" >> /etc/environment')
+#    if run('echo $PORT') == '':
+#        sudo('echo PORT="80"' + ' >> /etc/environment')
 
-def _ejecutar_aplicacion(envirotment):
-    run('flask-3.6 run --debugger -h 0.0.0.0 -p 8080')
+def _ejecutar_aplicacion():
+    run('flask-3.6 run -h 0.0.0.0 -p 8080')
 
 def _eliminar_maquina(envirotment):
     if envirotment == "local":
@@ -70,18 +80,18 @@ def play(envirotment):
     _set_env(envirotment)
     if envirotment == "remote":
         local('vagrant ssh remote -c "sudo dnf install python2.x86_64 firewalld.noarch -y"')
-    _configurar_maquina(envirotment)
-    #if envirotment == "local":
-        #local('ssh-copy-id -i /home/usuario/.ssh/id_rsa_deploying vagrant@localhost -p 2222')
+    if envirotment == "local":
+        local('ssh-copy-id -i /home/usuario/.ssh/id_rsa_deploying vagrant@localhost -p 2222')
         #_toput()
-    _ejecutar_aplicacion(envirotment)
+    _configurar_maquina(envirotment)
+    _ejecutar_aplicacion()
 
 def restart(envirotment):
     _detener_maquina(envirotment)
     _set_env(envirotment)
     _levantar_maquina(envirotment)
     _configurar_maquina(envirotment)
-    _ejecutar_aplicacion(envirotment)
+    _ejecutar_aplicacion()
     
 def stop(envirotment):
     _set_env(envirotment)

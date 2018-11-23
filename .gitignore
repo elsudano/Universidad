@@ -50,3 +50,5 @@ debug/
 /04Cuarto/Redes_MultiServicio_RMS/03_Practica_3/lib/bridj-0.6.2.jar
 /04Cuarto/Redes_MultiServicio_RMS/03_Practica_3/dist/
 /.project
+*.code-workspace
+\database/

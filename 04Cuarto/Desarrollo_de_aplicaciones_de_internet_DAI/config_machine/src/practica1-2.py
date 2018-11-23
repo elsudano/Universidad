@@ -4,6 +4,7 @@
 from PIL import Image
 from flask import Flask, send_file
 from random import randint
+from pathlib import Path
 
 app = Flask(__name__, static_folder="static_dir")
 
@@ -220,19 +221,20 @@ def dynamic_image_random():
         paleta = [(0,0,0), (255,255,255)]
     else:
         paleta = [(255,0,0), (0,255,0), (0,0,255)]
-    renderizaMandelbrotBonito(2.0, 2.0, -2.0, -2.0, 400, randint(50,120), "/home/vagrant/src/imagen.png", paleta, 6)
-    return send_file("/home/vagrant/src/imagen.png", mimetype='image/png')
+    name_imagen = f"/home/vagrant/src/imagen_{npaleta}_{randint(0,100)}.png"
+    renderizaMandelbrotBonito(2.0, 2.0, -2.0, -2.0, 400, randint(50,120), name_imagen, paleta, 6)
+    return send_file(name_imagen, mimetype='image/png')
 
 @app.route('/dynamic-image/<x1>/<y1>/<x2>/<y2>/<w>/<i>/<p>')
 def dynamic_image(x1,y1,x2,y2,w,i,p):
-    print ('This is the values of all vars in URL:')
-    print ('X1: %s' % x1)
-    print ('Y1: %s' % y1)
-    print ('X2: %s' % x2)
-    print ('Y2: %s' % y2)
-    print ('Width: %s' % w)
-    print ('Iterations: %s' % i)
-    print ('Palette Nº: %s' % p)
+    #print ('This is the values of all vars in URL:')
+    #print ('X1: %s' % x1)
+    #print ('Y1: %s' % y1)
+    #print ('X2: %s' % x2)
+    #print ('Y2: %s' % y2)
+    #print ('Width: %s' % w)
+    #print ('Iterations: %s' % i)
+    #print ('Palette Nº: %s' % p)
     npaleta=int(p)
     if (npaleta == 1):
         paleta = [(96,111,140), (80,55,0), (0,100,25)] #cambiar colores
@@ -241,8 +243,11 @@ def dynamic_image(x1,y1,x2,y2,w,i,p):
     else:
         paleta = [(255,0,0), (0,255,0), (0,0,255)]
     #print (paleta)
-    renderizaMandelbrotBonito(float (x1), float (y1), float (x2), float (y2), int (w), int (i), "/home/vagrant/src/imagen.png", paleta, 6)
-    return send_file("/home/vagrant/src/imagen.png", mimetype='image/png')
+    name_imagen = f"/home/vagrant/src/static/imgages/img_{x1}_{y1}_{x2}_{y2}_{w}_{i}_{p}.png"
+    fname_imagen = Path(name_imagen)
+    if not fname_imagen.exists():
+        renderizaMandelbrotBonito(float (x1), float (y1), float (x2), float (y2), int (w), int (i), name_imagen, paleta, 6)
+    return send_file(name_imagen, mimetype='image/png')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')

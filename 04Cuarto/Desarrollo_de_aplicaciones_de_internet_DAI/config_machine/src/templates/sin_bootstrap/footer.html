@@ -2,7 +2,10 @@
 
 {% block footer %}
 <footer>
-    <h4>The footer</h4>
+    <h2>Carlos de la Torre</h2>
+    <a href="{{ url_for('static', filename='LICENSE') }}"><p>Licencia de Uso</p></a>
+    <a href="https://github.com/elsudano/"><img src="{{ url_for('static', filename='images/github-logo-icon.png') }}" alt="Logo GitHub" height="42" width="42"></a>
+    <a href="https://twitter.com/elsudano"><img src="{{ url_for('static', filename='images/twitter-logo-icon.png') }}" alt="Logo Twitter" height="42" width="42"></a>
 </footer>
 {% endblock %}
 

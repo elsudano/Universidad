@@ -7,19 +7,16 @@
     <table id="maintable">
         <tr>
             <td>
-                {% block left %}{% endblock %}
                 {% include 'sin_bootstrap/left.html' %}
             </td>
             <td>
                 {% block content %}{% endblock %}
             </td>
             <td>
-                {% block right %}{% endblock %}
                 {% include 'sin_bootstrap/right.html' %}
             </td>
         </tr>
     </table>
 </section>
-{% block footer %}{% endblock %}
 {% include 'sin_bootstrap/footer.html' %}
 {% endblock %}

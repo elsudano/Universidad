@@ -1,11 +1,19 @@
 ---
 - hosts: all
   remote_user: vagrant
+  # gather_facts: False
   environment:
-    FLASK_APP: "/home/$USER/src/practica4.py"
-    FLASK_ENV: "development"
+    # Estas son las variables que se utilizan para ejecutar la aplicacion
+    # pero setearlas en este punto no sirve de nada por que no es la misma
+    # shell en la que se va a realizar la ejecución de los fuentes.
+    # hay que asignar las variables en el mismo punto donde se produce
+    # la ejecución del programa, osea, fabric
+    FLASK_APP: '/home/{{ ansible_env.USER }}/src/app.py'
+    FLASK_ENV: 'development'
+    LC_ALL: 'C.UTF-8'
+    LANG: 'C.UTF-8'
   pre_tasks:
-
+    #- debug: msg="{{ ansible_env }}"
   tasks:
 #    - name: Upgrade all packages
 #      become: yes
@@ -56,24 +64,31 @@
       dnf:
         name: "python3-pyOpenSSL"
         state: latest
-#    - name: Install Jinja2
-#      command: "env"
-#      register: ipnum
-#    - debug: msg="{{ ipnum.stdout }}"
+    - name: Install Pickleshare module (database)
+      become: yes
+      dnf:
+        name: "python3-pickleshare"
+        state: latest      
+# Las siguientes lineas se usan solamente para cuando las variables
+# de entorno que se quieran utilizar van a ser permanentes
     - name: Setting environment var FLASK_APP
       become: yes
       lineinfile:
         path: /etc/profile
         create: yes
-#        line: 'export FLASK_APP="/home/$USER/src/practica1-2.py"'
-#        line: 'export FLASK_APP="/home/$USER/src/practica3.py"'
-        line: 'export FLASK_APP="/home/$USER/src/practica4.py"'
-#    - name: Setting environment var FLASK_ENV
-#      become: yes
-#      lineinfile:
-#        path: /etc/profile
-#        create: yes
-#        line: 'export FLASK_ENV=development'
+        line: 'export FLASK_APP="/home/$USER/src/app.py"'
+    - name: Setting debug mode in 3.6 version Flask
+      become: yes
+      lineinfile:
+        path: /etc/profile
+        create: yes
+        line: 'export FLASK_DEBUG=1'
+    - name: Setting environment var FLASK_ENV
+      become: yes
+      lineinfile:
+        path: /etc/profile
+        create: yes
+        line: 'export FLASK_ENV=development'
 #    - name: Copy Source Code to remote machine
 #      copy:
 #        src: ~/GitHub/Universidad/04Cuarto/Desarrollo_de_aplicaciones_de_internet_DAI/config_machine/src/
@@ -81,10 +96,10 @@
 #        owner: vagrant
 #        group: vagrant
 #        mode: 0744
-    - name: Print on screen envirotments vars
-      command: env
-      register: env_vars
-    - debug: msg="{{ env_vars.stdout }}"
+#    - name: Print on screen envirotments vars
+#      command: env
+#      register: env_vars
+#    - debug: msg="{{ env_vars.stdout }}"
 #    - name: Make directory of develop
 #      file:
 #        path: "/home/$USER/src"

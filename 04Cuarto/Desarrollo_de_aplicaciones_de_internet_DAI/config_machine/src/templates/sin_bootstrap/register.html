@@ -1,0 +1,17 @@
+{% extends "sin_bootstrap/body.html" %}
+
+{% block content %}
+<section>
+    <header id="artheader">
+        <h2>Intentando registrar al Usuario: {{name}}</h2>
+    </header>
+    <article>
+    {% if reg %}
+        <p>El registro se a procesado con éxito</p>
+    {% else %}
+        <p>Ocurrio algún fallo y no se ha podido registrar al usuario</p>
+    {% endif %}
+    </article>
+</section>
+{% endblock %}
+ 
