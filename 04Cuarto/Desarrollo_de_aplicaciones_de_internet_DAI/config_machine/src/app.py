@@ -59,65 +59,162 @@ def register_user(user,passwd):
 # ---------------------- Parte pública ---------------------------
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    if session.get('auth') == True:
+    if session.get('auth'):
         result = render_template('con_bootstrap/index.html', user=session['user'])
     else:
-        result = render_template('con_bootstrap/index.html')
+        result = render_template('con_bootstrap/login.html')
+    return result
+
+@app.route('/settings')
+def settings():
+    if session.get('auth'):
+        result = render_template('con_bootstrap/settings.html', user=session['user'])
+    else:
+        result = render_template('con_bootstrap/login.html')
+    return result
+
+@app.route('/user')
+def user():
+    if session.get('auth'):
+        result = render_template('con_bootstrap/user.html', user=session['user'])
+    else:
+        result = render_template('con_bootstrap/login.html')
+    return result
+
+@app.route('/doc')
+def doc():
+    if session.get('auth'):
+        result = render_template('con_bootstrap/doc.html')
+    else:
+        result = render_template('con_bootstrap/login.html')
+    return result
+
+@app.route('/flot')
+def flot():
+    if session.get('auth'):
+        result = render_template('con_bootstrap/flot.html')
+    else:
+        result = render_template('con_bootstrap/login.html')
+    return result
+
+@app.route('/morris')
+def morris():
+    if session.get('auth'):
+        result = render_template('con_bootstrap/morris.html')
+    else:
+        result = render_template('con_bootstrap/login.html')
+    return result
+
+@app.route('/tables')
+def tables():
+    if session.get('auth'):
+        result = render_template('con_bootstrap/tables.html')
+    else:
+        result = render_template('con_bootstrap/login.html')
+    return result
+
+@app.route('/forms')
+def forms():
+    if session.get('auth'):
+        result = render_template('con_bootstrap/forms.html')
+    else:
+        result = render_template('con_bootstrap/login.html')
+    return result
+
+@app.route('/panels-wells')
+def panels_wells():
+    if session.get('auth'):
+        result = render_template('con_bootstrap/panels-wells.html')
+    else:
+        result = render_template('con_bootstrap/login.html')
+    return result
+
+@app.route('/buttons')
+def buttons():
+    if session.get('auth'):
+        result = render_template('con_bootstrap/buttons.html')
+    else:
+        result = render_template('con_bootstrap/login.html')
+    return result
+
+@app.route('/notifications')
+def notifications():
+    if session.get('auth'):
+        result = render_template('con_bootstrap/notifications.html')
+    else:
+        result = render_template('con_bootstrap/login.html')
+    return result
+
+@app.route('/typography')
+def typography():
+    if session.get('auth'):
+        result = render_template('con_bootstrap/typography.html')
+    else:
+        result = render_template('con_bootstrap/login.html')
+    return result
+
+@app.route('/icons')
+def icons():
+    if session.get('auth'):
+        result = render_template('con_bootstrap/icons.html')
+    else:
+        result = render_template('con_bootstrap/login.html')
+    return result
+
+@app.route('/grid')
+def grid():
+    if session.get('auth'):
+        result = render_template('con_bootstrap/grid.html')
+    else:
+        result = render_template('con_bootstrap/login.html')
+    return result
+
+@app.route('/blank')
+def blank():
+    if session.get('auth'):
+        result = render_template('con_bootstrap/blank.html')
+    else:
+        result = render_template('con_bootstrap/login.html')
     return result
 
 @app.route('/session', methods=['GET', 'POST'])
 def session_user():
-    result = None
-    user = request.form.get('user')
-    passwd = request.form.get('passwd')
-    action = request.form.get('action')
+    if request.method == 'GET':
+        action = request.args.get('action')
+        if action == 'logout':
+            session['auth'] = False
+            session.clear()
+            result = render_template('con_bootstrap/index.html')
+    elif request.method == 'POST':
+        user = request.form.get('user')
+        passwd = request.form.get('passwd')
+        action = request.form.get('action')
+    else:
+        result = render_template('con_bootstrap/login.html')
+
     if action == 'login':
         if exist_user(user, passwd) != False:
             session['auth'] = True
             session['user'] = user
             result = render_template('con_bootstrap/index.html', user=session['user'])
         else:
-            result = render_template('con_bootstrap/session.html', fail=True)
-    elif action == 'logout':
-        session['auth'] = False
-        session.clear()
-        result = render_template('con_bootstrap/index.html')
+            result = render_template('con_bootstrap/login.html', fail=True)
     elif action == 'register':
         register_user(user, passwd)
         session['auth'] = True
         session['user'] = user
         result = render_template('con_bootstrap/index.html', user=session['user'])
     else:
-        result = render_template('con_bootstrap/session.html')
-    return result
-
-@app.route('/login')
-def login():
-    if session.get('auth') == True:
-        result = render_template('con_bootstrap/index.html', user=session['user'])
-    else:
-        result = render_template('con_bootstrap/login.html')
-    return result
-
-#@app.route('/settings')
-#def settings():
-#    return render_template('con_bootstrap/settings.html')
-
-#@app.route('/user')
-#def user():
-#    return render_template('con_bootstrap/user.html')
-
-@app.route('/doc')
-def doc():
-    if session.get('auth') == True:
-        result = render_template('con_bootstrap/doc.html', user=session['user'])
-    else:
         result = render_template('con_bootstrap/login.html')
     return result
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('con_bootstrap/404.html')
+    if session.get('auth'):
+        result = render_template('con_bootstrap/404.html')
+    else:
+        result = render_template('con_bootstrap/login.html')
+    return result
 
 if __name__ == '__main__':
     app.jinja_env.auto_reload = True
