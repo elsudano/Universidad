@@ -15,7 +15,6 @@ app = Flask(__name__, static_folder='static', template_folder='templates')
 app.secret_key = b'una cadena secreta'
 
 # ---------------------- Parte privada ---------------------------
-
 # Función para manejar la base de datos
 def db_manage(action,user,passwd=None):
     db = PickleShareDB('~/src/database')
@@ -57,68 +56,13 @@ def register_user(user,passwd):
         result = db_manage('write',user,passwd)
     return result
 
-# Esta función es para generar el Menú de la página
-def make_menu():
-    menu_items = [
-        {'href':'/','caption':'Inicio'},
-        {'href':'/about','caption':'Sobre mi..'},
-        {'href':'/doc','caption':'Documentación'},
-        {'href':'/var/test','caption':'Test de variable'},
-        {'href':'/test_user','caption':'Test para el Usuario'},
-    ]
-    return menu_items
-
 # ---------------------- Parte pública ---------------------------
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if session.get('auth') == True:
-        result = render_template('sin_bootstrap/index.html', user=session['user'], navigation=make_menu())
+        result = render_template('con_bootstrap/index.html', user=session['user'])
     else:
-        result = render_template('sin_bootstrap/index.html', navigation=make_menu())
-    return result
-
-@app.route('/doc')
-def doc():
-    docitems = [
-        {'deno':'Index Principal /','desc':'Muestra la primera plantilla utilizada con Jinja32'},
-        {'deno':'Recogiendo Variables /var/(nombre)','desc':'En esta dirección nos saldrá un saludo personalizado en el cual sustituirá lo que pongamos en la URL en el lugar donde se encuentra (nombre) por un valor dado, es una forma de probar la entrada de datos a la aplicación'},
-        {'deno':'Manejo de Sesiones /session','desc':'Desde esta página podemos controlar a los usuarios que se conectan o que se quieren dar de alta en la página'},
-        {'deno':'Página de Error 404','desc':'Por último si no encuentra la página que el usuario esta buscando, la aplicación mostrará una pagina de error personalizada'}
-    ]
-    if session.get('auth') == True:
-        result = render_template('sin_bootstrap/doc.html', user=session['user'], docitems=docitems, navigation=make_menu())
-    else:
-        result = render_template('sin_bootstrap/doc.html', navigation=make_menu())
-    return result
-
-@app.route('/var/<name>')
-def var(name):
-    if session.get('auth') == True:
-        result = render_template('sin_bootstrap/var.html', user=session['user'], name=name, navigation=make_menu())
-    else:
-        result = render_template('sin_bootstrap/var.html', navigation=make_menu())
-    return result
-
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    user = request.form.get('user')
-    passwd = request.form.get('passwd')
-    if register_user(user, passwd):
-        result = render_template('sin_bootstrap/register.html', reg=True, user=session['user'], navigation=make_menu())
-    else:
-        result = render_template('sin_bootstrap/register.html', reg=False, user=user, navigation=make_menu())
-    return result
-
-@app.route('/test_user', methods=['GET','POST'])
-def test_user():
-    user = request.form.get('user')
-    passwd = request.form.get('passwd')
-    if request.method == 'GET' and session.get('auth') == True:
-        result = render_template('sin_bootstrap/test_user.html', exist=True, user=session['user'], navigation=make_menu())
-    elif request.method == 'POST' and exist_user(user, passwd):
-        result = render_template('sin_bootstrap/test_user.html', exist=True, user=user, navigation=make_menu())
-    else:
-        result = render_template('sin_bootstrap/test_user.html', navigation=make_menu())
+        result = render_template('con_bootstrap/index.html')
     return result
 
 @app.route('/session', methods=['GET', 'POST'])
@@ -131,25 +75,49 @@ def session_user():
         if exist_user(user, passwd) != False:
             session['auth'] = True
             session['user'] = user
-            result = render_template('sin_bootstrap/index.html', user=session['user'], navigation=make_menu())
+            result = render_template('con_bootstrap/index.html', user=session['user'])
         else:
-            result = render_template('sin_bootstrap/session.html', fail=True, navigation=make_menu())
+            result = render_template('con_bootstrap/session.html', fail=True)
     elif action == 'logout':
         session['auth'] = False
         session.clear()
-        result = render_template('sin_bootstrap/index.html', navigation=make_menu())
+        result = render_template('con_bootstrap/index.html')
     elif action == 'register':
         register_user(user, passwd)
         session['auth'] = True
         session['user'] = user
-        result = render_template('sin_bootstrap/index.html', user=session['user'], navigation=make_menu())
+        result = render_template('con_bootstrap/index.html', user=session['user'])
     else:
-        result = render_template('sin_bootstrap/session.html', navigation=make_menu())
+        result = render_template('con_bootstrap/session.html')
+    return result
+
+@app.route('/login')
+def login():
+    if session.get('auth') == True:
+        result = render_template('con_bootstrap/index.html', user=session['user'])
+    else:
+        result = render_template('con_bootstrap/login.html')
+    return result
+
+#@app.route('/settings')
+#def settings():
+#    return render_template('con_bootstrap/settings.html')
+
+#@app.route('/user')
+#def user():
+#    return render_template('con_bootstrap/user.html')
+
+@app.route('/doc')
+def doc():
+    if session.get('auth') == True:
+        result = render_template('con_bootstrap/doc.html', user=session['user'])
+    else:
+        result = render_template('con_bootstrap/login.html')
     return result
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('sin_bootstrap/error.html', navigation=make_menu())
+    return render_template('con_bootstrap/404.html')
 
 if __name__ == '__main__':
     app.jinja_env.auto_reload = True

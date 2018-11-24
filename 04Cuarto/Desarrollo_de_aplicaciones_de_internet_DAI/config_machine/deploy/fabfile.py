@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3.7
 # -*- coding: UTF-8 -*-
 import os, sys
 from fabric.api import env, local, run, sudo
@@ -14,7 +14,7 @@ def _set_env(envirotment):
     elif envirotment == "remote":
         env.host_string = 'dai.sudano.net:22'
     else:
-        print "Por favor indique una maquina valida para desplegar"
+        print ("Por favor indique una maquina valida para desplegar")
         sys.exit()
     #print "Connect to Host: %s" %(env.host_string)
 
@@ -57,11 +57,11 @@ def _eliminar_maquina(envirotment):
         local('vagrant destroy remote --force')
 
 def _create_floating_ip():
-    print "En esta funcion creamos la ip publica y la presentamos por pantalla para que se pueda asignar al dominio que nosostros queremos ademas se guarda en una variable global para que la podamos asignar luego a la maquina que hemos creado"
+    print ("En esta funcion creamos la ip publica y la presentamos por pantalla para que se pueda asignar al dominio que nosostros queremos ademas se guarda en una variable global para que la podamos asignar luego a la maquina que hemos creado")
 
 def _assing_floating_ip():
     fip = os.environ['DO_FIP']
-    print "Tienes que asignar la ip publica %s que se ha creado antes a la maquina que queremos que responda" % fip
+    print ("Tienes que asignar la ip publica %s que se ha creado antes a la maquina que queremos que responda" % fip)
 
 # Esto es para poder copiar la aplicación al servidor remoto cuando
 # no tengamos la opción de sincronizar carpetas locales con la maquina
