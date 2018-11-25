@@ -23,7 +23,7 @@
     - name: Install requeriments of disable selinux
       become: yes
       dnf:
-        name: "libselinux-python"
+        name: libselinux-python
         state: latest
     - name: Disable SeLinux
       become: yes
@@ -34,41 +34,55 @@
       systemd:
         name: firewalld
         state: stopped
-    - name: Install htop
+    - name: Install Utils for server Linux
       become: yes
       dnf:
-        name: "htop"
-        state: latest
-    - name: Install nano
-      become: yes
-      dnf:
-        name: "nano"
-        state: latest
-    - name: Install net tools basic
-      become: yes
-      dnf:
-        name: "net-tools"
+        name: ['htop', 'nano', 'net-tools']
         state: latest
     - name: Install Flask
       become: yes
       dnf:
-        name: "python3-flask"
+        name: python3-flask
         state: latest
     - name: Install PIL library for images
       become: yes
       dnf:
-        name: "python3-pillow"
+        name: python3-pillow
         state: latest
     - name: Install python3-pyOpenSSL library connect for https
       become: yes
       dnf:
-        name: "python3-pyOpenSSL"
+        name: python3-pyOpenSSL
         state: latest
     - name: Install Pickleshare module (database)
       become: yes
       dnf:
-        name: "python3-pickleshare"
-        state: latest      
+        name: python3-pickleshare
+        state: latest    
+    - name: Install No-SQL database MongoDB and utils
+      become: yes
+      dnf:
+        name: ['mongodb', 'mongodb-server', 'python3-pymongo']
+        state: latest
+    - name: Delete bindIP setting on MongoDB configuration
+      become: yes
+      lineinfile:
+        path: /etc/mongod.conf
+        regexp: 'bindIp: 127\.0\.0\.1'
+        line: '  bindIp: 127.0.0.1'
+    - name: Delete ipv6 setting on MongoDB configuration
+      become: yes
+      lineinfile:
+        path: /etc/mongod.conf
+        regexp: 'ipv6:\s\w+'
+        line: '  ipv6: false'
+    - name: Starting MongoDB Server
+      become: yes
+      systemd:
+        daemon_reload: yes
+        enabled: yes
+        name: mongod
+        state: started
 # Las siguientes lineas se usan solamente para cuando las variables
 # de entorno que se quieran utilizar van a ser permanentes
     - name: Setting environment var FLASK_APP
