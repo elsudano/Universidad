@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 from PIL import Image
-import hashlib
+import os, hashlib
 from flask import Flask, send_file, render_template, request, redirect, url_for, session, escape
 from pickleshare import *
 from OpenSSL import SSL
@@ -12,14 +12,16 @@ context.use_privatekey_file('src/secure/privkey.pem')
 context.use_certificate_file('src/secure/cert.pem')
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
-app.secret_key = b'una cadena secreta'
+app.templates_auto_reload = True
+app.jinja_env.auto_reload = True
+app.secret_key = os.environ.get('DO_SALT')
 
 # ---------------------- Parte privada ---------------------------
 # Función para manejar la base de datos
 def db_manage(action,user,passwd=None):
     db = PickleShareDB('~/src/database')
     md5 = hashlib.md5()
-    salt = 'sal&pimienta'
+    salt = os.environ.get('DO_SALT')
     if action == 'read' and user != None and user in db:
         if passwd == None or passwd == '':
             result = False
@@ -179,6 +181,9 @@ def blank():
 
 @app.route('/session', methods=['GET', 'POST'])
 def session_user():
+    action = None
+    user = None
+    passwd = None
     if request.method == 'GET':
         action = request.args.get('action')
         if action == 'logout':
@@ -217,7 +222,4 @@ def page_not_found(e):
     return result
 
 if __name__ == '__main__':
-    app.jinja_env.auto_reload = True
-    app.config['TEMPLATES_AUTO_RELOAD'] = True
     app.run(host='0.0.0.0', debug=True, ssl_context=context)
-
