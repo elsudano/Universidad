@@ -34,7 +34,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             provider.image = 'fedora-28-x64'
             provider.region = 'lon1'
             provider.size = 's-1vcpu-1gb'
-            config.vm.synced_folder "src/", "/home/vagrant/src", type: "rsync",
+            config.vm.synced_folder "src/", "/home/vagrant/src", owner: "vagrant", group: "vagrant", type: "rsync",
             rsync__args: ["--verbose", "--rsync-path='sudo rsync'", "--archive", "--delete", "-z"],
                 rsync__exclude: ["__pycache__/", "database/", "", "*.pyc"]
         end
