@@ -1,6 +1,6 @@
 #!/usr/bin/python3.7
 # -*- coding: UTF-8 -*-
-import os, sys
+import os, sys, requests
 from fabric.api import env, local, run, sudo
 from fabric.operations import put
 
@@ -16,7 +16,6 @@ def _set_env(envirotment):
     else:
         print ("Por favor indique una maquina valida para desplegar")
         sys.exit()
-    #print "Connect to Host: %s" %(env.host_string)
 
 def _levantar_maquina(envirotment):
     if envirotment == "local":
@@ -33,19 +32,17 @@ def _detener_maquina(envirotment):
 def _configurar_maquina(envirotment):
     if envirotment == "local":
         local('vagrant provision local')
-        #local('sed "/localhost/d" ~/.ssh/known_hosts > ~/.ssh/known_hosts')
+        local('sed "/localhost/d" ~/.ssh/known_hosts > ~/.ssh/known_hosts.tmp')
+        local('mv -f ~/.ssh/known_hosts.tmp ~/.ssh/known_hosts')
     elif envirotment == "remote":
         local('vagrant provision remote')
-#    if run('echo $DOMAIN') == '':
-#        sudo('echo DOMAIN="' + os.environ['DOMAIN'] + '" >> /etc/environment')
-#    if run('echo $URL_BASE') == '':
-#        sudo('echo URL_BASE="' + os.environ['URL_BASE'] + '" >> /etc/environment')
-#    if run('echo $USER_NEXTCLOUD') == '':
-#        sudo('echo USER_NEXTCLOUD="' + os.environ['USER_NEXTCLOUD'] + '" >> /etc/environment')
-#    if run('echo $PASS_NEXTCLOUD') == '':
-#        sudo('echo PASS_NEXTCLOUD="' + os.environ['PASS_NEXTCLOUD'] + '" >> /etc/environment')
-#    if run('echo $PORT') == '':
-#        sudo('echo PORT="80"' + ' >> /etc/environment')
+    
+    if run('echo $DO_SALT') == '':
+        sudo('echo export DO_SALT=\"' + os.environ['DO_SALT'] + '\" >> /etc/profile')
+    elif run('echo $DO_SALT') != '':
+        sudo('sed "/export DO_SALT=/d" /etc/profile > /etc/profile.tmp')
+        sudo('mv -f /etc/profile.tmp /etc/profile')
+        sudo('echo export DO_SALT=\"' + os.environ['DO_SALT'] + '\" >> /etc/profile')
 
 def _ejecutar_aplicacion():
     run('flask-3.6 run -h 0.0.0.0 -p 8080')
@@ -56,12 +53,21 @@ def _eliminar_maquina(envirotment):
     elif envirotment == "remote":
         local('vagrant destroy remote --force')
 
-def _create_floating_ip():
-    print ("En esta funcion creamos la ip publica y la presentamos por pantalla para que se pueda asignar al dominio que nosostros queremos ademas se guarda en una variable global para que la podamos asignar luego a la maquina que hemos creado")
+def _config_mongod_service():
+    print('Test de config')
+
+def _import_data_mongodb():
+    print('Test de import')
 
 def _assing_floating_ip():
+    token = os.environ['DO_TOKEN']
     fip = os.environ['DO_FIP']
-    print ("Tienes que asignar la ip publica %s que se ha creado antes a la maquina que queremos que responda" % fip)
+    headers = {'Content-Type': 'application/json','Authorization': 'Bearer %s' % token}
+    url_get_droplets = 'https://api.digitalocean.com/v2/droplets?page=1&per_page=1'
+    url_assign_ip_droplet = 'https://api.digitalocean.com/v2/floating_ips/%s/actions' % fip    
+    id_droplet = requests.get(url_get_droplets, headers=headers).json()['droplets'][0]['id']
+    payload = '{"type":"assign","droplet_id":"%s"}' % id_droplet
+    requests.post(url_assign_ip_droplet, headers=headers, data=payload)
 
 # Esto es para poder copiar la aplicación al servidor remoto cuando
 # no tengamos la opción de sincronizar carpetas locales con la maquina
@@ -112,4 +118,4 @@ def tests_app(envirotment):
     local('curl localhost:8080/error')
 
 def test(envirotment):
-    run('env')
+    _assing_floating_ip()
