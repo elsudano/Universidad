@@ -36,13 +36,6 @@ def _configurar_maquina(envirotment):
         local('mv -f ~/.ssh/known_hosts.tmp ~/.ssh/known_hosts')
     elif envirotment == "remote":
         local('vagrant provision remote')
-    
-    if run('echo $DO_SALT') == '':
-        sudo('echo export DO_SALT=\"' + os.environ['DO_SALT'] + '\" >> /etc/profile')
-    elif run('echo $DO_SALT') != '':
-        sudo('sed "/export DO_SALT=/d" /etc/profile > /etc/profile.tmp')
-        sudo('mv -f /etc/profile.tmp /etc/profile')
-        sudo('echo export DO_SALT=\"' + os.environ['DO_SALT'] + '\" >> /etc/profile')
 
 def _ejecutar_aplicacion():
     run('flask-3.6 run -h 0.0.0.0 -p 8080')
@@ -53,11 +46,12 @@ def _eliminar_maquina(envirotment):
     elif envirotment == "remote":
         local('vagrant destroy remote --force')
 
-def _config_mongod_service():
-    print('Test de config')
-
 def _import_data_mongodb():
-    print('Test de import')
+    mongodb_host = os.environ['MONGODB_HOST']
+    mongodb_port = os.environ['MONGODB_PORT']
+    run('mongo mongodb://%s:%s/dai --eval "db.dropDatabase()"' % (mongodb_host, mongodb_port))
+    run('mongoimport ~/src/static/json/restaurants.json --db dai --collection restaurants')
+    run('mongoimport ~/src/static/json/neighborhoods.json --db dai --collection neighborhoods')
 
 def _assing_floating_ip():
     token = os.environ['DO_TOKEN']
@@ -90,6 +84,7 @@ def play(envirotment):
         local('ssh-copy-id -i /home/usuario/.ssh/id_rsa_deploying vagrant@localhost -p 2222')
         #_toput()
     _configurar_maquina(envirotment)
+    _import_data_mongodb()
     _ejecutar_aplicacion()
 
 def restart(envirotment):
@@ -97,6 +92,7 @@ def restart(envirotment):
     _set_env(envirotment)
     _levantar_maquina(envirotment)
     _configurar_maquina(envirotment)
+    _import_data_mongodb()
     _ejecutar_aplicacion()
     
 def stop(envirotment):
