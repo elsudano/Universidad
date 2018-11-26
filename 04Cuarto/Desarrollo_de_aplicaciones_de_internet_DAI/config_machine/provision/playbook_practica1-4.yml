@@ -14,6 +14,7 @@
     LANG: 'C.UTF-8'
   pre_tasks:
     #- debug: msg="{{ ansible_env }}"
+    #- debug: msg="{{ lookup('env','USER') }}"
   tasks:
 #    - name: Upgrade all packages
 #      become: yes
@@ -62,20 +63,17 @@
     - name: Install No-SQL database MongoDB and utils
       become: yes
       dnf:
-        name: ['mongodb', 'mongodb-server', 'python3-pymongo']
+        name: ['mongodb', 'mongodb-server', 'mongo-tools', 'python3-pymongo']
         state: latest
-    - name: Delete bindIP setting on MongoDB configuration
+    - name: Change configuration MongoDB /etc/mongod.conf
       become: yes
       lineinfile:
         path: /etc/mongod.conf
-        regexp: 'bindIp: 127\.0\.0\.1'
-        line: '  bindIp: 127.0.0.1'
-    - name: Delete ipv6 setting on MongoDB configuration
-      become: yes
-      lineinfile:
-        path: /etc/mongod.conf
-        regexp: 'ipv6:\s\w+'
-        line: '  ipv6: false'
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }}"
+      with_items:
+      - { regexp: 'bindIp: 127\.0\.0\.1', line: '  bindIp: 127.0.0.1' }
+      - { regexp: 'ipv6:\s\w+', line: '  ipv6: false' }
     - name: Starting MongoDB Server
       become: yes
       systemd:
@@ -85,24 +83,19 @@
         state: started
 # Las siguientes lineas se usan solamente para cuando las variables
 # de entorno que se quieran utilizar van a ser permanentes
-    - name: Setting environment var FLASK_APP
+    - name: Setting environment var for Flask Application
       become: yes
       lineinfile:
         path: /etc/profile
         create: yes
-        line: 'export FLASK_APP="/home/$USER/src/app.py"'
-    - name: Setting debug mode in 3.6 version Flask
-      become: yes
-      lineinfile:
-        path: /etc/profile
-        create: yes
-        line: 'export FLASK_DEBUG=1'
-    - name: Setting environment var FLASK_ENV
-      become: yes
-      lineinfile:
-        path: /etc/profile
-        create: yes
-        line: 'export FLASK_ENV=development'
+        line: "{{ item }}"
+      with_items:
+      - 'export FLASK_APP="/home/{{ ansible_env.USER }}/src/app.py"'
+      - 'export FLASK_DEBUG=1'
+      - 'export FLASK_ENV=development'
+      - "export DO_SALT={{ lookup('env','DO_SALT') }}"
+      - "export MONGODB_HOST={{ lookup('env','MONGODB_HOST') }}"
+      - "export MONGODB_PORT={{ lookup('env','MONGODB_PORT') }}"
 #    - name: Copy Source Code to remote machine
 #      copy:
 #        src: ~/GitHub/Universidad/04Cuarto/Desarrollo_de_aplicaciones_de_internet_DAI/config_machine/src/
