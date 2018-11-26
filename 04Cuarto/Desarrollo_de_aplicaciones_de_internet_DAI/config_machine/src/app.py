@@ -4,6 +4,7 @@
 from PIL import Image
 import os, hashlib
 from flask import Flask, send_file, render_template, request, redirect, url_for, session, escape
+from pymongo import MongoClient
 from pickleshare import *
 from OpenSSL import SSL
 
@@ -15,6 +16,11 @@ app = Flask(__name__, static_folder='static', template_folder='templates')
 app.templates_auto_reload = True
 app.jinja_env.auto_reload = True
 app.secret_key = os.environ.get('DO_SALT')
+
+client = MongoClient(os.environ.get('MONGODB_HOST'), int(os.environ.get('MONGODB_PORT')))
+db = client.dai
+restaurants = db.restaurants
+neighborhoods = db.neighborhoods
 
 # ---------------------- Parte privada ---------------------------
 # Función para manejar la base de datos
@@ -58,11 +64,28 @@ def register_user(user,passwd):
         result = db_manage('write',user,passwd)
     return result
 
+# Esta función es para generar el Menú de la página
+def make_menu():
+    menu_items = [
+        {'href':'/','icon':'fa-dashboard','caption':'Dashboard'},
+        {'href':'/tables','icon':'fa-table','caption':'Tables'},
+        {'href':'/forms','icon':'fa-edit','caption':'Forms'},
+        {'href':'/panels-wells','icon':'fa-tasks','caption':'Panels and Wells'},
+        {'href':'/buttons','icon':'fa-play-circle','caption':'Buttons'},
+        {'href':'/notifications','icon':'fa-comments','caption':'Notifications'},
+        {'href':'/typography','icon':'fa-header','caption':'Typography'},
+        {'href':'/icons','icon':'fa-tags','caption':'Icons'},
+        {'href':'/grid','icon':'fa-wrench','caption':'Grid'},
+        {'href':'/doc','icon':'fa-book','caption':'Documentation'},
+        {'href':'/forms','icon':'','caption':'Forms'},
+    ]
+    return menu_items
+
 # ---------------------- Parte pública ---------------------------
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if session.get('auth'):
-        result = render_template('con_bootstrap/index.html', user=session['user'])
+        result = render_template('con_bootstrap/index.html', user=session['user'], navigation=make_menu())
     else:
         result = render_template('con_bootstrap/login.html')
     return result
@@ -70,7 +93,7 @@ def index():
 @app.route('/settings')
 def settings():
     if session.get('auth'):
-        result = render_template('con_bootstrap/settings.html', user=session['user'])
+        result = render_template('con_bootstrap/settings.html', user=session['user'], navigation=make_menu())
     else:
         result = render_template('con_bootstrap/login.html')
     return result
@@ -78,7 +101,7 @@ def settings():
 @app.route('/user')
 def user():
     if session.get('auth'):
-        result = render_template('con_bootstrap/user.html', user=session['user'])
+        result = render_template('con_bootstrap/user.html', user=session['user'], navigation=make_menu())
     else:
         result = render_template('con_bootstrap/login.html')
     return result
@@ -86,7 +109,19 @@ def user():
 @app.route('/doc')
 def doc():
     if session.get('auth'):
-        result = render_template('con_bootstrap/doc.html')
+        result = render_template('con_bootstrap/doc.html', navigation=make_menu())
+    else:
+        result = render_template('con_bootstrap/login.html')
+    return result
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    if session.get('auth'):
+        if request.method == 'POST':
+            stype = request.form.get('stype')
+            string = request.form.get('string')
+        print (db.restaurants.find_one({'name':'%s' % string}))
+        result = render_template('con_bootstrap/search.html', navigation=make_menu())
     else:
         result = render_template('con_bootstrap/login.html')
     return result
@@ -94,7 +129,7 @@ def doc():
 @app.route('/flot')
 def flot():
     if session.get('auth'):
-        result = render_template('con_bootstrap/flot.html')
+        result = render_template('con_bootstrap/flot.html', navigation=make_menu())
     else:
         result = render_template('con_bootstrap/login.html')
     return result
@@ -102,7 +137,7 @@ def flot():
 @app.route('/morris')
 def morris():
     if session.get('auth'):
-        result = render_template('con_bootstrap/morris.html')
+        result = render_template('con_bootstrap/morris.html', navigation=make_menu())
     else:
         result = render_template('con_bootstrap/login.html')
     return result
@@ -110,7 +145,7 @@ def morris():
 @app.route('/tables')
 def tables():
     if session.get('auth'):
-        result = render_template('con_bootstrap/tables.html')
+        result = render_template('con_bootstrap/tables.html', navigation=make_menu())
     else:
         result = render_template('con_bootstrap/login.html')
     return result
@@ -118,7 +153,7 @@ def tables():
 @app.route('/forms')
 def forms():
     if session.get('auth'):
-        result = render_template('con_bootstrap/forms.html')
+        result = render_template('con_bootstrap/forms.html', navigation=make_menu())
     else:
         result = render_template('con_bootstrap/login.html')
     return result
@@ -126,7 +161,7 @@ def forms():
 @app.route('/panels-wells')
 def panels_wells():
     if session.get('auth'):
-        result = render_template('con_bootstrap/panels-wells.html')
+        result = render_template('con_bootstrap/panels-wells.html', navigation=make_menu())
     else:
         result = render_template('con_bootstrap/login.html')
     return result
@@ -134,7 +169,7 @@ def panels_wells():
 @app.route('/buttons')
 def buttons():
     if session.get('auth'):
-        result = render_template('con_bootstrap/buttons.html')
+        result = render_template('con_bootstrap/buttons.html', navigation=make_menu())
     else:
         result = render_template('con_bootstrap/login.html')
     return result
@@ -142,7 +177,7 @@ def buttons():
 @app.route('/notifications')
 def notifications():
     if session.get('auth'):
-        result = render_template('con_bootstrap/notifications.html')
+        result = render_template('con_bootstrap/notifications.html', navigation=make_menu())
     else:
         result = render_template('con_bootstrap/login.html')
     return result
@@ -150,7 +185,7 @@ def notifications():
 @app.route('/typography')
 def typography():
     if session.get('auth'):
-        result = render_template('con_bootstrap/typography.html')
+        result = render_template('con_bootstrap/typography.html', navigation=make_menu())
     else:
         result = render_template('con_bootstrap/login.html')
     return result
@@ -158,7 +193,7 @@ def typography():
 @app.route('/icons')
 def icons():
     if session.get('auth'):
-        result = render_template('con_bootstrap/icons.html')
+        result = render_template('con_bootstrap/icons.html', navigation=make_menu())
     else:
         result = render_template('con_bootstrap/login.html')
     return result
@@ -166,7 +201,7 @@ def icons():
 @app.route('/grid')
 def grid():
     if session.get('auth'):
-        result = render_template('con_bootstrap/grid.html')
+        result = render_template('con_bootstrap/grid.html', navigation=make_menu())
     else:
         result = render_template('con_bootstrap/login.html')
     return result
@@ -174,7 +209,7 @@ def grid():
 @app.route('/blank')
 def blank():
     if session.get('auth'):
-        result = render_template('con_bootstrap/blank.html')
+        result = render_template('con_bootstrap/blank.html', navigation=make_menu())
     else:
         result = render_template('con_bootstrap/login.html')
     return result
@@ -189,7 +224,7 @@ def session_user():
         if action == 'logout':
             session['auth'] = False
             session.clear()
-            result = render_template('con_bootstrap/index.html')
+            result = render_template('con_bootstrap/login.html')
     elif request.method == 'POST':
         user = request.form.get('user')
         passwd = request.form.get('passwd')
@@ -201,14 +236,14 @@ def session_user():
         if exist_user(user, passwd) != False:
             session['auth'] = True
             session['user'] = user
-            result = render_template('con_bootstrap/index.html', user=session['user'])
+            result = render_template('con_bootstrap/index.html', user=session['user'], navigation=make_menu())
         else:
             result = render_template('con_bootstrap/login.html', fail=True)
     elif action == 'register':
         register_user(user, passwd)
         session['auth'] = True
         session['user'] = user
-        result = render_template('con_bootstrap/index.html', user=session['user'])
+        result = render_template('con_bootstrap/index.html', user=session['user'], navigation=make_menu())
     else:
         result = render_template('con_bootstrap/login.html')
     return result
@@ -216,7 +251,7 @@ def session_user():
 @app.errorhandler(404)
 def page_not_found(e):
     if session.get('auth'):
-        result = render_template('con_bootstrap/404.html')
+        result = render_template('con_bootstrap/404.html', navigation=make_menu())
     else:
         result = render_template('con_bootstrap/login.html')
     return result
