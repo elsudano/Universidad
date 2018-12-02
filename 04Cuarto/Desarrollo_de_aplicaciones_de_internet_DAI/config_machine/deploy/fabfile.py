@@ -31,11 +31,14 @@ def _detener_maquina(envirotment):
 
 def _configurar_maquina(envirotment):
     if envirotment == "local":
+        #local('sed "/localhost/d" ~/.ssh/known_hosts > ~/.ssh/known_hosts.tmp')
+        #local('sed "/127.0.0.1/d" ~/.ssh/known_hosts.tmp > ~/.ssh/known_hosts.tmp')
+        #local('mv -f ~/.ssh/known_hosts.tmp ~/.ssh/known_hosts')
+        local('ssh-copy-id -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /home/usuario/.ssh/id_rsa_deploying vagrant@localhost -p 2222')
         local('vagrant provision local')
-        local('sed "/localhost/d" ~/.ssh/known_hosts > ~/.ssh/known_hosts.tmp')
-        local('mv -f ~/.ssh/known_hosts.tmp ~/.ssh/known_hosts')
     elif envirotment == "remote":
         local('vagrant provision remote')
+        local('vagrant ssh remote -c "sudo dnf install python2.x86_64 firewalld.noarch -y"')
 
 def _ejecutar_aplicacion():
     run('flask-3.6 run -h 0.0.0.0 -p 8080')
@@ -78,11 +81,7 @@ def start(envirotment):
 
 def play(envirotment):
     _set_env(envirotment)
-    if envirotment == "remote":
-        local('vagrant ssh remote -c "sudo dnf install python2.x86_64 firewalld.noarch -y"')
-    if envirotment == "local":
-        local('ssh-copy-id -i /home/usuario/.ssh/id_rsa_deploying vagrant@localhost -p 2222')
-        #_toput()
+    #_toput()
     _configurar_maquina(envirotment)
     _import_data_mongodb()
     _ejecutar_aplicacion()
@@ -115,3 +114,6 @@ def tests_app(envirotment):
 
 def test(envirotment):
     _assing_floating_ip()
+
+def install_vbguest(envirotment):
+    local('vagrant vbguest %s -f -b --do install' % envirotment)

@@ -6,18 +6,30 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.define "local" do |config|
         config.vm.box = "virtualbox"
         config.vm.box="generic/fedora28"
+        config.vm.communicator = "ssh"
+        config.ssh.host = "localhost"
+        config.ssh.port = 2222
+        config.ssh.keys_only = false
+        config.ssh.insert_key = true
+        config.ssh.private_key_path = '~/.ssh/id_rsa_deploying'
+        config.ssh.username = "vagrant"
+        config.ssh.password = "vagrant"
+        #config.vm.network "public_network"
+        config.vm.hostname = "local-dev-machine"
+        config.vm.provider "virtualbox" do |vbox|
+            vbox.default_nic_type = "82543GC"
+            vbox.name = "local-dev-machine"
+            vbox.memory = 2000
+            vbox.cpus = 2
+        end
+        config.vm.network "forwarded_port", guest: 8080, host: 8080
+        config.vm.network "forwarded_port", guest: 22, host: 2222
         # Para que esta linea funcione es necesario instalar el plugin de vagrant
         # Con esta linea sincronizamos el directorio de desarrollo con la maquina virtuaĺ
         # vagrant plugin install vagrant-vbguest
+        config.vbguest.iso_path = "/usr/share/virtualbox/VBoxGuestAdditions.iso"
+        #config.vbguest.no_remote = true # no se baja la ISO
         config.vm.synced_folder 'src/', '/home/vagrant/src', SharedFoldersEnableSymlinksCreate: false#, disabled: true
-        config.vm.communicator = "ssh"
-        config.ssh.username = "vagrant"
-        config.ssh.password = "vagrant"
-        #config.ssh.insert_key = true
-        #config.ssh.private_key_path = '~/.ssh/id_rsa_deploying'
-        #config.vm.network "public_network"
-        config.vm.hostname = "local-dev-machine"
-        config.vm.network "forwarded_port", guest: 8080, host: 8080
     end
     config.vm.define "remote" do |config|
         config.vm.provider :digital_ocean do |provider, override|
@@ -42,7 +54,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
     # Provisionamiento con ansible
     config.vm.provision :ansible do |ansible|
+        #ansible.verbose = "vvv"
+        ansible.raw_ssh_args = ["-i ~/.ssh/id_rsa_deploying"]
         ansible.playbook = "./provision/playbook_practica1-4.yml"
     end
 end
-
