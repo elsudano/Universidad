@@ -16,11 +16,11 @@
     #- debug: msg="{{ ansible_env }}"
     #- debug: msg="{{ lookup('env','USER') }}"
   tasks:
-#    - name: Upgrade all packages
-#      become: yes
-#      dnf:
-#        name: "*"
-#        state: latest   
+    - name: Upgrade all packages
+      become: yes
+      dnf:
+        name: "*"
+        state: latest   
     - name: Install requeriments of disable selinux
       become: yes
       dnf:
