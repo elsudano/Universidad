@@ -1,0 +1,54 @@
+openssl genrsa -out emisor/CarlosRSAkey.pem 901
+openssl rsa -text -in emisor/CarlosRSAkey.pem > emisor/CarlosRSApriv.pem
+openssl rsa -in emisor/CarlosRSAkey.pem -outform PEM -pubout -out emisor/CarlosRSApub.pem
+openssl enc -aes-128-ecb -pass pass:mipass -nosalt -in emisor/CarlosRSApriv.pem -out emisor/CarlosRSApriv.pem.enc
+dd if=/dev/zero of=/tmp/imput.bin bs=128 count=1
+openssl rsautl -encrypt -inkey emisor/CarlosRSApub.pem -pubin -in /tmp/imput.bin -out /tmp/imput.bin.enc_rsa
+
+Simulación de Criptosistema Híbrido
+------------------------------------------------------------------------------------------------------------------
+openssl genrsa -out emisor/RSAkey.pem 4096
+openssl rsa -in emisor/RSAkey.pem -outform PEM -pubout -out emisor/RSApub.pem
+openssl rand -hex 128 > emisor/sessionkey
+echo "-aes-128-ecb" >> emisor/sessionkey
+openssl genrsa -out receptor/RSAkey.pem 4096
+openssl rsa -in receptor/RSAkey.pem -outform PEM -pubout -out receptor/RSApub.pem
+openssl rsautl -encrypt -inkey receptor/RSApub.pem -pubin -in emisor/sessionkey -out emisor/sessionkey_enc
+openssl enc -e -aes-128-ecb -pass file:sessionkey -nosalt -in /tmp/imput.bin -out /tmp/imput.bin.enc.aes-128
+
+-- en este punto se tienen que mandar los dos ficheros cifrados sessionkey_enc y /tmp/imput.bin.enc.aes-128 para que el receptor descifre el fichero de sessionkey_enc para tener la contraseña y el algoritmo por el cual se ha cifrado el mensaje y se utilizara los siguientes mensajes para realizar estas operaciones: --
+
+cp emisor/sessionkey_enc receptor/sessionkey_enc
+cp /tmp/imput.bin.enc.aes-128 receptor/imput.bin.enc.aes-128
+
+openssl rsautl -decrypt -inkey receptor/RSAkey.pem -in receptor/sessionkey_enc -out receptor/sessionkey
+openssl enc -d -aes-128-ecb -pass file:sessionkey -nosalt -in receptor/imput.bin.enc.aes-128 -out receptor/imput.bin
+cat /tmp/imput.bin
+cat receptor/imput.bin
+hexdump /tmp/imput.bin
+hexdump receptor/imput.bin
+
+------------------------------------------------------------------------------------------------------------------
+
+openssl rsautl -encrypt -inkey receptor/RSApub.pem -pubin -in /tmp/imput.bin -out emisor/imput.bin.enc.rsa
+openssl rsautl -decrypt -inkey receptor/RSAkey.pem -in emisor/imput.bin.enc.rsa -out emisor/imput.bin
+cat /tmp/imput.bin
+cat emisor/imput.bin
+hexdump /tmp/imput.bin
+hexdump emisor/imput.bin
+
+------------------------------------------------------------------------------------------------------------------
+
+openssl ecparam -list_curves
+- en mi implementación de openssl solo vienen unas cuantas curvas 
+  buscando por internet, he podido darme cuenta que las que se utilizan
+  para los servidores web son secp256k1 y secp384r1 así que utilizaré la segunda -
+openssl ecparam -name secp384r1 -text -out emisor/stdECparam.key
+openssl ecparam -param_enc explicit -conv_form uncompressed -text -noout -no_seed -name secp384r1
+openssl ecparam -name secp384r1 -genkey -outform PEM -out emisor/CarlosECkey.pem
+cat emisor/CarlosECkey.pem | tail -n 6 > emisor/CarlosECpriv.pem
+openssl enc -aes-128-ecb -pass pass:mipass -nosalt -in emisor/CarlosECpriv.pem -out emisor/CarlosECpriv.pem.enc
+cat emisor/CarlosECpriv.pem
+cat emisor/CarlosECpriv.pem.enc
+openssl ec -in emisor/CarlosECkey.pem -pubout -outform PEM -out emisor/CarlosECpub.pem
+cat emisor/CarlosECpub.pem
