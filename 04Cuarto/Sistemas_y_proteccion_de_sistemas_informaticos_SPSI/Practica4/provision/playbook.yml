@@ -1,0 +1,153 @@
+---
+- hosts: all
+  remote_user: vagrant
+  #gather_facts: False
+  environment:
+    # Estas son las variables que se utilizan para ejecutar la aplicacion
+    # pero setearlas en este punto no sirve de nada por que no es la misma
+    # shell en la que se va a realizar la ejecución de los fuentes.
+    # hay que asignar las variables en el mismo punto donde se produce
+    # la ejecución del programa, osea, fabric
+    LC_ALL: 'C.UTF-8'
+    LANG: 'C.UTF-8'
+  pre_tasks:
+    #- debug: msg="{{ ansible_env }}"
+    #- debug: msg="{{ lookup('env','USER') }}"
+  tasks:
+    - name: Upgrade all packages
+      become: yes
+      dnf:
+        name: "*"
+        state: latest   
+    - name: Install requeriments of disable selinux
+      become: yes
+      dnf:
+        name: libselinux-python
+        state: latest
+    - name: Disable SeLinux
+      become: yes
+      selinux:
+        state: disabled
+    - name: Stoping FirewallD
+      become: yes
+      systemd:
+        name: firewalld
+        state: stopped
+    - name: Install Utils for server Linux
+      become: yes
+      dnf:
+        name: ['htop', 'nano', 'net-tools']
+        state: latest
+    - name: Install requeriments of manipulate certificates
+      become: yes
+      dnf:
+        name: python2-pyOpenSSL
+        state: latest
+    - name: Copy OpenSSL config to remote server
+      copy:
+        src: '{{ item }}'
+        dest: ~/
+        owner: vagrant
+        group: vagrant
+        mode: 0744
+      with_items:
+      - '~/nextCloud/Facultad/01_Seguridad_y_Proteccion_de_datos_de_sistemas_informaticas_SPSI/Practicas/Practica4/Scrtipts_maquina_virtual/openssl_ca.conf'
+      - '~/nextCloud/Facultad/01_Seguridad_y_Proteccion_de_datos_de_sistemas_informaticas_SPSI/Practicas/Practica4/Scrtipts_maquina_virtual/openssl_subordinada.conf'
+      - '~/nextCloud/Facultad/01_Seguridad_y_Proteccion_de_datos_de_sistemas_informaticas_SPSI/Practicas/Practica4/Scrtipts_maquina_virtual/create_ca_and_ca-sub.sh'
+#    - name: Make tree structure for Certificate Authority
+#      file:
+#        path: '{{ item }}'
+#        state: directory
+#        mode: 0755
+#      with_items:
+#      - '~/CA'
+#      - '~/CA/certs'
+#      - '~/CA/crl'
+#      - '~/CA/newcerts'
+#      - '~/CA/private'
+#      - '~/CA/subordinada'
+#      - '~/CA/subordinada/certs'
+#      - '~/CA/subordinada/crl'
+#      - '~/CA/subordinada/csr'
+#      - '~/CA/subordinada/newcerts'
+#      - '~/CA/subordinada/private'
+#    - name: Create the files of database an serials of the certificates
+#      file:
+#        path: '{{ item }}'
+#        state: touch
+#        mode: 0644
+#      with_items:
+#      - '~/CA/index.txt'
+#      - '~/CA/index.txt.attr'
+#      - '~/CA/serial'
+#      - '~/CA/subordinada/index.txt'
+#      - '~/CA/subordinada/index.txt.attr'
+#      - '~/CA/subordinada/serial'
+#    - name: Setting of the firs serial numbers of certificates
+#      shell: '{{ item }}'
+#      with_items:
+#      - 'echo 1000 > ~/CA/serial'
+#      - 'echo 1000 > ~/CA/subordinada/serial'
+#    - name: Generate Private Key of the Certificate Authority
+#      openssl_privatekey:
+#        path: ~/CA/private/CA-RSA-key.pem
+#        passphrase: pass
+#        cipher: aes256
+#    - name: Print Values of private key to CA
+#      command: "openssl rsa -text -noout -in ~/CA/private/CA-RSA-key.pem -k pass"
+#      register: privatekey_values
+#    - debug: msg="{{ privatekey_values.stdout }}"
+#    - name: Generate Certificate of CA
+#      command: 'openssl req -config ~/openssl_ca.conf -key ~/CA/private/CA-RSA-key.pem -new -x509 -days 7300 -sha512 -subj "/C=ES/ST=Granada/L=Granada/O=SPSI-ORG/CN=spsi-server/" -out ~/CA/certs/CA-RSA-cert.pem'
+#      register: gen_cert_values
+#    - debug: msg="{{ gen_cert_values.stdout }}"
+#    - name: Generate Certificate of CA
+#      openssl_csr:
+#        path: ~/CA/certs/CA-RSA-cert.pem
+#        privatekey_path: ~/CA/private/CA-RSA-key.pem
+#        privatekey_passphrase: pass
+#        country_name: ES
+#        state_or_province_name: GRANADA
+#        locality_name: GRANADA
+#        organization_name: SPSI-ORG
+#        organizational_unit_name: DPTO-IT
+#        common_name: spsi-server
+#        email_address: test@spsi.com
+#    - name: Print Values of certificate to CA
+#      command: "openssl x509 -noout -text -in ~/CA/certs/CA-RSA-cert.pem"
+#      register: certificate_values
+#    - debug: msg="{{ certificate_values.stdout }}"
+#    - name: Generate Private Key of the Intermediate Certificate Authority
+#      openssl_privatekey:
+#        path: ~/CA/subordinada/private/CASUB-RSA-key.pem
+#        passphrase: pass
+#        cipher: aes256
+#    - name: Print Values of private key to Intermediate CA
+#      command: "openssl rsa -text -noout -in ~/CA/subordinada/private/CASUB-RSA-key.pem"
+#      register: sub_privatekey_values
+#    - debug: msg="{{ sub_privatekey_values.stdout }}"
+#    - name: Generate Request of the Certificate of Intermediate CA
+#      openssl_csr:
+#        path: ~/CA/subordinada/csr/CASUB-RSA-csr.pem
+#        privatekey_path: ~/CA/subordinada/private/CASUB-RSA-key.pem
+#        privatekey_passphrase: pass
+#        country_name: ES
+#        state_or_province_name: GRANADA
+#        locality_name: GRANADA
+#        organization_name: SUB-SPSI-ORG
+#        organizational_unit_name: DPTO-CERTS
+#        common_name: sub-spsi-server
+#        email_address: test@spsi.com
+#    - name: Generate certificate of the Intermediate CA
+#      command: "openssl ca -config ~/openssl_ca.conf -days 3650 -notext -md sha256 -in ~/CA/subordinada/csr/CASUB-RSA-csr.pem -out ~/CA/subordinada/certs/CASUB-RSA-cert.pem"
+#    - name: Print on screen envirotments vars
+#      command: env
+#      register: env_vars
+#    - debug: msg="{{ env_vars.stdout }}"
+#    - name: Make directory of develop
+#      file:
+#        path: "/home/$USER/src"
+#        state: directory
+#        mode: 0755
+#    - name: Run Application
+#      command: "ifconfig"

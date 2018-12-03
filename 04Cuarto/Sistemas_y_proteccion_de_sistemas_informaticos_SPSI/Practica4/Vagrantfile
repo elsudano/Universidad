@@ -1,0 +1,57 @@
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+    config.vm.define "local" do |config|
+        # Configure Machine
+        config.vm.box = "virtualbox"
+        config.vm.box="generic/fedora29"
+        config.vm.communicator = "ssh"
+        config.ssh.host = "localhost"
+        config.ssh.port = 2222
+        config.ssh.keys_only = false
+        config.ssh.insert_key = true
+        config.ssh.private_key_path = '~/.ssh/id_rsa_deploying'
+        config.ssh.username = "vagrant"
+        config.ssh.password = "vagrant"
+        config.vm.hostname = "spsi-server"
+        config.vm.provider "virtualbox" do |vbox|
+            vbox.default_nic_type = "82543GC"
+            vbox.name = "spsi-server"
+            vbox.memory = 2000
+            vbox.cpus = 2
+        end
+        # Para que esta linea funcione es necesario instalar el plugin de vagrant
+        # Con esta linea sincronizamos el directorio de desarrollo con la maquina virtuaĺ
+        # vagrant plugin install vagrant-vbguest
+        config.vbguest.iso_path = "/usr/share/virtualbox/VBoxGuestAdditions.iso"
+        #config.vbguest.no_remote = true # no se baja la ISO
+        config.vm.synced_folder 'src/', '/home/vagrant/src', SharedFoldersEnableSymlinksCreate: false#, disabled: true
+    end
+    config.vm.define "remote" do |config|
+        config.vm.provider :digital_ocean do |provider, override|
+            override.vm.box = "digital_ocean"
+            override.vm.box_url = "https://github.com/devopsgroup-io/vagrant-digitalocean/raw/master/box/digital_ocean.box"
+            override.ssh.username = 'vagrant'
+            override.ssh.private_key_path = '~/.ssh/id_rsa_deploying'
+            override.nfs.functional = false
+            provider.ssh_key_name  = 'vagrant-dev'
+            provider.private_networking = false
+            provider.backups_enabled = false
+            provider.monitoring = false
+            provider.token = ENV['DO_TOKEN']
+            provider.image = 'fedora-28-x64'
+            provider.region = 'lon1'
+            provider.size = 's-1vcpu-1gb'
+            config.vm.synced_folder "src/", "/home/vagrant/src", owner: "vagrant", group: "vagrant", type: "rsync",
+            rsync__args: ["--verbose", "--rsync-path='sudo rsync'", "--archive", "--delete", "-z"],
+                rsync__exclude: ["__pycache__/", "database/", "", "*.pyc"]
+        end
+        config.vm.hostname = "remote-dev-machine"
+    end
+    # Provisionamiento con ansible
+    config.vm.provision :ansible do |ansible|
+        #ansible.verbose = "vvv"
+        ansible.raw_ssh_args = ["-i ~/.ssh/id_rsa_deploying"]
+        ansible.playbook = "./provision/playbook.yml"
+    end
+end
