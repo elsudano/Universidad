@@ -1,0 +1,46 @@
+openssl dsaparam -outform PEM -out sharedDSA.pem 4096
+openssl dsaparam -text -noout -in sharedDSA.pem
+
+openssl gendsa -out usuario1/DSAkey.pem sharedDSA.pem
+openssl gendsa -out usuario2/DSAkey.pem sharedDSA.pem
+openssl dsa -text -noout -in usuario1/DSAkey.pem
+openssl dsa -text -noout -in usuario2/DSAkey.pem
+
+openssl dsa -in usuario1/DSAkey.pem -outform PEM -out usuario1/DSApriv.pem
+openssl dsa -aes-256-cbc -in usuario1/DSApriv.pem -out usuario1/DSApriv.pem.enc
+openssl dsa -in usuario2/DSAkey.pem -outform PEM -out usuario2/DSApriv.pem
+openssl dsa -aes-256-cbc -in usuario2/DSApriv.pem -out usuario2/DSApriv.pem.enc
+openssl dsa -text -noout -in usuario1/DSApriv.pem
+openssl dsa -text -noout -in usuario1/DSApriv.pem.enc
+openssl dsa -text -noout -in usuario2/DSApriv.pem
+openssl dsa -text -noout -in usuario2/DSApriv.pem.enc
+
+openssl dsa -pubout -outform PEM -in usuario1/DSAkey.pem -out usuario1/DSApub.pem
+openssl dsa -pubout -outform PEM -in usuario2/DSAkey.pem -out usuario2/DSApub.pem
+openssl dsa -pubout -in usuario1/DSAkey.pem
+openssl dsa -pubout -in usuario2/DSAkey.pem
+
+dd bs=128 count=1 </dev/urandom > /tmp/message
+hexdump /tmp/message
+
+openssl pkeyutl -sign -inkey usuario1/DSAkey.pem -in /tmp/message -out /tmp/message.sign
+hexdump /tmp/message.sign
+openssl pkeyutl -sign -inkey usuario2/DSAkey.pem -in /tmp/message -out /tmp/message.sign
+hexdump /tmp/message.sign
+
+dd bs=32 count=1 </dev/urandom > /tmp/extra
+cat /tmp/message > /tmp/message2
+cat /tmp/extra >> /tmp/message2
+hexdump /tmp/message
+hexdump /tmp/message2
+openssl pkeyutl -sign -inkey usuario1/DSAkey.pem -in /tmp/message -out /tmp/message.sign
+openssl pkeyutl -verify -inkey usuario1/DSAkey.pem -sigfile /tmp/message.sign -in /tmp/message
+openssl pkeyutl -verify -inkey usuario1/DSAkey.pem -sigfile /tmp/message.sign -in /tmp/message2
+
+openssl dgst -sha384 -c -out usuario1/DSApub.pem.sha384 usuario1/DSApub.pem
+cat usuario1/DSApub.pem.sha384
+
+openssl dgst -c -binary -sha1 -out /tmp/message2.sha1 /tmp/message2
+hexdump /tmp/message2.sha1
+ls -la /tmp/message2.sha1
+
