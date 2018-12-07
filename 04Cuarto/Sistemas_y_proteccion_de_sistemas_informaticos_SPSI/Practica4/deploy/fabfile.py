@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 import os, sys, requests
 from fabric.api import env, local, run, sudo
-from fabric.operations import put
+from fabric.operations import put, abort
 
 env.user = 'vagrant'
 env.key_filename = "~/.ssh/id_rsa_deploying"
@@ -13,10 +13,9 @@ def _set_env():
         env.password = 'vagrant'
         env.host_string = 'localhost:2222'
     elif env.machine == "remote":
-        env.host_string = 'dai.sudano.net:22'
+        env.host_string = 'spsi.sudano.net:22'
     else:
-        print ("Por favor indique una maquina valida para desplegar")
-        sys.exit()
+        abort("Por favor indique una maquina valida para desplegar")
 
 def _levantar_maquina():
     if env.machine == "local":
@@ -66,7 +65,7 @@ def _assing_floating_ip():
 # de desarrollo
 def _toput():
     run('mkdir -p ~/src')
-    put('~/GitHub/Universidad/04Cuarto/Desarrollo_de_aplicaciones_de_internet_DAI/config_machine/src', '~/')
+    put('~/GitHub/Universidad/04Cuarto/Sistemas_y_proteccion_de_sistemas_informaticos_SPSI/Practica4/src', '~/')
 
 def start():
     _set_env()
