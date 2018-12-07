@@ -14,11 +14,15 @@
     #- debug: msg="{{ ansible_env }}"
     #- debug: msg="{{ lookup('env','USER') }}"
   tasks:
-    - name: Upgrade all packages
+#    - name: Upgrade all packages
+#      become: yes
+#      dnf:
+#        name: "*"
+#        state: latest
+    - name: Set timezone to Europe/Madrid
       become: yes
-      dnf:
-        name: "*"
-        state: latest   
+      timezone:
+        name: Europe/Madrid
     - name: Install requeriments of disable selinux
       become: yes
       dnf:
@@ -51,9 +55,10 @@
         group: vagrant
         mode: 0744
       with_items:
-      - '~/nextCloud/Facultad/01_Seguridad_y_Proteccion_de_datos_de_sistemas_informaticas_SPSI/Practicas/Practica4/Scrtipts_maquina_virtual/openssl_ca.conf'
-      - '~/nextCloud/Facultad/01_Seguridad_y_Proteccion_de_datos_de_sistemas_informaticas_SPSI/Practicas/Practica4/Scrtipts_maquina_virtual/openssl_subordinada.conf'
-      - '~/nextCloud/Facultad/01_Seguridad_y_Proteccion_de_datos_de_sistemas_informaticas_SPSI/Practicas/Practica4/Scrtipts_maquina_virtual/create_ca_and_ca-sub.sh'
+      - '../openssl_ca.conf'
+      - '../openssl_subordinada.conf'
+      - '../create_ca_and_ca-sub.sh'
+      - '../DSAkey.pem'
 #    - name: Make tree structure for Certificate Authority
 #      file:
 #        path: '{{ item }}'
