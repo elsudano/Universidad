@@ -16,6 +16,7 @@ debug/
 \.vscode
 /.project
 \.vagrant
+*.retry
 *.pyc
 *.class
 *.code-workspace

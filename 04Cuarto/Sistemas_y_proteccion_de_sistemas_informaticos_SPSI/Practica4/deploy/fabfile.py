@@ -96,4 +96,7 @@ def remove():
     _eliminar_maquina()
 
 def install_vbguest():
+    _set_env()
+    # primero se crea la maquina, despues se actualiza la maquina despues se instala las vbguest y despues se ejecuta todo
     local('vagrant vbguest %s -f -b --do install' % env.machine)
+    run('shutdown -r 0')

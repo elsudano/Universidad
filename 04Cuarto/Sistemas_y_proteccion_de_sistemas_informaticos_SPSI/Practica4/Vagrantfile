@@ -21,11 +21,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             vbox.cpus = 2
         end
         # Para que esta linea funcione es necesario instalar el plugin de vagrant
-        # Con esta linea sincronizamos el directorio de desarrollo con la maquina virtuaĺ
         # vagrant plugin install vagrant-vbguest
         config.vbguest.iso_path = "/usr/share/virtualbox/VBoxGuestAdditions.iso"
         #config.vbguest.no_remote = true # no se baja la ISO
-        config.vm.synced_folder 'src/', '/home/vagrant/src', SharedFoldersEnableSymlinksCreate: false#, disabled: true
+        # Con esta linea sincronizamos el directorio de desarrollo con la maquina virtuaĺ
+        config.vm.synced_folder 'src/', '/home/vagrant/src', SharedFoldersEnableSymlinksCreate: false, disabled: true
     end
     config.vm.define "remote" do |config|
         config.vm.provider :digital_ocean do |provider, override|
