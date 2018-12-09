@@ -23,7 +23,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             vbox.cpus = 2
         end
         config.vm.network "forwarded_port", guest: 8080, host: 8080
-        config.vm.network "forwarded_port", guest: 22, host: 2222
+        #config.vm.network "forwarded_port", guest: 22, host: 2222
         # Para que esta linea funcione es necesario instalar el plugin de vagrant
         # Con esta linea sincronizamos el directorio de desarrollo con la maquina virtuaĺ
         # vagrant plugin install vagrant-vbguest

@@ -81,8 +81,8 @@
         enabled: yes
         name: mongod
         state: started
-# Las siguientes lineas se usan solamente para cuando las variables
-# de entorno que se quieran utilizar van a ser permanentes
+#     Las siguientes lineas se usan solamente para cuando las variables
+#     de entorno que se quieran utilizar van a ser permanentes
     - name: Setting environment var for Flask Application
       become: yes
       lineinfile:

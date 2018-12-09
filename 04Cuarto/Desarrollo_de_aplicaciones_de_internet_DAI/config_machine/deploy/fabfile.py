@@ -31,9 +31,8 @@ def _detener_maquina(envirotment):
 
 def _configurar_maquina(envirotment):
     if envirotment == "local":
-        #local('sed "/localhost/d" ~/.ssh/known_hosts > ~/.ssh/known_hosts.tmp')
-        #local('sed "/127.0.0.1/d" ~/.ssh/known_hosts.tmp > ~/.ssh/known_hosts.tmp')
-        #local('mv -f ~/.ssh/known_hosts.tmp ~/.ssh/known_hosts')
+        local('sed "/localhost/d" ~/.ssh/known_hosts > ~/.ssh/known_hosts.tmp')
+        local('sed "/127.0.0.1/d" ~/.ssh/known_hosts.tmp > ~/.ssh/known_hosts')
         local('ssh-copy-id -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /home/usuario/.ssh/id_rsa_deploying vagrant@localhost -p 2222')
         local('vagrant provision local')
     elif envirotment == "remote":
@@ -55,6 +54,8 @@ def _import_data_mongodb():
     run('mongo mongodb://%s:%s/dai --eval "db.dropDatabase()"' % (mongodb_host, mongodb_port))
     run('mongoimport ~/src/static/json/restaurants.json --db dai --collection restaurants')
     run('mongoimport ~/src/static/json/neighborhoods.json --db dai --collection neighborhoods')
+    run('mongo mongodb://%s:%s/dai --eval "db.restaurants.createIndex({name: \'text\'})"' % (mongodb_host, mongodb_port))
+    
 
 def _assing_floating_ip():
     token = os.environ['DO_TOKEN']
@@ -116,4 +117,8 @@ def test(envirotment):
     _assing_floating_ip()
 
 def install_vbguest(envirotment):
+    _set_env(envirotment)
+    # primero se crea la maquina, despues se actualiza la maquina, se tiene que reiniciar,
+    # despues se instala las vbguest y despues se ejecuta todo
     local('vagrant vbguest %s -f -b --do install' % envirotment)
+    run('shutdown -r 0')
