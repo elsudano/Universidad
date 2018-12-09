@@ -77,7 +77,7 @@ def make_menu():
         {'href':'/icons','icon':'fa-tags','caption':'Icons'},
         {'href':'/grid','icon':'fa-wrench','caption':'Grid'},
         {'href':'/doc','icon':'fa-book','caption':'Documentation'},
-        {'href':'/forms','icon':'','caption':'Forms'},
+        #{'href':'/forms','icon':'','caption':'Forms'},
     ]
     return menu_items
 
@@ -120,8 +120,14 @@ def search():
         if request.method == 'POST':
             stype = request.form.get('stype')
             string = request.form.get('string')
-        print (db.restaurants.find_one({'name':'%s' % string}))
-        result = render_template('con_bootstrap/search.html', navigation=make_menu())
+            if string != '':
+                myquery = {'$text':{'$search':string}}
+                search_result = db.restaurants.find(myquery)
+                result = render_template('con_bootstrap/search.html', search_result=search_result, navigation=make_menu())
+            else:
+                result = render_template('con_bootstrap/search.html', empty=True, navigation=make_menu())
+        else:
+            result = render_template('con_bootstrap/search.html', empty=True, navigation=make_menu())
     else:
         result = render_template('con_bootstrap/login.html')
     return result
