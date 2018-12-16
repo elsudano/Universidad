@@ -225,7 +225,7 @@
                         <li class="sidebar-search">
                             <div class="input-group custom-search-form">
                                 <form action='/search' method='POST' role="form">
-                                    <input class="form-control" type="hidden" name="type" value="simple">
+                                    <input class="form-control" type="hidden" name="stype" value="simple">
                                     <div class="form-group input-group">
                                         <input class="form-control" type="text" name="string" placeholder="Search...">
                                         <span class="input-group-btn">
@@ -239,6 +239,18 @@
                             <!-- /input-group -->
                         </li>
                         {% include 'con_bootstrap/navigator.html' %}
+                        <li>
+                            <a href="#"><i class="fa fa-shopping-cart fa-fw"></i> Restaurants<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="new">New Restaurant</a>
+                                </li>
+                                <li>
+                                    <a href="search">Advanced Search Restaurant</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
                         <li>
                             <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
