@@ -4,6 +4,7 @@
 from PIL import Image
 import os, hashlib
 from flask import Flask, send_file, render_template, request, redirect, url_for, session, escape
+from bson.objectid import ObjectId
 from pymongo import MongoClient
 from pickleshare import *
 from OpenSSL import SSL
@@ -23,7 +24,7 @@ restaurants = db.restaurants
 neighborhoods = db.neighborhoods
 
 # ---------------------- Parte privada ---------------------------
-# Función para manejar la base de datos
+# Función para manejar la base de datos de usuarios
 def db_manage(action,user,passwd=None):
     db = PickleShareDB('~/src/database')
     md5 = hashlib.md5()
@@ -118,19 +119,80 @@ def doc():
 def search():
     if session.get('auth'):
         if request.method == 'POST':
-            stype = request.form.get('stype')
+            stype = request.form.get('stype') # Searching type: simple or advance
             string = request.form.get('string')
             if string != '':
                 myquery = {'$text':{'$search':string}}
                 search_result = db.restaurants.find(myquery)
-                result = render_template('con_bootstrap/search.html', search_result=search_result, navigation=make_menu())
+                result = render_template('con_bootstrap/search.html', string=string, search_result=search_result, navigation=make_menu())
             else:
                 result = render_template('con_bootstrap/search.html', empty=True, navigation=make_menu())
+        elif request.method == 'GET':
+            result = render_template('con_bootstrap/search.html', navigation=make_menu())
         else:
             result = render_template('con_bootstrap/search.html', empty=True, navigation=make_menu())
     else:
         result = render_template('con_bootstrap/login.html')
     return result
+
+
+@app.route('/new', methods=['GET', 'POST'])
+def new():
+    if session.get('auth'):
+        if request.method == 'POST':
+            rname = request.form.get('name')
+            rlong = request.form.get('long')
+            rlati = request.form.get('lati')
+            myquery = {'location':{'coordinates':[rlong,rlati], 'type':'Point'}, 'name':rname}
+            insert_result = db.restaurants.insert_one(myquery)
+            if insert_result:
+                save = True
+            result = render_template('con_bootstrap/new.html', save=save, navigation=make_menu())
+        elif request.method == 'GET':
+            result = render_template('con_bootstrap/new.html', navigation=make_menu())
+    else:
+        result = render_template('con_bootstrap/login.html')
+    return result
+
+
+@app.route('/edit', methods=['POST'])
+def update():
+    if session.get('auth'):
+        rid = request.form.get('id')
+        rname = request.form.get('name')
+        rlong = request.form.get('long')
+        rlati = request.form.get('lati')
+        myquery = {'_id': ObjectId(rid)}
+        update_string = {'location':{'coordinates':[rlong,rlati], 'type':'Point'}, 'name':rname}
+        db.restaurants.update_one(myquery,{"$set": update_string,"$currentDate": {"lastModified": True}})
+        search_result = db.restaurants.find(myquery)
+        result = render_template('con_bootstrap/search.html', string=rname, search_result=search_result, navigation=make_menu())
+    else:
+        result = render_template('con_bootstrap/login.html')
+    return result
+
+
+@app.route('/edit/<rid>', methods=['GET'])
+def edit(rid):
+    if session.get('auth'):
+        myquery = {'_id': ObjectId(rid)}
+        item_result = db.restaurants.find_one(myquery)
+        result = render_template('con_bootstrap/editing.html', save='', item_result=item_result, navigation=make_menu())
+    else:
+        result = render_template('con_bootstrap/login.html')
+    return result
+
+
+@app.route('/del/<rid>', methods=['GET'])
+def delete(rid):
+    if session.get('auth'):
+        myquery = {'_id': ObjectId(rid)}
+        db.restaurants.delete_one(myquery)
+        result = render_template('con_bootstrap/index.html', navigation=make_menu())
+    else:
+        result = render_template('con_bootstrap/login.html')
+    return result
+
 
 @app.route('/flot')
 def flot():
