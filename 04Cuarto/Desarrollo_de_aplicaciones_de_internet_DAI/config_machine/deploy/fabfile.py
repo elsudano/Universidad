@@ -55,6 +55,7 @@ def _import_data_mongodb():
     run('mongoimport ~/src/static/json/restaurants.json --db dai --collection restaurants')
     run('mongoimport ~/src/static/json/neighborhoods.json --db dai --collection neighborhoods')
     run('mongo mongodb://%s:%s/dai --eval "db.restaurants.createIndex({name: \'text\'})"' % (mongodb_host, mongodb_port))
+    run('mongo mongodb://%s:%s/dai --eval "db.neighborhoods.createIndex({name: \'text\'})"' % (mongodb_host, mongodb_port))
     
 
 def _assing_floating_ip():
