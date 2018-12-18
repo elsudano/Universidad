@@ -1,0 +1,36 @@
+{% extends "con_bootstrap/body.html" %}
+{% block content %}
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Documentación</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Paragraphs
+                        </div>
+                        <div class="panel-body">
+                            <pclass="lead">La siguiente aplicación solamente responde a una serie de URLs, de entre las que se destacan las siguientes:</p>
+                            <h4><strong>Index Principal /</strong></h4>
+                            <p>Muestra la primera plantilla utilizada con Jinja32</p>
+                            <h4><strong>Recogiendo Variables /var/(nombre)</strong></h4>
+                            <p>En esta dirección nos saldrá un saludo personalizado en el cual sustituirá lo que pongamos en la URL en el lugar donde se encuentra (nombre) por un valor dado, es una forma de probar la entrada de datos a la aplicación</p>
+                            <h4><strong>Datos Estáticos /static-data</strong></h4>
+                            <p>En esta dirección lo que vamos a encontrar es una página estática pero esta vez será leida desde un fichero HTML</p>
+                            <h4><strong>Imágen Aleatoria /random-image</strong></h4>
+                            <p>Generá una imágen fractal y la muestra en el navegador</p>
+                            <h4><strong>Imágen Dinámica /dynamic-image/(x1)/(y1)/(x2)/(y2)/(w)/(i)/(p)</strong></h4>
+                            <p>Generá una imágen fractal y la muestra en el navegador, pero en está ocasión hay que poner los párametros que queremos para la imágen, quedando de la siguiente manera los datos a pasar: coordenada x1, coordenada y1, coordenada x2, coordenada y2, ancho de la imágen, cantidad de itraciones para el fractal y paleta de colores</p>
+                            <h4><strong>Página de Error 404</strong></h4>
+                            <p>Por último si no encuentra la página que el usuario esta buscando, la aplicación mostrará una pagina de error personalizada</p>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+            <!-- /.col-lg-12 -->
+            </div>
+        </div>
+{% endblock %}

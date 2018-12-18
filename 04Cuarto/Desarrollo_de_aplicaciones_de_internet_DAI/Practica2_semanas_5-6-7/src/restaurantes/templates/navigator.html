@@ -1,0 +1,5 @@
+{% block navigation %}
+{% for item in navigation %}
+    <li><a href="{{ item.href }}"><i class="fa {{ item.icon }} fa-fw"></i> {{ item.caption }}</a></li>
+{% endfor %}
+{% endblock %}
