@@ -20,7 +20,11 @@
       become: yes
       dnf:
         name: "*"
-        state: latest   
+        state: latest
+    - name: Set timezone to Europe/Madrid
+      become: yes
+      timezone:
+        name: Europe/Madrid
     - name: Install requeriments of disable selinux
       become: yes
       dnf:
