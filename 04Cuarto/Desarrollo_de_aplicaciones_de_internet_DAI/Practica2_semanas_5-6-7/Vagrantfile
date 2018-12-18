@@ -17,8 +17,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         #config.vm.network "public_network"
         config.vm.hostname = "local-dev-machine"
         config.vm.provider "virtualbox" do |vbox|
-            vbox.default_nic_type = "82543GC"
-            vbox.name = "local-dev-machine-p1"
+            vbox.default_nic_type = "82545EM"
+            vbox.name = "local-dev-machine-p2"
             vbox.memory = 2000
             vbox.cpus = 2
             vbox.customize ["modifyvm", :id, '--accelerate2dvideo', 'off', '--clipboard', 'bidirectional', '--draganddrop', 'hosttoguest']
@@ -30,7 +30,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         # vagrant plugin install vagrant-vbguest
         config.vbguest.iso_path = "/usr/share/virtualbox/VBoxGuestAdditions.iso"
         #config.vbguest.no_remote = true # no se baja la ISO
-        config.vm.synced_folder 'src/', '/home/vagrant/src', SharedFoldersEnableSymlinksCreate: false#, disabled: true
+        config.vm.synced_folder 'src/', '/home/vagrant/src/', SharedFoldersEnableSymlinksCreate: false#, disabled: true
     end
     config.vm.define "remote" do |config|
         config.vm.provider :digital_ocean do |provider, override|
