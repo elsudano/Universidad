@@ -48,10 +48,12 @@
         name: python3-pip
         state: latest
     - name: Install Django with pip
+      become: yes
       pip:
         executable: pip3.6
         name:
-          django==2.1.4
+          - django==2.1.4
+          - django-allauth==0.38.0
     - name: Install No-SQL database MongoDB and utils
       become: yes
       dnf:

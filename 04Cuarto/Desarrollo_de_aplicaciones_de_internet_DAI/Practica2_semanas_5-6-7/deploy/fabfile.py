@@ -62,7 +62,7 @@ def _configurar_django():
     if not exists('%(path_django)s/%(app)s' % env):
         run('cd %(path_django)s; python3.6 %(path_django)s/manage.py startapp %(app)s' % env)
     run('python3.6 %(path_django)s/manage.py migrate' % env)
-    run('python3.6 %(path_django)s/manage.py createsuperuser' % env)
+    #run('python3.6 %(path_django)s/manage.py createsuperuser' % env)
 
 
 def _import_data_mongodb():
