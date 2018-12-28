@@ -39,6 +39,9 @@ class MainView(View):
         # --------------------------------------------------------------------------------
         self.l_title = ttk.Label(self._principal_frame, text="Generación de Blockchain", font=('Helvetica', 20, 'bold'))
         self.l_title.grid(column=0, row=0, columnspan=7, sticky='SN')
+        self.b_clean = ttk.Button(self._principal_frame, text="Clean All")
+        self.b_clean.grid(column=1, columnspan=12, row=11, sticky='SE')
+        self.b_clean.bind("<Button>", self._controller.clean_all)
         try:
             self.g_group1 = ttk.Labelframe(self._principal_frame, text="Primeros datos de entrada:", borderwidth=4, padding=2)
         except:
