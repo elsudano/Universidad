@@ -11,6 +11,8 @@ import abc
 import six
 # para el analisis de rutas del sistema
 # from pathlib import Path
+# para las gráficas
+import matplotlib.pyplot as plt
 
 
 @six.add_metaclass(abc.ABCMeta)
@@ -25,6 +27,8 @@ class Controller:
         """Constructor por defecto."""
         self._window = window
         self._model = model
+        # para la represntación interactiva
+        plt.ion()
 
     @abc.abstractmethod
     def back(self, event):

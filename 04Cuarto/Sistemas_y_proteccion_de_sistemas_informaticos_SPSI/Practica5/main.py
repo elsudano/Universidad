@@ -13,7 +13,7 @@ from src.model.Models import MainModel
 from src.view_app.Views import MainView
 
 if __name__ == '__main__':
-    global DEBUG # Variable para depurar programa
+    global DEBUG  # Variable para depurar programa
     DEBUG = True
     # Creamos la Ventana
     myWindow = w("Practica 5 de SPSI", 1154, 660)

@@ -12,9 +12,8 @@ PyInstaller
 pyparsing
 python-dateutil
 Pillow
+matplotlib
 
-
-#matplotlib
 #nose
 #numpy
 #pandas

@@ -9,6 +9,12 @@ mas fácil encontrar en donde se encuentra cada parte del programa.
 # para crear clases con padres e hijos
 import abc
 import six
+# para funciones hash
+import hashlib
+# para numeros aleatorios
+import random
+# para cadenas
+import string
 
 
 @six.add_metaclass(abc.ABCMeta)
@@ -17,8 +23,7 @@ class Model():
 
     def __init__(self):
         """Constructor por defecto."""
-        # para la represntación interactiva
-        #plt.ion()
+        pass
 
     @abc.abstractmethod
     def hacer_algo(self):
