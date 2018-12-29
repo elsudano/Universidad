@@ -1,10 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-from src.model.Model import Model
-import hashlib
-import random
-import string
+from src.model.Model import Model, hashlib, random, string
 
 
 class MainModel(Model):
@@ -33,6 +30,19 @@ class MainModel(Model):
         binary = bin(int(hex_string, 16))[2:].zfill(bits_of_string)
         return binary
 
+    @staticmethod
+    def convert_str_to_hex(number):
+        hexadecimal = hex(int(number))
+        return hexadecimal
+
+    # @staticmethod
+    # def show_plot(avrg_iter, n_bits):
+    #     plt.xlabel('Bits')
+    #     plt.ylabel('Avrg Iteration')
+    #     plt.grid()
+    #     plt.plot(n_bits, avrg_iter)
+    #     plt.show()
+
     # for hexadecimal version
     def first_function(self, text, n_bits, string_n_bits):
         bits_of_string = len(string_n_bits)*4
@@ -54,7 +64,7 @@ class MainModel(Model):
         return [myid, string_x, hash_value, count]
 
     # for binary version
-    def second_function(self, text, n_bits, string_n_bits):
+    def first_function_bin(self, text, n_bits, string_n_bits):
         bits_of_string = len(string_n_bits)
         myid = string_n_bits+text
         hash_value = None
@@ -71,5 +81,25 @@ class MainModel(Model):
             # Justo aquí es donde miramos si la cadena tiene la cantidad de 0 que queremos
             if bits_of_string-int(hash_value, 16).bit_length() == n_bits:
                 hash_value = self.convert_hex_to_bin(hash_value)
+                break
+        return [myid, string_x, hash_value, count]
+
+    def second_function(self, text, n_bits, string_n_bits):
+        bits_of_string = len(string_n_bits)*4
+        myid = string_n_bits+text
+        hash_value = None
+        count = 0
+        string_x = self.random_hex_string(bits_of_string)
+        while True:
+            string_x = hex(int(string_x, 16)+1)
+            count += 1
+            if bits_of_string == 256:
+                hash_value = hashlib.sha256((myid + string_x).encode('utf-8')).hexdigest()
+            if bits_of_string == 384:
+                hash_value = hashlib.sha384((myid + string_x).encode('utf-8')).hexdigest()
+            if bits_of_string == 512:
+                hash_value = hashlib.sha512((myid + string_x).encode('utf-8')).hexdigest()
+            # Justo aquí es donde miramos si la cadena tiene la cantidad de 0 que queremos
+            if bits_of_string-int(hash_value, 16).bit_length() == n_bits:
                 break
         return [myid, string_x, hash_value, count]
