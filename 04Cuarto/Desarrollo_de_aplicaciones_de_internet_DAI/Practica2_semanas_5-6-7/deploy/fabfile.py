@@ -1,7 +1,7 @@
 #!/usr/bin/python3.7
 # -*- coding: UTF-8 -*-
 import os, sys, requests
-from fabric.api import env, local, run, sudo
+from fabric.api import env, local, run, sudo, prompt
 from fabric.operations import put
 from fabric.contrib.files import exists
 
@@ -39,6 +39,10 @@ def _configurar_maquina(envirotment):
         local('sed "/127.0.0.1/d" ~/.ssh/known_hosts.tmp > ~/.ssh/known_hosts')
         local('ssh-copy-id -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /home/usuario/.ssh/id_rsa_deploying vagrant@localhost -p 2222')
         local('vagrant provision local')
+        install_tools = prompt('¿Quieres intalar las tools a la maquina? [y/N]?: ', default='N')
+        print(install_tools)
+        if install_tools == 'y' or install_tools == 'Y':
+            install_vbguest(envirotment)
         _configurar_django()
     elif envirotment == "remote":
         local('vagrant provision remote')
@@ -59,10 +63,19 @@ def _configurar_django():
     run('sed -i "s/\'DIRS\': \\\[\\\]\\\,/\'DIRS\': [os.path.join(BASE_DIR, \'\/templates\/\')],/" %(path_django)s/%(project)s/settings.py' % env)
     run('sed -i "s/LANGUAGE_CODE = \'en-us\'/LANGUAGE_CODE = \'es-ES\'/" %(path_django)s/%(project)s/settings.py' % env)
     run('sed -i "s/TIME_ZONE = \'UTC\'/TIME_ZONE = \'Europe\/Madrid\'/" %(path_django)s/%(project)s/settings.py' % env)
+    debug_on = prompt('¿Quieres el modo debug? [Y/n]?: ', default='Y')
+    if debug_on == 'y' or debug_on == 'Y':
+        run('sed -i "s/DEBUG = False/DEBUG = True/" %(path_django)s/%(project)s/settings.py' % env)
+        run('sed -i "s/ALLOWED_HOSTS = \[\'dai.sudano.net\', \'localhost\', \'127.0.0.1\', \'\[::1\]\'\]/ALLOWED_HOSTS = \[\]/" %(path_django)s/%(project)s/settings.py' % env)
+    elif debug_on == 'n' or debug_on == 'N':
+        run('sed -i "s/DEBUG = True/DEBUG = False/" %(path_django)s/%(project)s/settings.py' % env)
+        run('sed -i "s/ALLOWED_HOSTS = \[\]/ALLOWED_HOSTS = \[\'dai.sudano.net\', \'localhost\', \'127.0.0.1\', \'\[::1\]\'\]/" %(path_django)s/%(project)s/settings.py' % env)
     if not exists('%(path_django)s/%(app)s' % env):
         run('cd %(path_django)s; python3.6 %(path_django)s/manage.py startapp %(app)s' % env)
     run('python3.6 %(path_django)s/manage.py migrate' % env)
-    #run('python3.6 %(path_django)s/manage.py createsuperuser' % env)
+    create_user = prompt('¿Quieres crear el super usuario? [y/N]?: ', default='N')
+    if create_user == 'y' or create_user == 'Y':
+        run('python3.6 %(path_django)s/manage.py createsuperuser' % env)
 
 
 def _import_data_mongodb():
@@ -139,4 +152,4 @@ def install_vbguest(envirotment):
     # primero se crea la maquina, despues se actualiza la maquina, se tiene que reiniciar,
     # despues se instala las vbguest y despues se ejecuta todo
     local('vagrant vbguest %s -f -b --do install' % envirotment)
-    sudo('shutdown -r 0')
+    sudo('shutdown now')
