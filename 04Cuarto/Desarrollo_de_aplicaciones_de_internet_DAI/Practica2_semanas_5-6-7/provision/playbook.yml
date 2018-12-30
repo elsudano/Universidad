@@ -45,15 +45,16 @@
     - name: Install dependencies for Django
       become: yes
       dnf:
-        name: python3-pip
+        name: ['python3-pip', 'python3-pymongo-gridfs']
         state: latest
     - name: Install Django with pip
       become: yes
       pip:
         executable: pip3.6
         name:
-          - django==2.1.4
-          - django-allauth==0.38.0
+          - django
+          - django-allauth
+          - mongoengine
     - name: Install No-SQL database MongoDB and utils
       become: yes
       dnf:
