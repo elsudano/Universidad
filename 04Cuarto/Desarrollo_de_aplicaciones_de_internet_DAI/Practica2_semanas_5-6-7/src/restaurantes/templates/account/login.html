@@ -1,32 +1,47 @@
-{% extends "base.html" %}
-{% block body %}
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+{% if messages %}
+<div>
+  <strong>Messages:</strong>
+  <ul>
+    {% for message in messages %}
+    <li>{{message}}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+{% block content %}
     <div class="container">
         <div class="row">
 			<div class="col-md-6 col-md-offset-3">
 				<div class="login-panel panel panel-default">
 					<div class="panel-heading">
-                        <h3 class="panel-title">Please Sign In or Sing Up</h3>
+                        <h3 class="panel-title">{% trans "Sign In" %}</h3>
 					</div>
 					<div class="panel-body">
                         <!-- Nav tabs -->
                         <ul class="nav nav-tabs">
+                            {% get_providers as socialaccount_providers %}
                             <li class="active"><a href="#login" data-toggle="tab" id="login-form-link">Login</a>
                             </li>
                             <li><a href="#register" data-toggle="tab" id="register-form-link">Register</a>
                             </li>
+                            {% include "socialaccount/snippets/provider_list.html" with process="login" %}
                         </ul>
-
                         <!-- Tab panes -->
                         <div class="tab-content">
                             <div class="tab-pane fade in active" id="login">
-                                <!-- {% load socialaccount %}
-                                {{ user.username }}
-                                {% provider_login_url 'github' %} -->
-                                <!-- <form action='/login/' method='POST' role="form">
+                                {% load socialaccount %}
+                                <form action='{% url 'account_login' %}' method='POST' role="form">
                                     <fieldset>
                                         {% csrf_token %}
-                                        {{ login_form }}
-                                        <div class="form-group">
+                                        {{ form.as_p }}
+                                        <!-- <div class="form-group">
                                             <input class="form-control" placeholder="Username" name="user" type="text" autofocus>
                                         </div>
                                         <div class="form-group">
@@ -36,16 +51,21 @@
                                             <label>
                                                 <input name="remember" type="checkbox" value="Remember Me">Remember Me
                                             </label>
-                                        </div>
-                                        <input class="form-control" type="hidden" name="page_before_login" value="/pepe_perez/">
-                                        <p><input class="btn btn-lg btn-success btn-block" type=submit value=Login></p>
+                                        </div> -->
+                                        {% if redirect_field_value %}
+                                        <input class="form-control" type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                                        {% endif %}
+                                        <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans 'Forgot Password?' %}</a>
+                                        <p><input class="btn btn-lg btn-success btn-block" type=submit value="{% trans 'Sign In' %}" /></p>
                                     </fieldset>
-                                </form> -->
+                                </form>
                             </div>
                             <div class="tab-pane fade" id="register">
-                                <form action='/session/' method='POST' role="form">
+                                <form class="signup" id="signup_form" action="{% url 'account_signup' %}" method='POST' role="form">
                                     <fieldset>
-                                        <div class="form-group">
+                                        {% csrf_token %}
+                                        {{ form.as_p }}
+                                        <!-- <div class="form-group">
                                             <input type="text" name="user" id="user" tabindex="1" class="form-control" placeholder="Username" value="">
                                         </div>
                                         <div class="form-group">
@@ -56,9 +76,11 @@
                                         </div>
                                         <div class="form-group">
                                             <input type="password" name="confirm-passwd" id="confirm-passwd" tabindex="2" class="form-control" placeholder="Confirm Password">
-                                        </div>
-                                        <input class="form-control" type="hidden" name="action" value="register">
-                                        <p><input class="btn btn-lg btn-success btn-block" type=submit value="Register Now"></p>
+                                        </div> -->
+                                        {% if redirect_field_value %}
+                                        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                                        {% endif %}
+                                        <p><input class="btn btn-lg btn-success btn-block" type=submit value="{% trans 'Sign Up' %} &raquo;"></p>
                                     </fieldset>
                                 </form>
                             </div>

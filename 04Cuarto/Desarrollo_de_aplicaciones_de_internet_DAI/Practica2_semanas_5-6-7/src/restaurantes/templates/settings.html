@@ -1,5 +1,7 @@
-{% extends "body.html" %}
+{% extends 'base.html' %}
 {% block content %}
+{% if user.is_authenticated %}
+{% include 'header.html' %}
         <!-- Page Content -->
         <div id="page-wrapper">
             <div class="container-fluid">
@@ -27,4 +29,6 @@
             <!-- /.container-fluid -->
         </div>
         <!-- /#page-wrapper -->
+{% include 'footer.html' %}
+{% endif %}
 {% endblock %}

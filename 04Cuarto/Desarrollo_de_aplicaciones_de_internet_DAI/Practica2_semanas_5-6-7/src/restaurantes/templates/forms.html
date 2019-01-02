@@ -1,5 +1,7 @@
-{% extends "body.html" %}
+{% extends 'base.html' %}
 {% block content %}
+{% if user.is_authenticated %}
+{% include 'header.html' %}
         <!-- Page Content -->
         <div id="page-wrapper">
                 <div class="row">
@@ -204,4 +206,6 @@
                 <!-- /.row -->
         </div>
         <!-- /#page-wrapper -->
+{% include 'footer.html' %}
+{% endif %}
 {% endblock %}

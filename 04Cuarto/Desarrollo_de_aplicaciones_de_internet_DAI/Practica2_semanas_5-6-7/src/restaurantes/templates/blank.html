@@ -1,5 +1,13 @@
-{% extends "body.html" %}
+{% extends 'base.html' %}
+
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block head_title %}Blank Page{% endblock %}
+
 {% block content %}
+{% if user.is_authenticated %}
+{% include 'header.html' %}
         <!-- Page Content -->
         <div id="page-wrapper">
             <div class="container-fluid">
@@ -14,4 +22,6 @@
             <!-- /.container-fluid -->
         </div>
         <!-- /#page-wrapper -->
+{% include 'footer.html' %}
+{% endif %}
 {% endblock %}
