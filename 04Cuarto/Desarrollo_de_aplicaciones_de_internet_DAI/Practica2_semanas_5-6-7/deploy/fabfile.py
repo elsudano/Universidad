@@ -45,8 +45,10 @@ def _configurar_maquina(envirotment):
             install_vbguest(envirotment)
         _configurar_django()
     elif envirotment == "remote":
-        local('vagrant provision remote')
         local('vagrant ssh remote -c "sudo dnf install python2.x86_64 firewalld.noarch -y"')
+        local('vagrant provision remote')
+        sudo('chown vagrant:vagrant -R /home/vagrant/src')
+        _configurar_django()
 
 def _ejecutar_aplicacion():
     run('python3.6 %(path_django)s/manage.py runserver 0.0.0.0:8080' % env)
