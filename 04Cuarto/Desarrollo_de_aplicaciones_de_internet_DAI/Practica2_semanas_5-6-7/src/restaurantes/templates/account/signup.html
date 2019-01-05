@@ -1,0 +1,53 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block head_title %}{% trans "Sign Up" %}{% endblock %}
+{% if messages %}
+<div>
+    <strong>Messages:</strong>
+    <ul>
+        {% for message in messages %}
+        <li>{{message}}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="login-panel panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{% trans "Sign Up" %}</h3>
+                </div>
+                <div class="panel-body">
+                    <form action='{% url "account_signup" %}' method='POST' role="form">
+                        <fieldset>
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            {% if redirect_field_value %}
+                            <input class="form-control" type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                            {% endif %}
+                            <p>{% blocktrans %}Already have an account? Then please{% endblocktrans %} <a href="{{ login_url }}">{%
+                                    trans 'Sign In' %}</a>.</p>
+                            <p><input class="btn btn-lg btn-success btn-block" type=submit value="{% trans 'Sign Up' %}" /></p>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-md-offset-3">
+            {% if fail %}
+            <div class="alert alert-danger alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                Fallo en la autenticación <a href="#" class="alert-link">Alert Link</a>.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% include 'footer.html' %}
+{% endblock %}

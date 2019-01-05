@@ -29,29 +29,19 @@
                             {% get_providers as socialaccount_providers %}
                             <li class="active"><a href="#login" data-toggle="tab" id="login-form-link">Login</a>
                             </li>
-                            <li><a href="#register" data-toggle="tab" id="register-form-link">Register</a>
+                            <li><a href="/signup" id="register-form-link">Register</a>
                             </li>
+                            <!-- <li><a href="#register" data-toggle="tab" id="register-form-link">Register</a>
+                            </li> -->
                             {% include "socialaccount/snippets/provider_list.html" with process="login" %}
                         </ul>
                         <!-- Tab panes -->
                         <div class="tab-content">
                             <div class="tab-pane fade in active" id="login">
-                                {% load socialaccount %}
                                 <form action='{% url 'account_login' %}' method='POST' role="form">
                                     <fieldset>
                                         {% csrf_token %}
                                         {{ form.as_p }}
-                                        <!-- <div class="form-group">
-                                            <input class="form-control" placeholder="Username" name="user" type="text" autofocus>
-                                        </div>
-                                        <div class="form-group">
-                                            <input class="form-control" placeholder="Password" name="passwd" type="password" value="">
-                                        </div>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input name="remember" type="checkbox" value="Remember Me">Remember Me
-                                            </label>
-                                        </div> -->
                                         {% if redirect_field_value %}
                                         <input class="form-control" type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
                                         {% endif %}
@@ -65,18 +55,6 @@
                                     <fieldset>
                                         {% csrf_token %}
                                         {{ form.as_p }}
-                                        <!-- <div class="form-group">
-                                            <input type="text" name="user" id="user" tabindex="1" class="form-control" placeholder="Username" value="">
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email Address" value="">
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="password" name="passwd" id="passwd" tabindex="2" class="form-control" placeholder="Password">
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="password" name="confirm-passwd" id="confirm-passwd" tabindex="2" class="form-control" placeholder="Confirm Password">
-                                        </div> -->
                                         {% if redirect_field_value %}
                                         <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
                                         {% endif %}

@@ -34,20 +34,11 @@
                                     <!-- Alert to save reg -->
                                     {% endif %}
                                     <div class="panel-body">
-                                        <form action='/new' method='POST' role="form">
+                                        
+                                        <form action='/new/' method='POST' role="form">
                                             <fieldset>
-                                                <div class="form-group">
-                                                    <label>Restaurant name:</label>
-                                                    <input class="form-control" placeholder="Restaurant name" name="name" type="text" autofocus>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Longitud position:</label>
-                                                    <input class="form-control" placeholder="Longitud" name="long" type="text" value="">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Latitud position:</label>
-                                                    <input class="form-control" placeholder="Latitud" name="lati" type="text" value="">
-                                                </div>
+                                                {% csrf_token %}
+                                                {{ newform }}
                                                 <p><input class="btn btn-lg btn-success btn-block" type=submit value=Create></p>
                                             </fieldset>
                                         </form>
