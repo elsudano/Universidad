@@ -2,9 +2,8 @@ from django.urls import include, path
 from . import views
 
 urlpatterns = [
-    path('', views.Login, name='login'),
+    path('', views.Index, name='index'),
     path('', include('allauth.urls')),
-    path('index/', views.Index, name='index'),
     path('blank/', views.Blank, name='blank'),
     path('grid/', views.Grid, name='grid'),
     path('icons/', views.Icons, name='icons'),
