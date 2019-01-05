@@ -74,6 +74,7 @@ def _configurar_django():
         run('sed -i "s/ALLOWED_HOSTS = \[\]/ALLOWED_HOSTS = \[\'dai.sudano.net\', \'localhost\', \'127.0.0.1\', \'\[::1\]\'\]/" %(path_django)s/%(project)s/settings.py' % env)
     if not exists('%(path_django)s/%(app)s' % env):
         run('cd %(path_django)s; python3.6 %(path_django)s/manage.py startapp %(app)s' % env)
+    run('python3.6 %(path_django)s/manage.py makemigrations %(app)s' % env)
     run('python3.6 %(path_django)s/manage.py migrate' % env)
     create_user = prompt('¿Quieres crear el super usuario? [y/N]?: ', default='N')
     if create_user == 'y' or create_user == 'Y':
