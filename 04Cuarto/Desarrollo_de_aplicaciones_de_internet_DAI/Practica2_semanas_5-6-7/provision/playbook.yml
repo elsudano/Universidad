@@ -86,7 +86,13 @@
       with_items:
       - "export MONGODB_HOST={{ lookup('env','MONGODB_HOST') }}"
       - "export MONGODB_PORT={{ lookup('env','MONGODB_PORT') }}"
-      - "export SECRET_KEY_DJANGO_DAI={{ lookup('env','SECRET_KEY_DJANGO_DAI') }}"
+      - "export SECRET_KEY_DJANGO_DAI='{{ lookup('env','SECRET_KEY_DJANGO_DAI') }}'"
+      - "export NAME_OF_APP={{ lookup('env','NAME_OF_APP') }}"
+      - "export NAME_OF_DBAPP={{ lookup('env','NAME_OF_DBAPP') }}"
+      - "export GITHUB_CLIENT_ID={{ lookup('env','GITHUB_CLIENT_ID') }}"
+      - "export GITHUB_CLIENT_SECRET={{ lookup('env','GITHUB_CLIENT_SECRET') }}"
+      - "export GOOGLE_CLIENT_ID={{ lookup('env','GOOGLE_CLIENT_ID') }}"
+      - "export GOOGLE_CLIENT_SECRET={{ lookup('env','GOOGLE_CLIENT_SECRET') }}"
 #    - name: Copy Source Code to remote machine
 #      copy:
 #        src: ~/GitHub/Universidad/04Cuarto/Desarrollo_de_aplicaciones_de_internet_DAI/config_machine/src/

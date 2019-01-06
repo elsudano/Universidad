@@ -19,7 +19,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['SECRET_KEY_DJANGO_DAI']
+SECRET_KEY = '%s' % os.environ['SECRET_KEY_DJANGO_DAI']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -120,7 +120,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'djongo',
         'ENFORCE_SCHEMA': True,
-        'NAME': 'adminapp',
+        'NAME': os.environ['NAME_OF_DBAPP'],
         'HOST': 'localhost',
         'PORT': 27017,
         # 'USER': 'user',

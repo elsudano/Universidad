@@ -1,15 +1,27 @@
 #!/usr/bin/python3.7
 # -*- coding: UTF-8 -*-
-import os, sys, requests
+import os, sys, requests, datetime
 from fabric.api import env, local, run, sudo, prompt
 from fabric.operations import put
 from fabric.contrib.files import exists
 
+env.pythonbin = 'python3.6'
+env.datenow = datetime.datetime.now().isoformat()
 env.user = 'vagrant'
+env.pass_admin_app = "pbkdf2_sha256$120000$39fUzRVqPpfn$WYKC0q6ZSMXqq6fuFl57wqkRYhEwvXFS31ummVsmScA="
 env.key_filename = "~/.ssh/id_rsa_deploying"
 env.path_django = '/home/vagrant/src'
 env.project = 'DAIPROJECT'
-env.app = 'restaurantes'
+env.mongodb_host = os.environ['MONGODB_HOST']
+env.mongodb_port = os.environ['MONGODB_PORT']
+env.token = os.environ['DO_TOKEN']
+env.fip = os.environ['DO_FIP']
+env.name_app = os.environ['NAME_OF_APP']
+env.name_dbapp = os.environ['NAME_OF_DBAPP']
+env.github_client_id = os.environ['GITHUB_CLIENT_ID']
+env.github_client_secret = os.environ['GITHUB_CLIENT_SECRET']
+env.google_client_id = os.environ['GOOGLE_CLIENT_ID']
+env.google_client_secret = os.environ['GOOGLE_CLIENT_SECRET']
 
 def _set_env(envirotment):
     if envirotment == "local":
@@ -37,10 +49,10 @@ def _configurar_maquina(envirotment):
     if envirotment == "local":
         local('sed "/localhost/d" ~/.ssh/known_hosts > ~/.ssh/known_hosts.tmp')
         local('sed "/127.0.0.1/d" ~/.ssh/known_hosts.tmp > ~/.ssh/known_hosts')
-        local('ssh-copy-id -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /home/usuario/.ssh/id_rsa_deploying vagrant@localhost -p 2222')
+        local('ssh-copy-id -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i \
+        /home/usuario/.ssh/id_rsa_deploying vagrant@localhost -p 2222')
         local('vagrant provision local')
-        install_tools = prompt('¿Quieres intalar las tools a la maquina? [y/N]?: ', default='N')
-        print(install_tools)
+        install_tools = prompt('¿Quieres instalar las tools a la maquina? [y/N]?: ', default='N')
         if install_tools == 'y' or install_tools == 'Y':
             install_vbguest(envirotment)
         _configurar_django()
@@ -51,7 +63,7 @@ def _configurar_maquina(envirotment):
         _configurar_django()
 
 def _ejecutar_aplicacion():
-    run('python3.6 %(path_django)s/manage.py runserver 0.0.0.0:8080' % env)
+    run('%(pythonbin)s %(path_django)s/manage.py runserver 0.0.0.0:8080' % env)
 
 def _eliminar_maquina(envirotment):
     if envirotment == "local":
@@ -62,40 +74,86 @@ def _eliminar_maquina(envirotment):
 def _configurar_django():
     if not exists('%(path_django)s/%(project)s' % env):
         run('django-admin startproject %(project)s %(path_django)s' % env)
-    run('sed -i "s/\'DIRS\': \\\[\\\]\\\,/\'DIRS\': [os.path.join(BASE_DIR, \'\/templates\/\')],/" %(path_django)s/%(project)s/settings.py' % env)
+    if not exists('%(path_django)s/%(name_app)s' % env):
+        run('cd %(path_django)s; python3.6 %(path_django)s/manage.py startapp %(name_app)s' % env)
+    run('sed -i "s/\'DIRS\': \\\[\\\]\\\,/\'DIRS\': [os.path.join(BASE_DIR, \'\/templates\/\')],/" \
+    %(path_django)s/%(project)s/settings.py' % env)
     run('sed -i "s/LANGUAGE_CODE = \'en-us\'/LANGUAGE_CODE = \'es-ES\'/" %(path_django)s/%(project)s/settings.py' % env)
     run('sed -i "s/TIME_ZONE = \'UTC\'/TIME_ZONE = \'Europe\/Madrid\'/" %(path_django)s/%(project)s/settings.py' % env)
     debug_on = prompt('¿Quieres el modo debug? [Y/n]?: ', default='Y')
     if debug_on == 'y' or debug_on == 'Y':
         run('sed -i "s/DEBUG = False/DEBUG = True/" %(path_django)s/%(project)s/settings.py' % env)
-        run('sed -i "s/ALLOWED_HOSTS = \[\'dai.sudano.net\', \'localhost\', \'127.0.0.1\', \'\[::1\]\'\]/ALLOWED_HOSTS = \[\]/" %(path_django)s/%(project)s/settings.py' % env)
+        run('sed -i "s/ALLOWED_HOSTS = \[\'dai.sudano.net\', \'localhost\', \'127.0.0.1\', \
+        \'\[::1\]\'\]/ALLOWED_HOSTS = \[\]/" %(path_django)s/%(project)s/settings.py' % env)
     elif debug_on == 'n' or debug_on == 'N':
         run('sed -i "s/DEBUG = True/DEBUG = False/" %(path_django)s/%(project)s/settings.py' % env)
-        run('sed -i "s/ALLOWED_HOSTS = \[\]/ALLOWED_HOSTS = \[\'dai.sudano.net\', \'localhost\', \'127.0.0.1\', \'\[::1\]\'\]/" %(path_django)s/%(project)s/settings.py' % env)
-    if not exists('%(path_django)s/%(app)s' % env):
-        run('cd %(path_django)s; python3.6 %(path_django)s/manage.py startapp %(app)s' % env)
-    run('python3.6 %(path_django)s/manage.py makemigrations %(app)s' % env)
-    run('python3.6 %(path_django)s/manage.py migrate' % env)
+        run('sed -i "s/ALLOWED_HOSTS = \[\]/ALLOWED_HOSTS = \[\'dai.sudano.net\', \'localhost\', \
+        \'127.0.0.1\', \'\[::1\]\'\]/" %(path_django)s/%(project)s/settings.py' % env)
+    run('%(pythonbin)s %(path_django)s/manage.py migrate' % env)
+    config_allauth = prompt('¿Quieres configurar AllAuth con MongoDB? [y/N]?: ', default='N')
+    if config_allauth == 'y' or config_allauth == 'Y':
+        _config_allauth_in_mongodb()
+        run('%(pythonbin)s %(path_django)s/manage.py makemigrations %(name_app)s' % env)
+        run('%(pythonbin)s %(path_django)s/manage.py migrate' % env)
     create_user = prompt('¿Quieres crear el super usuario? [y/N]?: ', default='N')
     if create_user == 'y' or create_user == 'Y':
-        run('python3.6 %(path_django)s/manage.py createsuperuser' % env)
+        auto = prompt('¿Modo interactivo o automático? [i/A]?: ', default='A')
+        if auto == 'a' or auto == 'A':
+            run('mongo mongodb://%(mongodb_host)s:%(mongodb_port)s/%(name_dbapp)s --eval \
+            "db.auth_user.remove({\'id\':NumberInt(1)})"' % env)
+            run('mongo mongodb://%(mongodb_host)s:%(mongodb_port)s/%(name_dbapp)s --eval \
+            "db.auth_user.insert({\'id\':NumberInt(1),\'password\':\'%(pass_admin_app)s\', \'last_login\':null, \
+            \'is_superuser\':true,\'username\':\'admin\',\'first_name\':\'Administrator\', \
+            \'last_name\':\'of App\',\'email\':\'admin@localhost.local\',\'is_staff\':true, \
+            \'is_active\':true,\'date_joined\':ISODate(\'%(datenow)s\')})"' % env)
+        elif auto == 'i' or auto == 'I':
+            run('mongo mongodb://%(mongodb_host)s:%(mongodb_port)s/%(name_dbapp)s --eval \
+            "db.auth_user.remove({\'id\':NumberInt(1)})"' % env)
+            run('%(pythonbin)s %(path_django)s/manage.py createsuperuser' % env)
+    import_data = prompt('¿Quiere importar los datos de los restaurantes y los vecinos? [y/N]?: ', default='N')
+    if import_data == 'y' or import_data == 'Y':
+        _import_data_mongodb()
 
+def _config_allauth_in_mongodb():
+    run('mongo mongodb://%(mongodb_host)s:%(mongodb_port)s/%(name_dbapp)s --eval \
+    "db.socialaccount_socialapp.remove({\'id\':NumberInt(1)})"' % env)
+    run('mongo mongodb://%(mongodb_host)s:%(mongodb_port)s/%(name_dbapp)s --eval \
+    "db.socialaccount_socialapp.insert({\'id\':NumberInt(1),\'provider\':\'github\',\'name\': \
+    \'Github\',\'client_id\':\'%(github_client_id)s\',\'secret\':\'%(github_client_secret)s\' \
+    ,\'key\':\'\'})"' % env)
+    run('mongo mongodb://%(mongodb_host)s:%(mongodb_port)s/%(name_dbapp)s --eval \
+    "db.socialaccount_socialapp.remove({\'id\':NumberInt(2)})"' % env)
+    run('mongo mongodb://%(mongodb_host)s:%(mongodb_port)s/%(name_dbapp)s --eval \
+    "db.socialaccount_socialapp.insert({\'id\':NumberInt(2),\'provider\':\'google\',\'name\': \
+    \'Google\',\'client_id\':\'%(google_client_id)s\',\'secret\':\'%(google_client_secret)s\' \
+    ,\'key\':\'\'})"' % env)
+    run('mongo mongodb://%(mongodb_host)s:%(mongodb_port)s/%(name_dbapp)s --eval \
+    "db.django_site.remove({\'id\':NumberInt(1)})"' % env)
+    run('mongo mongodb://%(mongodb_host)s:%(mongodb_port)s/%(name_dbapp)s --eval \
+    "db.django_site.insert({\'id\':NumberInt(1),\'domain\':\'localhost\',\'name\':\'dai.sudano.net\'})"' % env)
+    run('mongo mongodb://%(mongodb_host)s:%(mongodb_port)s/%(name_dbapp)s --eval \
+    "db.socialaccount_socialapp_sites.remove({\'id\':NumberInt(1)})"' % env)
+    run('mongo mongodb://%(mongodb_host)s:%(mongodb_port)s/%(name_dbapp)s --eval \
+    "db.socialaccount_socialapp_sites.insert({\'id\':NumberInt(1),\'socialapp_id\':NumberInt(1),\'site_id\':NumberInt(1)})"' % env)
+    run('mongo mongodb://%(mongodb_host)s:%(mongodb_port)s/%(name_dbapp)s --eval \
+    "db.socialaccount_socialapp_sites.remove({\'id\':NumberInt(2)})"' % env)
+    run('mongo mongodb://%(mongodb_host)s:%(mongodb_port)s/%(name_dbapp)s --eval \
+    "db.socialaccount_socialapp_sites.insert({\'id\':NumberInt(2),\'socialapp_id\':NumberInt(2),\'site_id\':NumberInt(1)})"' % env)
 
 def _import_data_mongodb():
-    mongodb_host = os.environ['MONGODB_HOST']
-    mongodb_port = os.environ['MONGODB_PORT']
-    run('mongo mongodb://%s:%s/dai --eval "db.dropDatabase()"' % (mongodb_host, mongodb_port))
-    run('mongoimport ~/src/restaurants.json --db dai --collection restaurants')
-    run('mongoimport ~/src/neighborhoods.json --db dai --collection neighborhoods')
-    run('mongo mongodb://%s:%s/dai --eval "db.restaurants.createIndex({name: \'text\'})"' % (mongodb_host, mongodb_port))
-    run('mongo mongodb://%s:%s/dai --eval "db.neighborhoods.createIndex({name: \'text\'})"' % (mongodb_host, mongodb_port))
+    run('mongo mongodb://%(mongodb_host)s:%(mongodb_port)s/%(name_dbapp)s --eval "db.restaurants.drop()"' % env)
+    run('mongo mongodb://%(mongodb_host)s:%(mongodb_port)s/%(name_dbapp)s --eval "db.neighborhoods.drop()"' % env)
+    run('mongoimport ~/src/restaurants.json --db %(name_dbapp)s --collection restaurants' % env)
+    run('mongoimport ~/src/neighborhoods.json --db %(name_dbapp)s --collection neighborhoods' % env)
+    run('mongo mongodb://%(mongodb_host)s:%(mongodb_port)s/%(name_dbapp)s --eval \
+    "db.restaurants.createIndex({name: \'text\'})"' % env)
+    run('mongo mongodb://%(mongodb_host)s:%(mongodb_port)s/%(name_dbapp)s --eval \
+    "db.neighborhoods.createIndex({name: \'text\'})"' % env)
 
 def _assing_floating_ip():
-    token = os.environ['DO_TOKEN']
-    fip = os.environ['DO_FIP']
-    headers = {'Content-Type': 'application/json','Authorization': 'Bearer %s' % token}
+    headers = {'Content-Type': 'application/json','Authorization': 'Bearer %(token)s' % env}
     url_get_droplets = 'https://api.digitalocean.com/v2/droplets?page=1&per_page=1'
-    url_assign_ip_droplet = 'https://api.digitalocean.com/v2/floating_ips/%s/actions' % fip    
+    url_assign_ip_droplet = 'https://api.digitalocean.com/v2/floating_ips/%(fip)s/actions' % env
     id_droplet = requests.get(url_get_droplets, headers=headers).json()['droplets'][0]['id']
     payload = '{"type":"assign","droplet_id":"%s"}' % id_droplet
     requests.post(url_assign_ip_droplet, headers=headers, data=payload)
@@ -113,7 +171,7 @@ def start(envirotment):
     if envirotment == "remote":
         _assing_floating_ip()
     _configurar_maquina(envirotment)
-    _import_data_mongodb()
+
 
 def play(envirotment):
     _set_env(envirotment)
