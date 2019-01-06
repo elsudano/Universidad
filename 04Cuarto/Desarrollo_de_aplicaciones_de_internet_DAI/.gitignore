@@ -10,3 +10,4 @@ pages/
 vendor/
 *.rb
 *.sqlite3
+\migrations/
