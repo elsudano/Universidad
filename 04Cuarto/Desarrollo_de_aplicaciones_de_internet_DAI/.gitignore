@@ -9,5 +9,4 @@ less/
 pages/
 vendor/
 *.rb
-\DAIPROJECT/
-\allauth/
+*.sqlite3

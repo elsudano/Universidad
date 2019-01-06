@@ -16,6 +16,7 @@ debug/
 \.vscode
 /.project
 \.vagrant
+*.sqlite3
 *.retry
 *.pyc
 *.class
@@ -47,3 +48,4 @@ debug/
 /04Cuarto/Redes_MultiServicio_RMS/03_Practica_3/lib/webcam-capture-0.3.10.jar
 /04Cuarto/Redes_MultiServicio_RMS/03_Practica_3/lib/bridj-0.6.2.jar
 /04Cuarto/Redes_MultiServicio_RMS/03_Practica_3/dist/
+
