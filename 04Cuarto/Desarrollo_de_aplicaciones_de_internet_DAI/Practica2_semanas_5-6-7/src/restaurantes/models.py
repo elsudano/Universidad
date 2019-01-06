@@ -1,9 +1,9 @@
 from django.db import models
 from pymongo import MongoClient
 
-client = MongoClient()
-db = client.dai                 # base de datos
-restaurantes = db.restaurants   # colección
+# client = MongoClient()
+# db = client.dai                 # base de datos
+# restaurantes = db.restaurants   # colección
 
 # Esta variable es para generar el Menú de la página
 menu_items = [

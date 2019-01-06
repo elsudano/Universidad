@@ -51,10 +51,7 @@
       become: yes
       pip:
         executable: pip3.6
-        name:
-          - django
-          - django-allauth
-          - djongo
+        name: ['django','django-allauth','djongo']
     - name: Install No-SQL database MongoDB and utils
       become: yes
       dnf:
@@ -89,6 +86,7 @@
       with_items:
       - "export MONGODB_HOST={{ lookup('env','MONGODB_HOST') }}"
       - "export MONGODB_PORT={{ lookup('env','MONGODB_PORT') }}"
+      - "export SECRET_KEY_DJANGO_DAI={{ lookup('env','SECRET_KEY_DJANGO_DAI') }}"
 #    - name: Copy Source Code to remote machine
 #      copy:
 #        src: ~/GitHub/Universidad/04Cuarto/Desarrollo_de_aplicaciones_de_internet_DAI/config_machine/src/
