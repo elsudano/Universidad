@@ -93,8 +93,10 @@ def _configurar_django():
     config_allauth = prompt('¿Quieres configurar AllAuth con MongoDB? [y/N]?: ', default='N')
     if config_allauth == 'y' or config_allauth == 'Y':
         _config_allauth_in_mongodb()
+    migrate = prompt('¿Quiere realiazar migraciones para la aplicación %(name_app)s? [y/N]?: ' % env, default='N')
+    if migrate == 'y' or migrate == 'Y':
         run('%(pythonbin)s %(path_django)s/manage.py makemigrations %(name_app)s' % env)
-        run('%(pythonbin)s %(path_django)s/manage.py migrate' % env)
+        run('%(pythonbin)s %(path_django)s/manage.py migrate %(name_app)s' % env)
     create_user = prompt('¿Quieres crear el super usuario? [y/N]?: ', default='N')
     if create_user == 'y' or create_user == 'Y':
         auto = prompt('¿Modo interactivo o automático? [i/A]?: ', default='A')
@@ -141,14 +143,14 @@ def _config_allauth_in_mongodb():
     "db.socialaccount_socialapp_sites.insert({\'id\':NumberInt(2),\'socialapp_id\':NumberInt(2),\'site_id\':NumberInt(1)})"' % env)
 
 def _import_data_mongodb():
-    run('mongo mongodb://%(mongodb_host)s:%(mongodb_port)s/%(name_dbapp)s --eval "db.restaurants.drop()"' % env)
-    run('mongo mongodb://%(mongodb_host)s:%(mongodb_port)s/%(name_dbapp)s --eval "db.neighborhoods.drop()"' % env)
-    run('mongoimport ~/src/restaurants.json --db %(name_dbapp)s --collection restaurants' % env)
-    run('mongoimport ~/src/neighborhoods.json --db %(name_dbapp)s --collection neighborhoods' % env)
+    run('mongo mongodb://%(mongodb_host)s:%(mongodb_port)s/%(name_dbapp)s --eval "db.%(name_app)s_restaurants.drop()"' % env)
+    run('mongo mongodb://%(mongodb_host)s:%(mongodb_port)s/%(name_dbapp)s --eval "db.%(name_app)s_neighborhoods.drop()"' % env)
+    run('mongoimport ~/src/restaurants.json --db %(name_dbapp)s --collection %(name_app)s_restaurants' % env)
+    run('mongoimport ~/src/neighborhoods.json --db %(name_dbapp)s --collection %(name_app)s_neighborhoods' % env)
     run('mongo mongodb://%(mongodb_host)s:%(mongodb_port)s/%(name_dbapp)s --eval \
-    "db.restaurants.createIndex({name: \'text\'})"' % env)
+    "db.%(name_app)s_restaurants.createIndex({name: \'text\'})"' % env)
     run('mongo mongodb://%(mongodb_host)s:%(mongodb_port)s/%(name_dbapp)s --eval \
-    "db.neighborhoods.createIndex({name: \'text\'})"' % env)
+    "db.%(name_app)s_neighborhoods.createIndex({name: \'text\'})"' % env)
 
 def _assing_floating_ip():
     headers = {'Content-Type': 'application/json','Authorization': 'Bearer %(token)s' % env}
