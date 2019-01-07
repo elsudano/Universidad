@@ -1,9 +1,4 @@
-from django.db import models
-from pymongo import MongoClient
-
-# client = MongoClient()
-# db = client.dai                 # base de datos
-# restaurantes = db.restaurants   # colección
+from djongo import models
 
 # Esta variable es para generar el Menú de la página
 menu_items = [
@@ -19,3 +14,29 @@ menu_items = [
     {'href':'/doc/','icon':'fa-book','caption':'Documentation'},
     #{'href':'/forms','icon':'','caption':'Forms'},
 ]
+
+class location(models.Model):
+    TYPES = (
+        ('Point', 'Point'),
+        ('Polygon', 'Polygon'),
+    )
+    coordinates = models.ListField(default=[])
+    type = models.CharField(max_length=7, choices=TYPES)
+    
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        location_string = {'coordinates':self.coordinates,'type':self.type}
+        return str(location_string)
+
+class restaurants(models.Model):
+    id = models.ObjectIdField()
+    location = models.EmbeddedModelField(model_container=location)
+    name = models.CharField(max_length=50)
+
+    objects = models.DjongoManager()
+
+    def __str__(self):
+        restaurant_string = {'id':self.id,'location':{'coordinates':self.location.coordinates,'type':self.location.type},'name':self.name}
+        return str(restaurant_string)
