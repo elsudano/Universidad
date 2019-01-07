@@ -1,4 +1,10 @@
 {% extends 'base.html' %}
+
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block head_title %}Edit Restaurant{% endblock %}
+
 {% block content %}
 {% if user.is_authenticated %}
 {% include 'header.html' %}
@@ -22,20 +28,20 @@
                                     </div>
                                     <!-- /.panel-heading -->
                                     <div class="panel-body">
-                                        <form action='/edit' method='POST' role="form">
+                                        <form action='/edit/' method='POST' role="form">
                                             <fieldset>
-                                                <input class="form-control" name="id" type="hidden" value="{{ item_result._id }}">
+                                                <input class="form-control" name="id" type="hidden" value="{{ item_select.id }}">
                                                 <div class="form-group">
                                                     <label>Restaurant name:</label>
-                                                    <input class="form-control" placeholder="Restaurant name" name="name" type="text" value="{{ item_result.name }}" autofocus>
+                                                    <input class="form-control" placeholder="Restaurant name" name="name" type="text" value="{{ item_select.name }}" autofocus>
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Longitud position:</label>
-                                                    <input class="form-control" placeholder="Longitud" name="long" type="text" value="{{ item_result.location.coordinates[0] }}">
+                                                    <input class="form-control" placeholder="Longitud" name="long" type="text" value="{{ item_select.location.coordinates.0 }}">
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Latitud position:</label>
-                                                    <input class="form-control" placeholder="Latitud" name="lati" type="text" value="{{ item_result.location.coordinates[1] }}">
+                                                    <input class="form-control" placeholder="Latitud" name="lati" type="text" value="{{ item_select.location.coordinates.1 }}">
                                                 </div>
                                                 <p><input class="btn btn-lg btn-success btn-block" type=submit value=Modify></p>
                                             </fieldset>

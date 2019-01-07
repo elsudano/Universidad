@@ -2,7 +2,7 @@
 # http://notesbyanerd.com/2015/12/19/joint-login-and-signup-django-allauth-view/
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import menu_items
+from .models import menu_items, restaurants
 from .forms import MyLoginForm, MySignupForm, NewRestaurant
 
 def Index(request):
@@ -115,54 +115,74 @@ def Morris(request):
         result = redirect('/login/')
     return result
 
-def Delete(request):
+def Delete(request, oid):
     if request.user.is_authenticated:
+        # Devuelve una lista [0] es la cantidad
+        # y el segundo [1] es un un diccionario
+        is_deleted = restaurants.objects.get(id=oid).delete()[1]
+        list_restaurants = restaurants.objects.all()[:100]
         context = {
             "navigation": menu_items,
+            "search_result": list_restaurants,
+            "is_deleted": is_deleted.get('restaurantes.restaurants'),
         }
-        result = render(request, 'delete.html', context)
+        result = render(request, 'search.html', context)
     else:
         result = redirect('/login/')
     return result
 
-def Edit(request):
+def Edit(request, oid):
     if request.user.is_authenticated:
-        context = {
-            "navigation": menu_items,
-        }
-        result = render(request, 'edit.html', context)
-    else:
-        result = redirect('/login/')
-    return result
-
-def Update(request):
-    if request.user.is_authenticated:
-        context = {
-            "navigation": menu_items,
-        }
-        result = render(request, 'update.html', context)
+        if request.method == 'POST':
+            item_created = restaurants.objects.create()
+            if item_created:
+                item_select = restaurants.objects.get(id=item_created.id)
+            print(item_created)
+            context = {
+                "navigation": menu_items,
+                "item_select": item_select,
+            }
+        elif request.method == 'GET':
+            item_select = restaurants.objects.get(id=oid)
+            context = {
+                "navigation": menu_items,
+                "item_select": item_select,
+            }
+        result = render(request, 'editing.html', context)
     else:
         result = redirect('/login/')
     return result
 
 def New(request):
     if request.user.is_authenticated:
-        context = {
-            "newform": NewRestaurant(),
-            "navigation": menu_items,
-        }
+        if request.method == 'POST':
+            context = {
+                "navigation": menu_items,
+            }
+        elif request.method == 'GET':
+            context = {
+                "newform": NewRestaurant(),
+                "navigation": menu_items,
+            }
         result = render(request, 'new.html', context)
     else:
         result = redirect('/login/')
     return result
 
 def Search(request):
-    iterador = restaurantes.find().limit(10)
     if request.user.is_authenticated:
-        context = {
-            "navigation": menu_items,
-            "lista": list(iterador)
-        } # Aquí van las variables para la plantilla
+        if request.method == 'POST':
+            list_restaurants = restaurants.objects.filter(name__icontains=request.POST.get('string'))
+            context = {
+                "navigation": menu_items,
+                "search_result": list_restaurants,
+            }
+        elif request.method == 'GET':
+            list_restaurants = restaurants.objects.all()[:100]
+            context = {
+                "navigation": menu_items,
+                "search_result": list_restaurants,
+            }
         result = render(request, 'search.html', context)
     else:
         result = redirect('/login/')
