@@ -145,10 +145,8 @@ def _config_allauth_in_mongodb():
 def _import_data_mongodb():
     run('mongo mongodb://%(mongodb_host)s:%(mongodb_port)s/%(name_dbapp)s --eval "db.%(name_app)s_restaurants.drop()"' % env)
     run('mongo mongodb://%(mongodb_host)s:%(mongodb_port)s/%(name_dbapp)s --eval "db.%(name_app)s_neighborhoods.drop()"' % env)
-    run('sed "s/_id/id/" ~/src/restaurants.json > /tmp/import_restaurants.json')
-    run('sed "s/_id/id/" ~/src/neighborhoods.json > /tmp/import_neighborhoods.json')
-    run('mongoimport /tmp/import_restaurants.json --db %(name_dbapp)s --collection %(name_app)s_restaurants' % env)
-    run('mongoimport /tmp/import_neighborhoods.json --db %(name_dbapp)s --collection %(name_app)s_neighborhoods' % env)
+    run('mongoimport ~/src/restaurants.json --db %(name_dbapp)s --collection %(name_app)s_restaurants' % env)
+    run('mongoimport ~/src/neighborhoods.json --db %(name_dbapp)s --collection %(name_app)s_neighborhoods' % env)
     run('mongo mongodb://%(mongodb_host)s:%(mongodb_port)s/%(name_dbapp)s --eval \
     "db.%(name_app)s_restaurants.createIndex({name: \'text\'})"' % env)
     run('mongo mongodb://%(mongodb_host)s:%(mongodb_port)s/%(name_dbapp)s --eval \
