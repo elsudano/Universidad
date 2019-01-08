@@ -24,10 +24,10 @@ class MySignupForm(SignupForm):
 class NewRestaurant(forms.Form):
     name = forms.CharField(max_length=100, label='Restaurant Name')
     long = forms.CharField(max_length=100, label='Longitud position')
-    lat = forms.CharField(max_length=100, label='Latitud position')
+    lati = forms.CharField(max_length=100, label='Latitud position')
 
     def __init__(self, *args, **kwargs):
         super(NewRestaurant, self).__init__(*args, **kwargs)
         self.fields['name'].widget = forms.TextInput(attrs={'class':'form-control'})
         self.fields['long'].widget = forms.TextInput(attrs={'class':'form-control'})
-        self.fields['lat'].widget = forms.TextInput(attrs={'class':'form-control'})
+        self.fields['lati'].widget = forms.TextInput(attrs={'class':'form-control'})
