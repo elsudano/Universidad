@@ -15,7 +15,7 @@ menu_items = [
     #{'href':'/forms','icon':'','caption':'Forms'},
 ]
 
-class location(models.Model):
+class Location(models.Model):
     TYPES = (
         ('Point', 'Point'),
         ('Polygon', 'Polygon'),
@@ -30,9 +30,9 @@ class location(models.Model):
         location_string = {'coordinates':self.coordinates,'type':self.type}
         return str(location_string)
 
-class restaurants(models.Model):
+class Restaurants(models.Model):
     id = models.ObjectIdField()
-    location = models.EmbeddedModelField(model_container=location)
+    location = models.EmbeddedModelField(model_container=Location)
     name = models.CharField(max_length=50)
 
     objects = models.DjongoManager()

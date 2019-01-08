@@ -2,7 +2,7 @@
 # http://notesbyanerd.com/2015/12/19/joint-login-and-signup-django-allauth-view/
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import menu_items, restaurants
+from .models import menu_items, Restaurants
 from .forms import MyLoginForm, MySignupForm, NewRestaurant
 
 def Index(request):
@@ -119,8 +119,8 @@ def Delete(request, oid):
     if request.user.is_authenticated:
         # Devuelve una lista [0] es la cantidad
         # y el segundo [1] es un un diccionario
-        is_deleted = restaurants.objects.get(id=oid).delete()[1]
-        list_restaurants = restaurants.objects.all()[:100]
+        is_deleted = Restaurants.objects.get(id=oid).delete()[1]
+        list_restaurants = Restaurants.objects.all()[:100]
         context = {
             "navigation": menu_items,
             "search_result": list_restaurants,
@@ -134,16 +134,16 @@ def Delete(request, oid):
 def Edit(request, oid):
     if request.user.is_authenticated:
         if request.method == 'POST':
-            item_created = restaurants.objects.create()
+            item_created = Restaurants.objects.create()
             if item_created:
-                item_select = restaurants.objects.get(id=item_created.id)
+                item_select = Restaurants.objects.get(id=item_created.id)
             print(item_created)
             context = {
                 "navigation": menu_items,
                 "item_select": item_select,
             }
         elif request.method == 'GET':
-            item_select = restaurants.objects.get(id=oid)
+            item_select = Restaurants.objects.get(id=oid)
             context = {
                 "navigation": menu_items,
                 "item_select": item_select,
@@ -172,13 +172,13 @@ def New(request):
 def Search(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
-            list_restaurants = restaurants.objects.filter(name__icontains=request.POST.get('string'))
+            list_restaurants = Restaurants.objects.filter(name__icontains=request.POST.get('string'))
             context = {
                 "navigation": menu_items,
                 "search_result": list_restaurants,
             }
         elif request.method == 'GET':
-            list_restaurants = restaurants.objects.all()[:100]
+            list_restaurants = Restaurants.objects.all()[:100]
             context = {
                 "navigation": menu_items,
                 "search_result": list_restaurants,
