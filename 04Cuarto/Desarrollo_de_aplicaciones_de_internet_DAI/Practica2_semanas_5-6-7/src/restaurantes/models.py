@@ -30,13 +30,26 @@ class Location(models.Model):
         location_string = {'coordinates':self.coordinates,'type':self.type}
         return str(location_string)
 
+class RestaurantsManager(models.Manager):
+    def create_restaurant(self, name, long, lati):
+        location = Location([float(long),float(lati)],'Point')
+        restaurant = self.create(name=name, location=location)
+        return restaurant
+
 class Restaurants(models.Model):
-    id = models.ObjectIdField()
+    _id = models.ObjectIdField()
     location = models.EmbeddedModelField(model_container=Location)
     name = models.CharField(max_length=50)
 
-    objects = models.DjongoManager()
+    # objects = models.DjongoManager()
+    objects = RestaurantsManager()
+    
+    # Esta fucnión la tenemos para poder renderizar el ID
+    # en las plantillas de DJango, hay un uso de ellas en:
+    # search.html
+    def getid(self):
+        return str(self._id)
 
     def __str__(self):
-        restaurant_string = {'id':self.id,'location':{'coordinates':self.location.coordinates,'type':self.location.type},'name':self.name}
+        restaurant_string = {'_id':self._id,'location':{'coordinates':self.location.coordinates,'type':self.location.type},'name':self.name}
         return str(restaurant_string)

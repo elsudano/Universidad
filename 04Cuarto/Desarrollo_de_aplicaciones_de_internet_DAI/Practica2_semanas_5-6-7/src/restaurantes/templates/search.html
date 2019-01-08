@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% load i18n %}
-{% load account socialaccount %}
+{% load account socialaccount functions_extra %}
 
 {% block head_title %}Searching...{% endblock %}
 
@@ -71,15 +71,16 @@
                                             {% for item in search_result %}
                                             <tr>
                                                 <td>{{ item.name }}</td>
-                                                <td>{{ item.location.coordinates.0 }}</td>
-                                                <td>{{ item.location.coordinates.1 }}</td>
+                                                <td>{{ item.location.coordinates.0|floatformat:2 }}</td>
+                                                <td>{{ item.location.coordinates.1|floatformat:2 }}</td>
                                                 <td>{{ item.location.type }}</td>
                                                 <td>
-                                                    <a type="button" class="btn btn-success btn-circle" href="/edit/{{ item.id }}"><i class="fa fa-pencil-square-o"></i></a>
+                                                    <!-- La función del item la tenemos que tener por que los templates de DJango no se permiten renderizar los undercore -->
+                                                    <a type="button" class="btn btn-success btn-circle" href="/edit/{{ item|getid }}"><i class="fa fa-pencil-square-o"></i></a>
                                                     <!-- Button trigger modal -->
-                                                    <button type="button" class="btn btn-danger btn-circle" data-toggle="modal" data-target="#{{ item.id }}"><i class="fa fa-trash-o"></i></button>
+                                                    <button type="button" class="btn btn-danger btn-circle" data-toggle="modal" data-target="#{{ item|getid }}"><i class="fa fa-trash-o"></i></button>
                                                     <!-- Modal -->
-                                                    <div class="modal fade" id="{{ item.id }}" tabindex="-1" role="dialog" aria-labelledby="confirm_modal_label" aria-hidden="true">
+                                                    <div class="modal fade" id="{{ item|getid }}" tabindex="-1" role="dialog" aria-labelledby="confirm_modal_label" aria-hidden="true">
                                                         <div class="modal-dialog">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
@@ -91,7 +92,7 @@
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                                                                    <a type="button" class="btn btn-primary" href="/del/{{ item.id }}">Yes</a>
+                                                                    <a type="button" class="btn btn-primary" href="/del/{{ item|getid }}">Yes</a>
                                                                 </div>
                                                             </div>
                                                             <!-- /.modal-content -->
