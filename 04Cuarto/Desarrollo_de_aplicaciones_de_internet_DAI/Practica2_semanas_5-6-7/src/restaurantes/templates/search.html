@@ -76,7 +76,7 @@
                                                 <td>{{ item.location.type }}</td>
                                                 <td>
                                                     <!-- La función del item la tenemos que tener por que los templates de DJango no se permiten renderizar los undercore -->
-                                                    <a type="button" class="btn btn-success btn-circle" href="/edit/{{ item|getid }}"><i class="fa fa-pencil-square-o"></i></a>
+                                                    <a type="button" class="btn btn-success btn-circle" href="/restaurant/edit/{{ item|getid }}"><i class="fa fa-pencil-square-o"></i></a>
                                                     <!-- Button trigger modal -->
                                                     <button type="button" class="btn btn-danger btn-circle" data-toggle="modal" data-target="#{{ item|getid }}"><i class="fa fa-trash-o"></i></button>
                                                     <!-- Modal -->
@@ -92,7 +92,7 @@
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                                                                    <a type="button" class="btn btn-primary" href="/del/{{ item|getid }}">Yes</a>
+                                                                    <a type="button" class="btn btn-primary" href="/restaurant/del/{{ item|getid }}">Yes</a>
                                                                 </div>
                                                             </div>
                                                             <!-- /.modal-content -->

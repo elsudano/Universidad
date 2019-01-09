@@ -29,8 +29,8 @@ class Restaurant(forms.Form):
     def __init__(self, *args, **kwargs):
         super(Restaurant, self).__init__(*args, **kwargs)
         self.fields['name'].widget = forms.TextInput(attrs={'class':'form-control'})
-        self.fields['long'].widget = forms.NumberInput(attrs={'class':'form-control', 'min':'-360', 'max':'360', 'step':'0.00001'})
-        self.fields['lati'].widget = forms.NumberInput(attrs={'class':'form-control', 'min':'-360', 'max':'360', 'step':'0.00001'})
+        self.fields['long'].widget = forms.NumberInput(attrs={'class':'form-control', 'min':'-360', 'max':'360', 'step':'0.000001'})
+        self.fields['lati'].widget = forms.NumberInput(attrs={'class':'form-control', 'min':'-360', 'max':'360', 'step':'0.000001'})
 
 class EditRestaurant(Restaurant):
     oid = forms.UUIDField()

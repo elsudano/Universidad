@@ -115,7 +115,7 @@ def Morris(request):
         result = redirect('/login/')
     return result
 
-def Delete(request, oid):
+def DeleteRestaurant(request, oid):
     if request.user.is_authenticated:
         # Devuelve una lista [0] es la cantidad
         # y el segundo [1] es un un diccionario
@@ -131,7 +131,7 @@ def Delete(request, oid):
         result = redirect('/login/')
     return result
 
-def EditPost(request):
+def EditRestaurantPost(request):
     if request.user.is_authenticated:
         oid = request.POST.get('oid')
         name = request.POST.get('name')
@@ -160,7 +160,7 @@ def EditPost(request):
         result = redirect('/login/')
     return result
 
-def EditGet(request, oid):
+def EditRestaurantGet(request, oid):
     if request.user.is_authenticated:
         result = render(request, 'index.html', {"navigation": menu_items})
         if request.method == 'GET':
@@ -183,7 +183,7 @@ def EditGet(request, oid):
         result = redirect('/login/')
     return result
 
-def New(request):
+def NewRestaurant(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
             name = request.POST.get('name')
@@ -200,6 +200,56 @@ def New(request):
         elif request.method == 'GET':
             context = {
                 "newform": Restaurant(),
+                "navigation": menu_items,
+            }
+            result = render(request, 'new.html', context)
+    else:
+        result = redirect('/login/')
+    return result
+
+def DeletePlate(request, oid):
+    if request.user.is_authenticated:
+        context = {
+            "navigation": menu_items,
+        }
+        result = render(request, 'search.html', context)
+    else:
+        result = redirect('/login/')
+    return result
+
+def EditPlatePost(request):
+    if request.user.is_authenticated:
+        result = render(request, 'index.html', {"navigation": menu_items})
+        if request.method == 'POST':
+            context = {
+                "navigation": menu_items,
+            }
+            result = render(request, 'editing.html', context)
+    else:
+        result = redirect('/login/')
+    return result
+
+def EditPlateGet(request, oid):
+    if request.user.is_authenticated:
+        result = render(request, 'index.html', {"navigation": menu_items})
+        if request.method == 'GET':
+            context = {
+                "navigation": menu_items,
+            }
+            result = render(request, 'editing.html', context)
+    else:
+        result = redirect('/login/')
+    return result
+
+def NewPlate(request):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            context = {
+                "navigation": menu_items,
+            }
+            result = render(request, 'search.html', context)
+        elif request.method == 'GET':
+            context = {
                 "navigation": menu_items,
             }
             result = render(request, 'new.html', context)
