@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+{% load account socialaccount functions_extra %}
+
+{% block head_title %}Edit Restaurant{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+{% include 'header.html' %}
+        <!-- Page Content -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h1 class="page-header">Edición de un Restaurante</h1>
+                            </div>
+                            <!-- /.col-lg-12 -->
+                        </div>
+                        <!-- /.row -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        Modifique los datos necesarios...
+                                    </div>
+                                    <!-- /.panel-heading -->
+                                    <div class="panel-body">
+                                        <form action='/restaurant/edit/' method='POST' role="form">
+                                            <fieldset>
+                                                {% csrf_token %}
+                                                {{ edit_form.as_p }}
+                                                <p><input class="btn btn-lg btn-success btn-block" type=submit value=Modify></p>
+                                            </fieldset>
+                                        </form>
+                                    </div>
+                                    <!-- .panel-body -->
+                                </div>
+                                <!-- /.panel -->
+                            </div>
+                            <!-- /.col-lg-12 -->
+                        </div>
+                        <!-- /.row -->
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- /#page-wrapper -->
+{% include 'footer.html' %}
+{% endif %}
+{% endblock %}

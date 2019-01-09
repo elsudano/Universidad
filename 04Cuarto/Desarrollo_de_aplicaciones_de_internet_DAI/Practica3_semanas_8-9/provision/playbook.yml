@@ -1,0 +1,146 @@
+---
+- hosts: all
+  remote_user: vagrant
+  # gather_facts: False
+  environment:
+    # Estas son las variables que se utilizan para ejecutar la aplicacion
+    # pero setearlas en este punto no sirve de nada por que no es la misma
+    # shell en la que se va a realizar la ejecución de los fuentes.
+    # hay que asignar las variables en el mismo punto donde se produce
+    # la ejecución del programa.
+    LC_ALL: 'C.UTF-8'
+    LANG: 'C.UTF-8'
+  pre_tasks:
+    #- debug: msg="{{ ansible_env }}"
+    #- debug: msg="{{ lookup('env','USER') }}"
+  tasks:
+    - name: Upgrade all packages
+      become: yes
+      dnf:
+        name: "*"
+        state: latest
+    - name: Set timezone to Europe/Madrid
+      become: yes
+      timezone:
+        name: Europe/Madrid
+    - name: Install requeriments of disable selinux
+      become: yes
+      dnf:
+        name: libselinux-python
+        state: latest
+    - name: Disable SeLinux
+      become: yes
+      selinux:
+        state: disabled
+    - name: Stoping FirewallD
+      become: yes
+      systemd:
+        name: firewalld
+        state: stopped
+    - name: Install Utils for server Linux
+      become: yes
+      dnf:
+        name: ['htop', 'nano', 'net-tools']
+        state: latest
+    - name: Install dependencies for Django
+      become: yes
+      dnf:
+        name: ['nginx', 'python3-pip', 'python3-pymongo-gridfs']
+        state: latest
+    - name: Install Django and utils with pip
+      become: yes
+      pip:
+        executable: pip3.6
+        name: ['django','django-allauth','djongo','gunicorn']
+    - name: Install No-SQL database MongoDB and utils
+      become: yes
+      dnf:
+        name: ['mongodb', 'mongodb-server', 'mongo-tools', 'python3-pymongo']
+        state: latest
+    - name: Change configuration MongoDB /etc/mongod.conf
+      become: yes
+      lineinfile:
+        path: /etc/mongod.conf
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }}"
+      with_items:
+      - { regexp: 'bindIp: 127\.0\.0\.1', line: '  bindIp: 127.0.0.1' }
+      - { regexp: 'ipv6:\s\w+', line: '  ipv6: false' }
+    - name: Copy the files configuratión to the correct places
+      become: yes
+      copy:
+        remote_src: yes
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        owner: root
+        group: root
+        mode: 0755
+      with_items:
+      - { src: '/home/vagrant/src/production/nginx.conf', dest: '/etc/nginx/nginx.conf'}
+      - { src: '/home/vagrant/src/production/gunicorn.service', dest: '/etc/systemd/system/gunicorn.service'}
+      - { src: '/home/vagrant/src/production/gunicorn.socket', dest: '/etc/systemd/system/gunicorn.socket'}
+      - { src: '/home/vagrant/src/production/gunicorn.conf', dest: '/etc/tmpfiles.d/gunicorn.conf'}
+    - name: Starting MongoDB Server
+      become: yes
+      systemd:
+        daemon_reload: yes
+        enabled: yes
+        name: mongod
+        state: started
+    - name: Starting Nginx Server
+      become: yes
+      systemd:
+        daemon_reload: yes
+        enabled: yes
+        name: nginx
+        state: started
+    - name: Starting Gunicorn socket
+      become: yes
+      systemd:
+        daemon_reload: yes
+        enabled: yes
+        name: gunicorn.socket
+        state: started
+    - name: Starting Gunicorn Daemon
+      become: yes
+      systemd:
+        daemon_reload: yes
+        enabled: yes
+        name: gunicorn.service
+        state: started
+#     Las siguientes lineas se usan solamente para cuando las variables
+#     de entorno que se quieran utilizar van a ser permanentes
+    - name: Setting environment vars of system for my app
+      become: yes
+      lineinfile:
+        path: /etc/profile
+        create: yes
+        line: "{{ item }}"
+      with_items:
+      - "export MONGODB_HOST={{ lookup('env','MONGODB_HOST') }}"
+      - "export MONGODB_PORT={{ lookup('env','MONGODB_PORT') }}"
+      - "export SECRET_KEY_DJANGO_DAI='{{ lookup('env','SECRET_KEY_DJANGO_DAI') }}'"
+      - "export NAME_OF_APP={{ lookup('env','NAME_OF_APP') }}"
+      - "export NAME_OF_DBAPP={{ lookup('env','NAME_OF_DBAPP') }}"
+      - "export GITHUB_CLIENT_ID={{ lookup('env','GITHUB_CLIENT_ID') }}"
+      - "export GITHUB_CLIENT_SECRET={{ lookup('env','GITHUB_CLIENT_SECRET') }}"
+      - "export GOOGLE_CLIENT_ID={{ lookup('env','GOOGLE_CLIENT_ID') }}"
+      - "export GOOGLE_CLIENT_SECRET={{ lookup('env','GOOGLE_CLIENT_SECRET') }}"
+#    - name: Copy Source Code to remote machine
+#      copy:
+#        src: ~/GitHub/Universidad/04Cuarto/Desarrollo_de_aplicaciones_de_internet_DAI/config_machine/src/
+#        dest: ~/src/
+#        owner: vagrant
+#        group: vagrant
+#        mode: 0744
+#    - name: Print on screen envirotments vars
+#      command: env
+#      register: env_vars
+#    - debug: msg="{{ env_vars.stdout }}"
+#    - name: Make directory of develop
+#      file:
+#        path: "/home/$USER/src"
+#        state: directory
+#        mode: 0755
+#    - name: Run Application
+#      command: "ifconfig"

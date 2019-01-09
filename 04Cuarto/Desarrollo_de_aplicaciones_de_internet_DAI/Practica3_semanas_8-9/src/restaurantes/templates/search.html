@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+{% load account socialaccount functions_extra %}
+
+{% block head_title %}Searching...{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+{% include 'header.html' %}
+        <!-- Page Content -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-3">
+                        {% if is_deleted %}
+                        <div class="alert alert-success alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            Se ha borrado correctamente.
+                        </div>
+                        <!-- /.col-md-6 -->
+                        {% endif %}
+                    </div>
+                    <div class="col-lg-12">
+                        <h1 class="page-header">Resultado de la Busqueda:</h1>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <!-- /.row -->
+                {% if empty %}
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Atención!!!
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body">
+                                <div class="alert alert-danger">
+                                    No se permiten busquedas con el campo vacío.
+                                </div>
+                            </div>
+                            <!-- .panel-body -->
+                        </div>
+                        <!-- /.panel -->
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <!-- /.row -->
+                {% else %}
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Todos los restaurantes que contienen la cadena: {{ string }}
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Nombre</th>
+                                                <th>Longitud</th>
+                                                <th>Latitud</th>
+                                                <th>Tipo</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in search_result %}
+                                            <tr>
+                                                <td>{{ item.name }}</td>
+                                                <td>{{ item.location.coordinates.0|floatformat:2 }}</td>
+                                                <td>{{ item.location.coordinates.1|floatformat:2 }}</td>
+                                                <td>{{ item.location.type }}</td>
+                                                <td>
+                                                    <!-- La función del item la tenemos que tener por que los templates de DJango no se permiten renderizar los undercore -->
+                                                    <a type="button" class="btn btn-success btn-circle" href="/restaurant/edit/{{ item|getid }}"><i class="fa fa-pencil-square-o"></i></a>
+                                                    <!-- Button trigger modal -->
+                                                    <button type="button" class="btn btn-danger btn-circle" data-toggle="modal" data-target="#{{ item|getid }}"><i class="fa fa-trash-o"></i></button>
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="{{ item|getid }}" tabindex="-1" role="dialog" aria-labelledby="confirm_modal_label" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                    <h4 class="modal-title" id="confirm_modal_label">Warning!!!</h4>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    ¿Esta seguro que quiere borrar el Restaurante?
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                                                                    <a type="button" class="btn btn-primary" href="/restaurant/del/{{ item|getid }}">Yes</a>
+                                                                </div>
+                                                            </div>
+                                                            <!-- /.modal-content -->
+                                                        </div>
+                                                        <!-- /.modal-dialog -->
+                                                    </div>
+                                                    <!-- /.modal -->
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.table-responsive -->
+                            </div>
+                            <!-- /.panel-body -->
+                        </div>
+                        <!-- /.panel -->
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <!-- /.row -->
+                {% endif %}
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- /#page-wrapper -->
+{% include 'footer.html' %}
+{% endif %}
+{% endblock %}
