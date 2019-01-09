@@ -38,8 +38,7 @@
                                         <form action='/new/' method='POST' role="form">
                                             <fieldset>
                                                 {% csrf_token %}
-                                                {{ newform }}
-                                                <br>
+                                                {{ newform.as_p }}
                                                 <p><input class="btn btn-lg btn-success btn-block" type=submit value=Create></p>
                                             </fieldset>
                                         </form>
