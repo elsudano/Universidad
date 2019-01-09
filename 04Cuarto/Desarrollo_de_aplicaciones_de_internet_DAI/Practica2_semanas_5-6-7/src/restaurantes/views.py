@@ -3,7 +3,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import menu_items, Restaurants
-from .forms import MyLoginForm, MySignupForm, NewRestaurant
+from .forms import MyLoginForm, MySignupForm, Restaurant, EditRestaurant
 
 def Index(request):
     if request.user.is_authenticated:
@@ -119,7 +119,7 @@ def Delete(request, oid):
     if request.user.is_authenticated:
         # Devuelve una lista [0] es la cantidad
         # y el segundo [1] es un un diccionario
-        is_deleted = Restaurants.objects.get(id=oid).delete()[1]
+        is_deleted = Restaurants.objects.get(_id=oid).delete()[1]
         list_restaurants = Restaurants.objects.all()[:100]
         context = {
             "navigation": menu_items,
@@ -131,24 +131,54 @@ def Delete(request, oid):
         result = redirect('/login/')
     return result
 
-def Edit(request, oid):
+def EditPost(request):
     if request.user.is_authenticated:
+        oid = request.POST.get('oid')
+        name = request.POST.get('name')
+        long = request.POST.get('long')
+        lati = request.POST.get('lati')
+        result = render(request, 'index.html', {"navigation": menu_items})
         if request.method == 'POST':
-            item_created = Restaurants.objects.create()
-            if item_created:
-                item_select = Restaurants.objects.get(id=item_created.id)
-            print(item_created)
+            item_select = Restaurants.objects.get(_id=oid)
+            item_select.name = name
+            item_select.location.coordinates[0] = long
+            item_select.location.coordinates[1] = lati
+            item_select.save()
+            # https://stackoverflow.com/questions/813418/django-set-field-value-after-a-form-is-initialized
+            edit_form = EditRestaurant(initial={ \
+                'oid':item_select._id, \
+                'name':item_select.name, \
+                'long':item_select.location.coordinates[0], \
+                'lati':item_select.location.coordinates[1]})
             context = {
                 "navigation": menu_items,
+                "edit_form": edit_form,
                 "item_select": item_select,
             }
-        elif request.method == 'GET':
-            item_select = Restaurants.objects.get(id=oid)
+            result = render(request, 'editing.html', context)
+    else:
+        result = redirect('/login/')
+    return result
+
+def EditGet(request, oid):
+    if request.user.is_authenticated:
+        result = render(request, 'index.html', {"navigation": menu_items})
+        if request.method == 'GET':
+            item_select = Restaurants.objects.get(_id=oid)
+            if item_select:
+                edit_form = EditRestaurant(initial={ \
+                    'oid':item_select._id, \
+                    'name':item_select.name, \
+                    'long':item_select.location.coordinates[0], \
+                    'lati':item_select.location.coordinates[1]})
+            else:
+                edit_form = EditRestaurant()
             context = {
                 "navigation": menu_items,
+                "edit_form": edit_form,
                 "item_select": item_select,
             }
-        result = render(request, 'editing.html', context)
+            result = render(request, 'editing.html', context)
     else:
         result = redirect('/login/')
     return result
@@ -156,15 +186,23 @@ def Edit(request, oid):
 def New(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
+            name = request.POST.get('name')
+            long = request.POST.get('long')
+            lati = request.POST.get('lati')
+            item_created = Restaurants.objects.create_restaurant(name=name,long=long,lati=lati)
+            if item_created:
+                search_result = Restaurants.objects.filter(_id=item_created._id)
             context = {
                 "navigation": menu_items,
+                "search_result": search_result,
             }
+            result = render(request, 'search.html', context)
         elif request.method == 'GET':
             context = {
-                "newform": NewRestaurant(),
+                "newform": Restaurant(),
                 "navigation": menu_items,
             }
-        result = render(request, 'new.html', context)
+            result = render(request, 'new.html', context)
     else:
         result = redirect('/login/')
     return result
