@@ -4,14 +4,15 @@ Requires=gunicorn.socket
 After=network.target
 
 [Service]
-PIDFile=/run/gunicorn/pid
+PIDFile=/home/vagrant/gunicorn/pid
 User=vagrant
 Group=vagrant
 RuntimeDirectory=gunicorn
 WorkingDirectory=/home/vagrant/src
+Environment="SECRET_KEY_DJANGO_DAI=$SECRET_KEY_DJANGO_DAI"
 ExecStart=/usr/local/bin/gunicorn --pid /run/gunicorn/pid   \
-          --bind unix:/run/gunicorn/socket \
-          --log-file /var/log/gunicorn/error.log --log-level debug DAIPROJECT.wsgi
+          --bind unix:/home/vagrant/gunicorn/socket \
+          --log-file /var/log/gunicorn.log --log-level info DAIPROJECT.wsgi
 ExecReload=/bin/kill -s HUP $MAINPID
 ExecStop=/bin/kill -s TERM $MAINPID
 PrivateTmp=true

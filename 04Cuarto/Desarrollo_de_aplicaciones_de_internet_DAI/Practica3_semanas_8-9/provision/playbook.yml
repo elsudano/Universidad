@@ -80,6 +80,14 @@
       - { src: '/home/vagrant/src/production/gunicorn.service', dest: '/etc/systemd/system/gunicorn.service'}
       - { src: '/home/vagrant/src/production/gunicorn.socket', dest: '/etc/systemd/system/gunicorn.socket'}
       - { src: '/home/vagrant/src/production/gunicorn.conf', dest: '/etc/tmpfiles.d/gunicorn.conf'}
+    - name: Create a empty file for log Gunicorn
+      become: yes
+      copy:
+        content: ""
+        dest: "/var/log/gunicorn.log"
+        owner: vagrant
+        group: vagrant
+        mode: 0664
     - name: Starting MongoDB Server
       become: yes
       systemd:
@@ -101,13 +109,6 @@
         enabled: yes
         name: gunicorn.socket
         state: started
-    - name: Starting Gunicorn Daemon
-      become: yes
-      systemd:
-        daemon_reload: yes
-        enabled: yes
-        name: gunicorn.service
-        state: started
 #     Las siguientes lineas se usan solamente para cuando las variables
 #     de entorno que se quieran utilizar van a ser permanentes
     - name: Setting environment vars of system for my app
@@ -126,21 +127,3 @@
       - "export GITHUB_CLIENT_SECRET={{ lookup('env','GITHUB_CLIENT_SECRET') }}"
       - "export GOOGLE_CLIENT_ID={{ lookup('env','GOOGLE_CLIENT_ID') }}"
       - "export GOOGLE_CLIENT_SECRET={{ lookup('env','GOOGLE_CLIENT_SECRET') }}"
-#    - name: Copy Source Code to remote machine
-#      copy:
-#        src: ~/GitHub/Universidad/04Cuarto/Desarrollo_de_aplicaciones_de_internet_DAI/config_machine/src/
-#        dest: ~/src/
-#        owner: vagrant
-#        group: vagrant
-#        mode: 0744
-#    - name: Print on screen envirotments vars
-#      command: env
-#      register: env_vars
-#    - debug: msg="{{ env_vars.stdout }}"
-#    - name: Make directory of develop
-#      file:
-#        path: "/home/$USER/src"
-#        state: directory
-#        mode: 0755
-#    - name: Run Application
-#      command: "ifconfig"

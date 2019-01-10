@@ -27,9 +27,6 @@ def _set_env(envirotment):
     if envirotment == "local":
         env.password = 'vagrant'
         env.host_string = 'localhost:2222'
-    elif envirotment == "prolocal":
-        env.password = 'vagrant'
-        env.host_string = 'localhost:2500'
     elif envirotment == "remote":
         env.host_string = 'dai.sudano.net:22'
     else:
@@ -39,16 +36,12 @@ def _set_env(envirotment):
 def _levantar_maquina(envirotment):
     if envirotment == "local":
         local('vagrant up --no-provision --provider=virtualbox local')
-    elif envirotment == "prolocal":
-        local('vagrant up --no-provision --provider=virtualbox prolocal')
     elif envirotment == "remote":
         local('vagrant up --no-provision --provider=digital_ocean remote')
 
 def _detener_maquina(envirotment):
     if envirotment == "local":
         local('vagrant halt --force local')
-    elif envirotment == "prolocal":
-        local('vagrant halt --force prolocal')
     elif envirotment == "remote":
         local('vagrant halt --force remote')
 
@@ -58,20 +51,10 @@ def _configurar_maquina(envirotment):
         local('sed "/127.0.0.1/d" ~/.ssh/known_hosts.tmp > ~/.ssh/known_hosts')
         local('ssh-copy-id -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i \
         /home/usuario/.ssh/id_rsa_deploying vagrant@localhost -p 2222')
+        install_tools = prompt('¿Quieres instalar las tools a la maquina? [y/N]?: ', default='N')
+        if install_tools == 'y' or install_tools == 'Y':
+            install_vbguest(envirotment)
         local('vagrant provision local')
-        install_tools = prompt('¿Quieres instalar las tools a la maquina? [y/N]?: ', default='N')
-        if install_tools == 'y' or install_tools == 'Y':
-            install_vbguest(envirotment)
-        _configurar_django()
-    elif envirotment == "prolocal":
-        local('sed "/localhost/d" ~/.ssh/known_hosts > ~/.ssh/known_hosts.tmp')
-        local('sed "/127.0.0.1/d" ~/.ssh/known_hosts.tmp > ~/.ssh/known_hosts')
-        local('ssh-copy-id -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i \
-        /home/usuario/.ssh/id_rsa_deploying vagrant@localhost -p 2500')
-        local('vagrant provision prolocal')
-        install_tools = prompt('¿Quieres instalar las tools a la maquina? [y/N]?: ', default='N')
-        if install_tools == 'y' or install_tools == 'Y':
-            install_vbguest(envirotment)
         _configurar_django()
     elif envirotment == "remote":
         local('vagrant ssh remote -c "sudo dnf install python2.x86_64 firewalld.noarch -y"')
@@ -79,20 +62,13 @@ def _configurar_maquina(envirotment):
         sudo('chown vagrant:vagrant -R /home/vagrant/src')
         _configurar_django()
 
-def _ejecutar_aplicacion(envirotment):
-    if envirotment == "local":
-        run('%(pythonbin)s %(path_django)s/manage.py runserver 0.0.0.0:8080' % env)
-    elif envirotment == "prolocal":
-        sudo('gunicorn --bind 0.0.0.0:8000 %(project)s.wsgi' % env)
-    elif envirotment == "remote":
-        pass
+def _ejecutar_aplicacion():
+    run('%(pythonbin)s %(path_django)s/manage.py runserver 0.0.0.0:8080' % env)
 
 
 def _eliminar_maquina(envirotment):
     if envirotment == "local":
         local('vagrant destroy --force local')
-    elif envirotment == "prolocal":
-        local('vagrant destroy --force prolocal')
     elif envirotment == "remote":
         local('vagrant destroy --force remote')
 
@@ -202,7 +178,7 @@ def start(envirotment):
 
 def play(envirotment):
     _set_env(envirotment)
-    _ejecutar_aplicacion(envirotment)
+    _ejecutar_aplicacion()
 
 def restart(envirotment):
     _detener_maquina(envirotment)

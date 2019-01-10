@@ -22,9 +22,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ['SECRET_KEY_DJANGO_DAI']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['dai.sudano.net', 'localhost',         '127.0.0.1', '[::1]']
+ALLOWED_HOSTS = ['dai.sudano.net', 'localhost', '127.0.0.1', '[::1]']
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
