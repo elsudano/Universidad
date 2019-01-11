@@ -19,12 +19,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['SECRET_KEY_DJANGO_DAI']
+SECRET_KEY = ''
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['dai.sudano.net', 'localhost', '127.0.0.1', '[::1]']
+ALLOWED_HOSTS = []
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
@@ -55,6 +55,8 @@ ACCOUNT_LOGOUT_ON_GET = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = os.path.join(BASE_DIR, '/static/')
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'restaurantes/static/')
 
 # Application definition
 INSTALLED_APPS = [
@@ -120,7 +122,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'djongo',
         'ENFORCE_SCHEMA': True,
-        'NAME': os.environ['NAME_OF_DBAPP'],
+        'NAME': '',
         'HOST': 'localhost',
         'PORT': 27017,
         # 'USER': 'user',
