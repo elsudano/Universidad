@@ -1,4 +1,5 @@
 #!/bin/bash
+systemctl stop gunicorn.socket
 systemctl stop gunicorn.service
-systemctl restart gunicorn.socket
+systemctl start gunicorn.socket
 systemctl restart nginx.service
