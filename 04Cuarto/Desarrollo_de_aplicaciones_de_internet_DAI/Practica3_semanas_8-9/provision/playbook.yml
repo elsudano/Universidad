@@ -23,10 +23,10 @@
       become: yes
       timezone:
         name: Europe/Madrid
-    - name: Install requeriments of disable selinux
+    - name: Install requeriments of disable selinux, and firewalld
       become: yes
       dnf:
-        name: libselinux-python
+        name: [libselinux-python, 'firewalld']
         state: latest
     - name: Disable SeLinux
       become: yes
@@ -73,20 +73,21 @@
     #     owner: vagrant
     #     group: vagrant
     #     mode: 0744
-    - name: Copy the files configuratión to the correct places
+    - name: Copy config files of daemons the correct place
       become: yes
       copy:
-        remote_src: yes
-        src: "{{ item.src }}"
+        # remote_src: yes
+        # src: "/home/vagrant/src/production/{{ item.src }}"
+        src: "~/GitHub/Universidad/04Cuarto/Desarrollo_de_aplicaciones_de_internet_DAI/Practica3_semanas_8-9/src/{{ item.src }}"
         dest: "{{ item.dest }}"
         owner: root
         group: root
         mode: 0755
       with_items:
-      - { src: '/home/vagrant/src/production/nginx.conf', dest: '/etc/nginx/nginx.conf'}
-      - { src: '/home/vagrant/src/production/gunicorn.service', dest: '/etc/systemd/system/gunicorn.service'}
-      - { src: '/home/vagrant/src/production/gunicorn.socket', dest: '/etc/systemd/system/gunicorn.socket'}
-      - { src: '/home/vagrant/src/production/gunicorn.conf', dest: '/etc/tmpfiles.d/gunicorn.conf'}
+      - { src: 'production/nginx.conf', dest: '/etc/nginx/nginx.conf'}
+      - { src: 'production/gunicorn.service', dest: '/etc/systemd/system/gunicorn.service'}
+      - { src: 'production/gunicorn.socket', dest: '/etc/systemd/system/gunicorn.socket'}
+      - { src: 'production/gunicorn.conf', dest: '/etc/tmpfiles.d/gunicorn.conf'}
     - name: Create a empty file for log Gunicorn
       become: yes
       copy:
@@ -127,10 +128,12 @@
       with_items:
       - "export MONGODB_HOST={{ lookup('env','MONGODB_HOST') }}"
       - "export MONGODB_PORT={{ lookup('env','MONGODB_PORT') }}"
-      - "export DJANGO_ADMIN_PASS='{{ lookup('env','DJANGO_ADMIN_PASS') }}'"
-      - "export SECRET_KEY_DJANGO='{{ lookup('env','SECRET_KEY_DJANGO') }}'"
-      - "export NAME_OF_APP={{ lookup('env','NAME_OF_APP') }}"
-      - "export NAME_OF_DBAPP={{ lookup('env','NAME_OF_DBAPP') }}"
+      - "export DJANGO_REMOTE_ROOT_PATH={{ lookup('env','DJANGO_REMOTE_ROOT_PATH') }}"
+      - "export DJANGO_ADMIN_PASS={{ lookup('env','DJANGO_ADMIN_PASS') }}"
+      - "export DJANGO_SECRET_KEY='{{ lookup('env','DJANGO_SECRET_KEY') }}'"
+      - "export DJANGO_NAME_OF_PROJECT={{ lookup('env','DJANGO_NAME_OF_PROJECT') }}"
+      - "export DJANGO_NAME_OF_APP={{ lookup('env','DJANGO_NAME_OF_APP') }}"
+      - "export DJANGO_NAME_OF_DBAPP={{ lookup('env','DJANGO_NAME_OF_DBAPP') }}"
       - "export GITHUB_CLIENT_ID_DEV={{ lookup('env','GITHUB_CLIENT_ID_DEV') }}"
       - "export GITHUB_CLIENT_SECRET_DEV={{ lookup('env','GITHUB_CLIENT_SECRET_DEV') }}"
       - "export GOOGLE_CLIENT_ID_DEV={{ lookup('env','GOOGLE_CLIENT_ID_DEV') }}"
@@ -139,3 +142,25 @@
       - "export GITHUB_CLIENT_SECRET_PRO={{ lookup('env','GITHUB_CLIENT_SECRET_PRO') }}"
       - "export GOOGLE_CLIENT_ID_PRO={{ lookup('env','GOOGLE_CLIENT_ID_PRO') }}"
       - "export GOOGLE_CLIENT_SECRET_PRO={{ lookup('env','GOOGLE_CLIENT_SECRET_PRO') }}"
+    # - name: Create directories for APP
+    #   file:
+    #     path: "{{ item }}"
+    #     state: directory
+    #     owner: vagrant
+    #     group: vagrant
+    #     mode: 0755
+    #   with_items:
+    #   - "{{ lookup('env','DJANGO_REMOTE_ROOT_PATH') }}"
+    #   - "{{ lookup('env','DJANGO_REMOTE_ROOT_PATH') }}/{{ lookup('env','DJANGO_NAME_OF_PROJECT') }}"
+    #   - "{{ lookup('env','DJANGO_REMOTE_ROOT_PATH') }}/{{ lookup('env','DJANGO_NAME_OF_APP') }}"
+    - name: Copy app files to the server
+      become: yes
+      copy:
+        src: "~/GitHub/Universidad/04Cuarto/Desarrollo_de_aplicaciones_de_internet_DAI/Practica3_semanas_8-9/src/{{ item.src }}"
+        dest: "{{ item.dest }}"
+        owner: root
+        group: root
+        mode: 0755
+      with_items:
+      - { src: "restaurants.json", dest: "{{ lookup('env','DJANGO_REMOTE_ROOT_PATH') }}/restaurants.json"}
+      - { src: "neighborhoods.json", dest: "{{ lookup('env','DJANGO_REMOTE_ROOT_PATH') }}/neighborhoods.json"}
