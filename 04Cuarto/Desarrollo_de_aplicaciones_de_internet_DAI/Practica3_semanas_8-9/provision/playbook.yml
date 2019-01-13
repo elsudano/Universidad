@@ -66,6 +66,13 @@
       with_items:
       - { regexp: 'bindIp: 127\.0\.0\.1', line: '  bindIp: 127.0.0.1' }
       - { regexp: 'ipv6:\s\w+', line: '  ipv6: false' }
+    # - name: Copy Source Code to remote machine
+    #   copy:
+    #     src: ~/GitHub/Universidad/04Cuarto/Desarrollo_de_aplicaciones_de_internet_DAI/Practica3_semanas_8-9/src/
+    #     dest: ~/src/
+    #     owner: vagrant
+    #     group: vagrant
+    #     mode: 0744
     - name: Copy the files configuratión to the correct places
       become: yes
       copy:

@@ -12,6 +12,7 @@ menu_items = [
     {'href':'/icons/','icon':'fa-tags','caption':'Icons'},
     {'href':'/grid/','icon':'fa-wrench','caption':'Grid'},
     {'href':'/doc/','icon':'fa-book','caption':'Documentation'},
+    {'href':'/maps/','icon':'fa-map-marker ','caption':'Maps'},
     #{'href':'/forms','icon':'','caption':'Forms'},
 ]
 
@@ -43,13 +44,30 @@ class Restaurants(models.Model):
 
     # objects = models.DjongoManager()
     objects = RestaurantsManager()
-    
-    # Esta fucnión la tenemos para poder renderizar el ID
-    # en las plantillas de DJango, hay un uso de ellas en:
-    # search.html
-    def getid(self):
-        return str(self._id)
 
     def __str__(self):
         restaurant_string = {'_id':self._id,'location':{'coordinates':self.location.coordinates,'type':self.location.type},'name':self.name}
         return str(restaurant_string)
+
+class CookType(models.Model):
+    TYPES = (
+        ('Point', 'Point'),
+        ('Polygon', 'Polygon'),
+    )
+    _id = models.ObjectIdField()
+    allergens = models.CharField(max_length=20, choices=TYPES)
+    deno = models.CharField(max_length=200)
+
+    def __str__(self):
+        cook_string = {'_id':self._id}
+        return str(cook_string)
+
+class Plato(models.Model):
+    _id = models.ObjectIdField()
+    name = models.CharField(max_length=200, unique=True)
+    cooktype = models.CharField(max_length=200)
+    price = models.PositiveIntegerField()
+	
+    def __str__(self):
+        plate_string = {'_id':{'coordinates':self.location.coordinates,'type':self.location.type}}
+        return str(plate_string)

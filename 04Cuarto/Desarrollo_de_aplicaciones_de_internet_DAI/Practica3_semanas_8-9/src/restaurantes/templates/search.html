@@ -20,6 +20,18 @@
                         </div>
                         <!-- /.col-md-6 -->
                         {% endif %}
+                        {% if save %}
+                        <div class="alert alert-success alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            Registro almacenado con éxito.
+                        </div>
+                        {% elif save == False %}
+                        <div class="alert alert-danger alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            Ha sucedido algo inesperado guardando el registro.
+                        </div>
+                        <!-- Alert to save reg -->
+                        {% endif %}
                     </div>
                     <div class="col-lg-12">
                         <h1 class="page-header">Resultado de la Busqueda:</h1>

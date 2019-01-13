@@ -3,7 +3,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import menu_items, Restaurants
-from .forms import MyLoginForm, MySignupForm, Restaurant, EditRestaurant
+from .forms import MyLoginForm, MySignupForm, Restaurant, EditRestaurant, Plate
 
 def Index(request):
     if request.user.is_authenticated:
@@ -105,12 +105,44 @@ def Tables(request):
         result = redirect('/login/')
     return result
 
+def Flot(request):
+    if request.user.is_authenticated:
+        context = {
+            "navigation": menu_items,
+        }
+        result = render(request, 'flot.html', context)
+    else:
+        result = redirect('/login/')
+    return result
+
 def Morris(request):
     if request.user.is_authenticated:
         context = {
             "navigation": menu_items,
         }
         result = render(request, 'morris.html', context)
+    else:
+        result = redirect('/login/')
+    return result
+
+def Highcharts(request):
+    if request.user.is_authenticated:
+        context = {
+            "navigation": menu_items,
+        }
+        result = render(request, 'highcharts.html', context)
+    else:
+        result = redirect('/login/')
+    return result
+
+def Maps(request):
+    if request.user.is_authenticated:
+        list_restaurants = Restaurants.objects.all()[:9]
+        context = {
+            "navigation": menu_items,
+            "search_result": list_restaurants,
+        }
+        result = render(request, 'maps.html', context)
     else:
         result = redirect('/login/')
     return result
@@ -124,7 +156,7 @@ def DeleteRestaurant(request, oid):
         context = {
             "navigation": menu_items,
             "search_result": list_restaurants,
-            "is_deleted": is_deleted.get('restaurantes.restaurants'),
+            "is_deleted": is_deleted.get('restaurantes.Restaurants'),
         }
         result = render(request, 'search.html', context)
     else:
@@ -194,11 +226,13 @@ def NewRestaurant(request):
                 search_result = Restaurants.objects.filter(_id=item_created._id)
             context = {
                 "navigation": menu_items,
+                "save": item_created,
                 "search_result": search_result,
             }
             result = render(request, 'search.html', context)
         elif request.method == 'GET':
             context = {
+                "tipo": "Restaurante",
                 "newform": Restaurant(),
                 "navigation": menu_items,
             }
@@ -250,6 +284,8 @@ def NewPlate(request):
             result = render(request, 'search.html', context)
         elif request.method == 'GET':
             context = {
+                "tipo": "Plato",
+                "newform": Plate(),
                 "navigation": menu_items,
             }
             result = render(request, 'new.html', context)

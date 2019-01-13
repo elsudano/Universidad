@@ -1,4 +1,4 @@
 from django.contrib import admin
-from .models import restaurants
+# from .models import Restaurants
 
-admin.site.register(restaurants)
+# admin.site.register(Restaurants)

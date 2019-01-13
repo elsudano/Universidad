@@ -20,7 +20,6 @@ class MySignupForm(SignupForm):
         self.fields['password1'].widget = forms.PasswordInput(attrs={'class':'form-control'})
         self.fields['password2'].widget = forms.PasswordInput(attrs={'class':'form-control'})
         
-
 class Restaurant(forms.Form):
     name = forms.CharField(max_length=100, label='Restaurant Name')
     long = forms.FloatField(label='Longitud position')
@@ -38,3 +37,8 @@ class EditRestaurant(Restaurant):
     def __init__(self, *args, **kwargs):
         super(EditRestaurant, self).__init__(*args, **kwargs)
         self.fields['oid'].widget = forms.HiddenInput()
+
+class Plate(forms.Form):
+
+    def __init__(self, *args, **kwargs):
+        super(Plate, self).__init__(*args, **kwargs)

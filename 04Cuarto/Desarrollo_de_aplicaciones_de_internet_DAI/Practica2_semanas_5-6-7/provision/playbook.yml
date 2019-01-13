@@ -23,6 +23,13 @@
       become: yes
       timezone:
         name: Europe/Madrid
+    # - name: Copy Source Code to remote machine
+    #   copy:
+    #     src: ~/GitHub/Universidad/04Cuarto/Desarrollo_de_aplicaciones_de_internet_DAI/Practica3_semanas_8-9
+    #     dest: ~/src/
+    #     owner: vagrant
+    #     group: vagrant
+    #     mode: 0744
     - name: Install requeriments of disable selinux
       become: yes
       dnf:
@@ -40,7 +47,7 @@
     - name: Install Utils for server Linux
       become: yes
       dnf:
-        name: ['htop', 'nano', 'net-tools']
+        name: ['htop', 'nano', 'net-tools', 'firewalld']
         state: latest
     - name: Install dependencies for Django
       become: yes
@@ -93,21 +100,3 @@
       - "export GITHUB_CLIENT_SECRET={{ lookup('env','GITHUB_CLIENT_SECRET') }}"
       - "export GOOGLE_CLIENT_ID={{ lookup('env','GOOGLE_CLIENT_ID') }}"
       - "export GOOGLE_CLIENT_SECRET={{ lookup('env','GOOGLE_CLIENT_SECRET') }}"
-#    - name: Copy Source Code to remote machine
-#      copy:
-#        src: ~/GitHub/Universidad/04Cuarto/Desarrollo_de_aplicaciones_de_internet_DAI/config_machine/src/
-#        dest: ~/src/
-#        owner: vagrant
-#        group: vagrant
-#        mode: 0744
-#    - name: Print on screen envirotments vars
-#      command: env
-#      register: env_vars
-#    - debug: msg="{{ env_vars.stdout }}"
-#    - name: Make directory of develop
-#      file:
-#        path: "/home/$USER/src"
-#        state: directory
-#        mode: 0755
-#    - name: Run Application
-#      command: "ifconfig"
