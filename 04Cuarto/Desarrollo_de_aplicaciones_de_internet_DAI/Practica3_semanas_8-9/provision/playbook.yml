@@ -26,7 +26,7 @@
     - name: Install requeriments of disable selinux, and firewalld
       become: yes
       dnf:
-        name: [libselinux-python, 'firewalld']
+        name: ['libselinux-python', 'firewalld']
         state: latest
     - name: Disable SeLinux
       become: yes
@@ -151,16 +151,14 @@
     #     mode: 0755
     #   with_items:
     #   - "{{ lookup('env','DJANGO_REMOTE_ROOT_PATH') }}"
-    #   - "{{ lookup('env','DJANGO_REMOTE_ROOT_PATH') }}/{{ lookup('env','DJANGO_NAME_OF_PROJECT') }}"
-    #   - "{{ lookup('env','DJANGO_REMOTE_ROOT_PATH') }}/{{ lookup('env','DJANGO_NAME_OF_APP') }}"
-    - name: Copy app files to the server
-      become: yes
-      copy:
-        src: "~/GitHub/Universidad/04Cuarto/Desarrollo_de_aplicaciones_de_internet_DAI/Practica3_semanas_8-9/src/{{ item.src }}"
-        dest: "{{ item.dest }}"
-        owner: root
-        group: root
-        mode: 0755
-      with_items:
-      - { src: "restaurants.json", dest: "{{ lookup('env','DJANGO_REMOTE_ROOT_PATH') }}/restaurants.json"}
-      - { src: "neighborhoods.json", dest: "{{ lookup('env','DJANGO_REMOTE_ROOT_PATH') }}/neighborhoods.json"}
+    # - name: Copy app files to the server
+    #   become: yes
+    #   copy:
+    #     src: "~/GitHub/Universidad/04Cuarto/Desarrollo_de_aplicaciones_de_internet_DAI/Practica3_semanas_8-9/src/{{ item.src }}"
+    #     dest: "{{ item.dest }}"
+    #     owner: root
+    #     group: root
+    #     mode: 0755
+    #   with_items:
+    #   - { src: "restaurants.json", dest: "{{ lookup('env','DJANGO_REMOTE_ROOT_PATH') }}/restaurants.json"}
+    #   - { src: "neighborhoods.json", dest: "{{ lookup('env','DJANGO_REMOTE_ROOT_PATH') }}/neighborhoods.json"}

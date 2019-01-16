@@ -66,8 +66,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # my app
-    'restaurantes',
     # dependencies for allauth
     'django.contrib.sites',
     # allauth app
@@ -77,6 +75,8 @@ INSTALLED_APPS = [
     # allauth providers
     'allauth.socialaccount.providers.github',
     'allauth.socialaccount.providers.google',
+    # my app
+    'restaurantes',
 ]
 
 MIDDLEWARE = [
@@ -92,7 +92,7 @@ MIDDLEWARE = [
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, '/templates/')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -107,14 +107,6 @@ TEMPLATES = [
 ]
 
 # Database
-# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-#
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
 # https://nesdis.github.io/djongo/integrating-django-with-mongodb/
 DATABASES = {
     'default': {
