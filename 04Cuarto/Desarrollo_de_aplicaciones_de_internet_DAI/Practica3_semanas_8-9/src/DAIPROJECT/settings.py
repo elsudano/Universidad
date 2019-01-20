@@ -56,8 +56,6 @@ ACCOUNT_LOGOUT_ON_GET = True
 
 STATIC_URL = os.path.join(BASE_DIR, '/static/')
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'restaurantes/static/')
-
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -66,17 +64,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # dependencies for allauth
-    'django.contrib.sites',
-    # allauth app
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    # allauth providers
-    'allauth.socialaccount.providers.github',
-    'allauth.socialaccount.providers.google',
-    # my app
-    'restaurantes',
 ]
 
 MIDDLEWARE = [
@@ -92,7 +79,7 @@ MIDDLEWARE = [
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, '/templates/')],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -150,8 +137,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://wsvincent.com/django-allauth-tutorial-custom-user-model/
 
 AUTHENTICATION_BACKENDS = (
-    "django.contrib.auth.backends.ModelBackend",
-    "allauth.account.auth_backends.AuthenticationBackend",
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 )
 
 # Posibles opciones por defecto para la siguiente variable
