@@ -152,7 +152,7 @@ def _config_mongodb():
     if not contains("%(path_django)s/%(project)s/settings.py" % env, "'ENFORCE_SCHEMA': True,"):
         run("sed -i \"/'ENGINE': 'djongo',/ a\ \t'ENFORCE_SCHEMA': True,\" %(path_django)s/%(project)s/settings.py" % env)
     if not contains("%(path_django)s/%(project)s/settings.py" % env, "'NAME': '%(name_dbapp)s'," % env):
-        run("sed -i \"/'ENFORCE_SCHEMA': True,/ a'NAME': '%(name_dbapp)s',\" %(path_django)s/%(project)s/settings.py" % env)
+        run("sed -i \"/'ENFORCE_SCHEMA': True,/ a\ \t'NAME': '%(name_dbapp)s',\" %(path_django)s/%(project)s/settings.py" % env)
     if not contains("%(path_django)s/%(project)s/settings.py" % env, "'HOST': 'localhost',"):
         run("sed -i \"/'NAME': '%(name_dbapp)s',/ a\ \t'HOST': 'localhost',\" %(path_django)s/%(project)s/settings.py" % env)
     if not contains("%(path_django)s/%(project)s/settings.py" % env, "'PORT': 27017,"):
@@ -177,13 +177,13 @@ def _config_allauth():
     if not contains("%(path_django)s/%(project)s/settings.py" % env, "'allauth.socialaccount.providers.google',"):
         run("sed -i \"/'allauth.socialaccount.providers.github',/ a\ \t'allauth.socialaccount.providers.google',\" %(path_django)s/%(project)s/settings.py" % env)
     if not contains("%(path_django)s/%(project)s/settings.py" % env, "SITE_ID = 1"):
-        run("sed -i \"/USE_TZ =/ aSITE_ID = 1\" %(path_django)s/%(project)s/settings.py" % env)
+        run("sed -i \"/USE_TZ =/ a\SITE_ID = 1\" %(path_django)s/%(project)s/settings.py" % env)
     if not contains("%(path_django)s/%(project)s/settings.py" % env, "LOGIN_REDIRECT_URL"):
-        run("sed -i \"/SITE_ID = 1/ a\ \nLOGIN_REDIRECT_URL = '\/'\" %(path_django)s/%(project)s/settings.py" % env)
+        run("sed -i \"/SITE_ID = 1/ a\LOGIN_REDIRECT_URL = '\/'\" %(path_django)s/%(project)s/settings.py" % env)
     if not contains("%(path_django)s/%(project)s/settings.py" % env, "LOGOUT_REDIRECT_URL"):
-        run("sed -i \"/LOGIN_REDIRECT_URL = '\/'/ a\ \nLOGOUT_REDIRECT_URL = '\/login'\" %(path_django)s/%(project)s/settings.py" % env)
+        run("sed -i \"/LOGIN_REDIRECT_URL = '\/'/ a\LOGOUT_REDIRECT_URL = '\/login'\" %(path_django)s/%(project)s/settings.py" % env)
     if not contains("%(path_django)s/%(project)s/settings.py" % env, "ACCOUNT_LOGOUT_ON_GET"):
-        run("sed -i \"/LOGOUT_REDIRECT_URL = '\/login'/ a\ \nACCOUNT_LOGOUT_ON_GET = True\" %(path_django)s/%(project)s/settings.py" % env)
+        run("sed -i \"/LOGOUT_REDIRECT_URL = '\/login'/ a\ACCOUNT_LOGOUT_ON_GET = True\" %(path_django)s/%(project)s/settings.py" % env)
     if not contains("%(path_django)s/%(project)s/settings.py" % env, "AUTHENTICATION_BACKENDS"):
         run("sed -i \"/ACCOUNT_LOGOUT_ON_GET = True/ aAUTHENTICATION_BACKENDS = (\\n \
             'django.contrib.auth.backends.ModelBackend',\\n \
