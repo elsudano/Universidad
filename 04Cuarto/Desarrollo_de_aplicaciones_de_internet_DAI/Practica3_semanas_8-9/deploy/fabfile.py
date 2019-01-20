@@ -65,7 +65,6 @@ def _configurar_maquina(envirotment):
         if not exists("/usr/bin/python"):
             sudo("ln -s /usr/bin/python3.6 /usr/bin/python")
         local("vagrant provision remote")
-        sudo("chown vagrant:vagrant -R /home/vagrant/src")
         _configurar_django()
 
 def _ejecutar_aplicacion():
@@ -84,17 +83,18 @@ def _migrate():
 
 def _configurar_django():
     if not exists("%(path_django)s/%(project)s" % env):
+        run('mkdir %(path_django)s; chown -R %(user)s:%(user)s %(path_django)s' % env)
         run("django-admin startproject %(project)s %(path_django)s" % env)
     if not exists("%(path_django)s/%(name_app)s" % env):
         run("cd %(path_django)s; %(pythonbin)s %(path_django)s/manage.py startapp %(name_app)s" % env)
-    run("sed -i \"/'DIRS': \[\],/ c'DIRS': [os.path.join(BASE_DIR, '/templates/')],\" %(path_django)s/%(project)s/settings.py" % env)
+    run("sed -i \"/'DIRS': \[\],/ c\ \t'DIRS': [os.path.join(BASE_DIR, 'templates/')],\" %(path_django)s/%(project)s/settings.py" % env)
     if contains("%(path_django)s/%(project)s/settings.py" % env, "LANGUAGE_CODE = 'en-us'"):
         run("sed -i \"/LANGUAGE_CODE = 'en-us'/ cLANGUAGE_CODE = 'es-ES'\" %(path_django)s/%(project)s/settings.py" % env)
     if contains("%(path_django)s/%(project)s/settings.py" % env, "TIME_ZONE = 'UTC'"):
         run("sed -i \"/TIME_ZONE = 'UTC'/ cTIME_ZONE = 'Europe\/Madrid'\" %(path_django)s/%(project)s/settings.py" % env)
     run("sed -i \"/SECRET_KEY =/ cSECRET_KEY = '%(secret_key)s'\" %(path_django)s/%(project)s/settings.py" % env)
     if not contains("%(path_django)s/%(project)s/settings.py" % env, "%(name_app)s" % env):
-        run("sed -i \"/'django.contrib.staticfiles',/ a'%(name_app)s',\" %(path_django)s/%(project)s/settings.py" % env)
+        run("sed -i \"/'django.contrib.staticfiles',/ a\ \t'%(name_app)s',\" %(path_django)s/%(project)s/settings.py" % env)
     debug_on = prompt("¿Quieres el modo debug? [Y/n]?: ", default="Y")
     if debug_on == "y" or debug_on == "Y":
         run("sed -i \"/DEBUG = False/ cDEBUG = True\" %(path_django)s/%(project)s/settings.py" % env)
@@ -106,7 +106,7 @@ def _configurar_django():
     if collect == "y" or collect == "Y":
         run("sed -i \"/STATIC_URL = '\/static\/'/ cSTATIC_URL = os.path.join(BASE_DIR, '\/static\/')\" %(path_django)s/%(project)s/settings.py" % env)
         if not contains("%(path_django)s/%(project)s/settings.py" % env, "STATIC_ROOT = "):
-            run("sed -i \"/STATIC_URL = os.path.join(BASE_DIR, '\/static\/')/ aSTATIC_ROOT = os.path.join(BASE_DIR, '%(name_app)s\/static\/')\" %(path_django)s/%(project)s/settings.py" % env)
+            run("sed -i \"/STATIC_URL = os.path.join(BASE_DIR, '\/static\/')/ aSTATIC_ROOT = os.path.join(BASE_DIR, '\/%(name_app)s\/static\/')\" %(path_django)s/%(project)s/settings.py" % env)
         sudo("%(pythonbin)s %(path_django)s/manage.py collectstatic --noinput" % env)
     config_mongodb = prompt("¿Quieres configurar DJango con MongoDB? [y/N]?: ", default="N")
     if config_mongodb == "y" or config_mongodb == "Y":
@@ -136,7 +136,7 @@ def _configurar_django():
         run("sed -i \"/from django.urls import path/ cfrom django.urls import path, include\" %(path_django)s/%(project)s/urls.py" % env)
     if not contains("%(path_django)s/%(project)s/urls.py" % env, "path('', include('%(name_app)s.urls'))," % env):
         run("sed -i \"/path('admin\/', admin.site.urls),/ apath('', include('%(name_app)s.urls')),\" %(path_django)s/%(project)s/urls.py" % env)
-    # _toput()
+    _toput()
     _migrate()
     import_data = prompt("¿Quiere importar los datos de los restaurantes y los vecinos? [y/N]?: ", default="N")
     if import_data == "y" or import_data == "Y":
@@ -148,15 +148,15 @@ def _config_mongodb():
     if contains("%(path_django)s/%(project)s/settings.py" % env, "'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),"):
         run("sed -i \"/'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),/d\" %(path_django)s/%(project)s/settings.py" % env)
     if contains("%(path_django)s/%(project)s/settings.py" % env, "'ENGINE': 'django.db.backends.sqlite3',"):
-        run("sed -i \"/'ENGINE': 'django.db.backends.sqlite3',/ c'ENGINE': 'djongo',\" %(path_django)s/%(project)s/settings.py" % env)
+        run("sed -i \"/'ENGINE': 'django.db.backends.sqlite3',/ c\ \t'ENGINE': 'djongo',\" %(path_django)s/%(project)s/settings.py" % env)
     if not contains("%(path_django)s/%(project)s/settings.py" % env, "'ENFORCE_SCHEMA': True,"):
-        run("sed -i \"/'ENGINE': 'djongo',/ a'ENFORCE_SCHEMA': True,\" %(path_django)s/%(project)s/settings.py" % env)
+        run("sed -i \"/'ENGINE': 'djongo',/ a\ \t'ENFORCE_SCHEMA': True,\" %(path_django)s/%(project)s/settings.py" % env)
     if not contains("%(path_django)s/%(project)s/settings.py" % env, "'NAME': '%(name_dbapp)s'," % env):
         run("sed -i \"/'ENFORCE_SCHEMA': True,/ a'NAME': '%(name_dbapp)s',\" %(path_django)s/%(project)s/settings.py" % env)
     if not contains("%(path_django)s/%(project)s/settings.py" % env, "'HOST': 'localhost',"):
-        run("sed -i \"/'NAME': '%(name_dbapp)s',/ a'HOST': 'localhost',\" %(path_django)s/%(project)s/settings.py" % env)
+        run("sed -i \"/'NAME': '%(name_dbapp)s',/ a\ \t'HOST': 'localhost',\" %(path_django)s/%(project)s/settings.py" % env)
     if not contains("%(path_django)s/%(project)s/settings.py" % env, "'PORT': 27017,"):
-        run("sed -i \"/'HOST': 'localhost',/ a'PORT': 27017,\" %(path_django)s/%(project)s/settings.py" % env)
+        run("sed -i \"/'HOST': 'localhost',/ a\ \t'PORT': 27017,\" %(path_django)s/%(project)s/settings.py" % env)
     are_you_sure = prompt("¿Seguro que quieres borrar la base de datos y la configuración actual? [y/N]?: ", default="N")
     if are_you_sure == "y" or are_you_sure == "Y":
         run("%(conn)s/%(name_dbapp)s --eval \"db.dropDatabase()\"" % env)
@@ -165,19 +165,35 @@ def _config_mongodb():
 
 def _config_allauth():
     if not contains("%(path_django)s/%(project)s/settings.py" % env, "'django.contrib.sites',"):
-        run("sed -i \"/'django.contrib.staticfiles',/ a'django.contrib.sites',\" %(path_django)s/%(project)s/settings.py" % env)
+        run("sed -i \"/'django.contrib.staticfiles',/ a\ \t'django.contrib.sites',\" %(path_django)s/%(project)s/settings.py" % env)
     if not contains("%(path_django)s/%(project)s/settings.py" % env, "'allauth',"):
-        run("sed -i \"/'django.contrib.sites',/ a'allauth',\" %(path_django)s/%(project)s/settings.py" % env)
+        run("sed -i \"/'restaurantes',/ a\ \t'allauth',\" %(path_django)s/%(project)s/settings.py" % env)
     if not contains("%(path_django)s/%(project)s/settings.py" % env, "'allauth.account',"):
-        run("sed -i \"/'allauth',/ a'allauth.account',\" %(path_django)s/%(project)s/settings.py" % env)
+        run("sed -i \"/'allauth',/ a\ \t'allauth.account',\" %(path_django)s/%(project)s/settings.py" % env)
     if not contains("%(path_django)s/%(project)s/settings.py" % env, "'allauth.socialaccount',"):
-        run("sed -i \"/'allauth.account',/ a'allauth.socialaccount',\" %(path_django)s/%(project)s/settings.py" % env)
+        run("sed -i \"/'allauth.account',/ a\ \t'allauth.socialaccount',\" %(path_django)s/%(project)s/settings.py" % env)
     if not contains("%(path_django)s/%(project)s/settings.py" % env, "'allauth.socialaccount.providers.github',"):
-        run("sed -i \"/'allauth.socialaccount',/ a'allauth.socialaccount.providers.github',\" %(path_django)s/%(project)s/settings.py" % env)
+        run("sed -i \"/'allauth.socialaccount',/ a\ \t'allauth.socialaccount.providers.github',\" %(path_django)s/%(project)s/settings.py" % env)
     if not contains("%(path_django)s/%(project)s/settings.py" % env, "'allauth.socialaccount.providers.google',"):
-        run("sed -i \"/'allauth.socialaccount.providers.github',/ a'allauth.socialaccount.providers.google',\" %(path_django)s/%(project)s/settings.py" % env)
+        run("sed -i \"/'allauth.socialaccount.providers.github',/ a\ \t'allauth.socialaccount.providers.google',\" %(path_django)s/%(project)s/settings.py" % env)
     if not contains("%(path_django)s/%(project)s/settings.py" % env, "SITE_ID = 1"):
         run("sed -i \"/USE_TZ =/ aSITE_ID = 1\" %(path_django)s/%(project)s/settings.py" % env)
+    if not contains("%(path_django)s/%(project)s/settings.py" % env, "LOGIN_REDIRECT_URL"):
+        run("sed -i \"/SITE_ID = 1/ a\ \nLOGIN_REDIRECT_URL = '\/'\" %(path_django)s/%(project)s/settings.py" % env)
+    if not contains("%(path_django)s/%(project)s/settings.py" % env, "LOGOUT_REDIRECT_URL"):
+        run("sed -i \"/LOGIN_REDIRECT_URL = '\/'/ a\ \nLOGOUT_REDIRECT_URL = '\/login'\" %(path_django)s/%(project)s/settings.py" % env)
+    if not contains("%(path_django)s/%(project)s/settings.py" % env, "ACCOUNT_LOGOUT_ON_GET"):
+        run("sed -i \"/LOGOUT_REDIRECT_URL = '\/login'/ a\ \nACCOUNT_LOGOUT_ON_GET = True\" %(path_django)s/%(project)s/settings.py" % env)
+    if not contains("%(path_django)s/%(project)s/settings.py" % env, "AUTHENTICATION_BACKENDS"):
+        run("sed -i \"/ACCOUNT_LOGOUT_ON_GET = True/ aAUTHENTICATION_BACKENDS = (\\n \
+            'django.contrib.auth.backends.ModelBackend',\\n \
+            'allauth.account.auth_backends.AuthenticationBackend',\\n)\" \
+            %(path_django)s/%(project)s/settings.py" % env)
+    if not contains("%(path_django)s/%(project)s/settings.py" % env, "ACCOUNT_FORMS"):
+        run("sed -i \"/ACCOUNT_LOGOUT_ON_GET = True/ aACCOUNT_FORMS = {\\n \
+            'login': 'restaurantes.forms.MyLoginForm',\\n \
+            'signup': 'restaurantes.forms.MySignupForm',\\n \
+        }\" %(path_django)s/%(project)s/settings.py" % env)
     _migrate()
     run("%(conn)s/%(name_dbapp)s --eval \
     \"db.socialaccount_socialapp.remove({'id':NumberInt(1)})\"" % env)
@@ -246,6 +262,9 @@ def _assing_floating_ip():
 # no tengamos la opción de sincronizar carpetas locales con la maquina
 # de desarrollo
 def _toput():
+    sudo("chown -R %(user)s:%(user)s %(path_django)s" % env)
+    put("%(django_local_path)s/restaurants.json" % env, "%(path_django)s/restaurants.json" % env)
+    put("%(django_local_path)s/neighborhoods.json" % env, "%(path_django)s/neighborhoods.json" % env)
     put("%(django_local_path)s/%(name_app)s/urls.py" % env, "%(path_django)s/%(name_app)s/urls.py" % env)
     put("%(django_local_path)s/%(name_app)s/views.py" % env, "%(path_django)s/%(name_app)s/views.py" % env)
     put("%(django_local_path)s/%(name_app)s/models.py" % env, "%(path_django)s/%(name_app)s/models.py" % env)
