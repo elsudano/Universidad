@@ -14,14 +14,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         config.ssh.private_key_path = '~/.ssh/id_rsa_deploying'
         config.ssh.username = "vagrant"
         config.ssh.password = "vagrant"
-        #config.vm.network "public_network"
+        config.vm.network "public_network", bridge:"wlp2s0"
         config.vm.hostname = "local-dev-machine"
         config.vm.provider "virtualbox" do |vbox|
             vbox.default_nic_type = "82545EM"
             vbox.name = "local-dev-machine-p2"
             vbox.memory = 2000
             vbox.cpus = 2
-            vbox.customize ["modifyvm", :id, '--accelerate2dvideo', 'off', '--clipboard', 'bidirectional', '--draganddrop', 'hosttoguest']
+            vbox.customize ["modifyvm", :id, "--accelerate2dvideo", "off"]
+            vbox.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
+            vbox.customize ["modifyvm", :id, "--draganddrop", "hosttoguest"]
         end
         config.vm.network "forwarded_port", guest: 8080, host: 8080
         #config.vm.network "forwarded_port", guest: 22, host: 2222
@@ -30,7 +32,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         # vagrant plugin install vagrant-vbguest
         config.vbguest.iso_path = "/usr/share/virtualbox/VBoxGuestAdditions.iso"
         #config.vbguest.no_remote = true # no se baja la ISO
-        config.vm.synced_folder 'src/', '/home/vagrant/src/', SharedFoldersEnableSymlinksCreate: false#, disabled: true
+        config.vm.synced_folder 'src/', '/home/vagrant/src/', SharedFoldersEnableSymlinksCreate: false, disabled: true
     end
     config.vm.define "remote" do |config|
         config.vm.provider :digital_ocean do |provider, override|
@@ -47,9 +49,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             provider.image = 'fedora-28-x64'
             provider.region = 'lon1'
             provider.size = 's-1vcpu-1gb'
-            config.vm.synced_folder "src/", "/home/vagrant/src", owner: "vagrant", group: "vagrant", type: "rsync",
-            rsync__args: ["--verbose", "--rsync-path='sudo rsync'", "--archive", "--delete", "-z"],
-                rsync__exclude: ["__pycache__/", "database/", "", "*.pyc"]
+            #config.vm.synced_folder "src/", "/home/vagrant/src", owner: "vagrant", group: "vagrant", type: "rsync",
+            #rsync__args: ["--verbose", "--rsync-path='sudo rsync'", "--archive", "--delete", "-z"],
+            #    rsync__exclude: ["__pycache__/", "database/", "", "*.pyc"]
         end
         config.vm.hostname = "remote-dev-machine"
     end
