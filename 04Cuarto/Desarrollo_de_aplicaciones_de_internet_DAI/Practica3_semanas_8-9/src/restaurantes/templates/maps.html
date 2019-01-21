@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+{% load account socialaccount functions_extra %}
+
+{% block head_title %}Maps...{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+{% include 'header.html' %}
+        <!-- Page Content -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">Localización de los Restaurantes</h1>
+                    </div>
+                </div>
+                <!-- /.row -->
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Situación del Restaurante.
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body">
+                                <div id="map"></div>
+                            </div>
+                            <!-- .panel-body -->
+                        </div>
+                        <!-- /.panel -->
+                    </div>
+                    <!-- /.col-lg-6 -->
+                    <div class="col-lg-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Lista de Restaurantes.
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Nombre</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in search_result %}
+                                            <tr>
+                                                <td>{{ item.name }}</td>
+                                                <td>
+                                                    <!-- La función del item la tenemos que tener por que los templates de DJango no se permiten renderizar los undercore -->
+                                                    <a type="button" class="btn btn-success btn-circle" href="/restaurant/edit/{{ item|getid }}"><i class="fa fa-pencil-square-o"></i></a>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.table-responsive -->
+                            </div>
+                            <!-- .panel-body -->
+                        </div>
+                        <!-- /.panel -->
+                    </div>
+                    <!-- /.col-lg-6 -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- /#page-wrapper -->
+{% include 'footer.html' %}
+{% endif %}
+{% endblock %}
