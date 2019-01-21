@@ -106,7 +106,7 @@ def _configurar_django():
     if collect == "y" or collect == "Y":
         run("sed -i \"/STATIC_URL = '\/static\/'/ cSTATIC_URL = os.path.join(BASE_DIR, '\/static\/')\" %(path_django)s/%(project)s/settings.py" % env)
         if not contains("%(path_django)s/%(project)s/settings.py" % env, "STATIC_ROOT = "):
-            run("sed -i \"/STATIC_URL = os.path.join(BASE_DIR, '\/static\/')/ aSTATIC_ROOT = os.path.join(BASE_DIR, '\/%(name_app)s\/static\/')\" %(path_django)s/%(project)s/settings.py" % env)
+            run("sed -i \"/STATIC_URL = os.path.join(BASE_DIR, '\/static\/')/ aSTATIC_ROOT = os.path.join(BASE_DIR, '%(name_app)s\/static\/')\" %(path_django)s/%(project)s/settings.py" % env)
         sudo("%(pythonbin)s %(path_django)s/manage.py collectstatic --noinput" % env)
     config_mongodb = prompt("¿Quieres configurar DJango con MongoDB? [y/N]?: ", default="N")
     if config_mongodb == "y" or config_mongodb == "Y":
