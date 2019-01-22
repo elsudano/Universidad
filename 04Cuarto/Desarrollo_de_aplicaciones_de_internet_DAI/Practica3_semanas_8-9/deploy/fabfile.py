@@ -87,12 +87,14 @@ def _configurar_django():
         run("django-admin startproject %(project)s %(path_django)s" % env)
     if not exists("%(path_django)s/%(name_app)s" % env):
         run("cd %(path_django)s; %(pythonbin)s %(path_django)s/manage.py startapp %(name_app)s" % env)
-    run("sed -i \"/'DIRS': \[\],/ c\ \t'DIRS': [os.path.join(BASE_DIR, 'templates/')],\" %(path_django)s/%(project)s/settings.py" % env)
+    if not contains("%(path_django)s/%(project)s/settings.py" % env, "'DIRS': [os.path.join(BASE_DIR, 'templates/')],"):
+        run("sed -i \"/'DIRS': \[\],/ c\ \t'DIRS': [os.path.join(BASE_DIR, 'templates/')],\" %(path_django)s/%(project)s/settings.py" % env)
     if contains("%(path_django)s/%(project)s/settings.py" % env, "LANGUAGE_CODE = 'en-us'"):
         run("sed -i \"/LANGUAGE_CODE = 'en-us'/ cLANGUAGE_CODE = 'es-ES'\" %(path_django)s/%(project)s/settings.py" % env)
     if contains("%(path_django)s/%(project)s/settings.py" % env, "TIME_ZONE = 'UTC'"):
         run("sed -i \"/TIME_ZONE = 'UTC'/ cTIME_ZONE = 'Europe\/Madrid'\" %(path_django)s/%(project)s/settings.py" % env)
-    run("sed -i \"/SECRET_KEY =/ cSECRET_KEY = '%(secret_key)s'\" %(path_django)s/%(project)s/settings.py" % env)
+    if not contains("%(path_django)s/%(project)s/settings.py" % env, "SECRET_KEY = '%(secret_key)s'" % env):
+        run("sed -i \"/SECRET_KEY =/ cSECRET_KEY = '%(secret_key)s'\" %(path_django)s/%(project)s/settings.py" % env)
     if not contains("%(path_django)s/%(project)s/settings.py" % env, "%(name_app)s" % env):
         run("sed -i \"/'django.contrib.staticfiles',/ a\ \t'%(name_app)s',\" %(path_django)s/%(project)s/settings.py" % env)
     debug_on = prompt("¿Quieres el modo debug? [Y/n]?: ", default="Y")
@@ -263,15 +265,17 @@ def _assing_floating_ip():
 # de desarrollo
 def _toput():
     sudo("chown -R %(user)s:%(user)s %(path_django)s" % env)
-    put("%(django_local_path)s/restaurants.json" % env, "%(path_django)s/restaurants.json" % env)
-    put("%(django_local_path)s/neighborhoods.json" % env, "%(path_django)s/neighborhoods.json" % env)
-    put("%(django_local_path)s/%(name_app)s/urls.py" % env, "%(path_django)s/%(name_app)s/urls.py" % env)
-    put("%(django_local_path)s/%(name_app)s/views.py" % env, "%(path_django)s/%(name_app)s/views.py" % env)
-    put("%(django_local_path)s/%(name_app)s/models.py" % env, "%(path_django)s/%(name_app)s/models.py" % env)
-    put("%(django_local_path)s/%(name_app)s/forms.py" % env, "%(path_django)s/%(name_app)s/forms.py" % env)
-    put("%(django_local_path)s/%(name_app)s/static/" % env, "%(path_django)s/%(name_app)s/" % env)
-    put("%(django_local_path)s/%(name_app)s/templates/" % env, "%(path_django)s/%(name_app)s/" % env)
-    put("%(django_local_path)s/%(name_app)s/templatetags/" % env, "%(path_django)s/%(name_app)s/" % env)
+    copy_sure = prompt("¿Quiere copiar los ficheros fuente al servidor remoto? [Y/n]?: ", default="Y")
+    if copy_sure == "y" or copy_sure == "Y":
+        put("%(django_local_path)s/restaurants.json" % env, "%(path_django)s/restaurants.json" % env)
+        put("%(django_local_path)s/neighborhoods.json" % env, "%(path_django)s/neighborhoods.json" % env)
+        put("%(django_local_path)s/%(name_app)s/urls.py" % env, "%(path_django)s/%(name_app)s/urls.py" % env)
+        put("%(django_local_path)s/%(name_app)s/views.py" % env, "%(path_django)s/%(name_app)s/views.py" % env)
+        put("%(django_local_path)s/%(name_app)s/models.py" % env, "%(path_django)s/%(name_app)s/models.py" % env)
+        put("%(django_local_path)s/%(name_app)s/forms.py" % env, "%(path_django)s/%(name_app)s/forms.py" % env)
+        put("%(django_local_path)s/%(name_app)s/static/" % env, "%(path_django)s/%(name_app)s/" % env)
+        put("%(django_local_path)s/%(name_app)s/templates/" % env, "%(path_django)s/%(name_app)s/" % env)
+        put("%(django_local_path)s/%(name_app)s/templatetags/" % env, "%(path_django)s/%(name_app)s/" % env)
 
 def start(envirotment):
     _set_env(envirotment)
