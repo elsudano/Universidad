@@ -48,12 +48,28 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {% for item in search_result %}
+                                            <script type="text/javascript" defer>
+                                                // La información que viene de los datos de la base de datos no esta en float
+                                                // esta en string por lo tanto hay que convertir las "," en "." y despues
+                                                // parsearlos a float, cambiando la posición de las coordenadas para que
+                                                // las interprete el mapa, se hace así por la necesidad de trabajar con 
+                                                // los datos importados desde los ficheros json.
+                                                var restaurants = [];
+                                            </script>
+                                            {% for restaurant in restaurants %}
+                                            <script type="text/javascript" defer>
+                                                var restaurant = {
+                                                    name: "{{ restaurant.name }}",
+                                                    lati: parseFloat("{{ restaurant.location.coordinates.1 }}".replace(",",".")),
+                                                    long: parseFloat("{{ restaurant.location.coordinates.0 }}".replace(",",".")),
+                                                };
+                                                restaurants.push(restaurant);
+                                            </script>
                                             <tr>
-                                                <td>{{ item.name }}</td>
+                                                <td>{{ restaurant.name }}</td>
                                                 <td>
                                                     <!-- La función del item la tenemos que tener por que los templates de DJango no se permiten renderizar los undercore -->
-                                                    <a type="button" class="btn btn-success btn-circle" href="/restaurant/edit/{{ item|getid }}"><i class="fa fa-pencil-square-o"></i></a>
+                                                    <a type="button" class="btn btn-success btn-circle" href="/restaurant/edit/{{ restaurant|getid }}"><i class="fa fa-pencil-square-o"></i></a>
                                                 </td>
                                             </tr>
                                             {% endfor %}
@@ -61,6 +77,21 @@
                                     </table>
                                 </div>
                                 <!-- /.table-responsive -->
+                                <div class="pagination">
+                                    <span class="step-links">
+                                        {% if restaurants.has_previous %}
+                                            <a href="?page=1">&laquo; primero</a>
+                                            <a href="?page={{ restaurants.previous_page_number }}">anterior</a>
+                                        {% endif %}
+                                        <span class="current">
+                                            P&aacutegina {{ restaurants.number }} de {{ restaurants.paginator.num_pages }}.
+                                        </span>
+                                        {% if restaurants.has_next %}
+                                            <a href="?page={{ restaurants.next_page_number }}">siguiente</a>
+                                            <a href="?page={{ restaurants.paginator.num_pages }}">último &raquo;</a>
+                                        {% endif %}
+                                    </span>
+                                </div>
                             </div>
                             <!-- .panel-body -->
                         </div>

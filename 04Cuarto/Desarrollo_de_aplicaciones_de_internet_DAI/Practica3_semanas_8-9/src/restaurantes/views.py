@@ -1,5 +1,6 @@
 # Información útil
 # http://notesbyanerd.com/2015/12/19/joint-login-and-signup-django-allauth-view/
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import menu_items, Restaurants
@@ -137,10 +138,14 @@ def Highcharts(request):
 
 def Maps(request):
     if request.user.is_authenticated:
-        list_restaurants = Restaurants.objects.all()[:9]
+        page = request.GET.get('page')
+        # si queremos reducir la cantidad de restaurantes totales.
+        all_restaurants = Restaurants.objects.all()#[:9]
+        paginator = Paginator(all_restaurants, 8)
+        list_part_of_restaurants = paginator.get_page(page)
         context = {
             "navigation": menu_items,
-            "search_result": list_restaurants,
+            "restaurants": list_part_of_restaurants,
         }
         result = render(request, 'maps.html', context)
     else:
