@@ -20,25 +20,40 @@ class MySignupForm(SignupForm):
         self.fields['password1'].widget = forms.PasswordInput(attrs={'class':'form-control'})
         self.fields['password2'].widget = forms.PasswordInput(attrs={'class':'form-control'})
         
-class Restaurant(forms.Form):
+class formRestaurant(forms.Form):
     name = forms.CharField(max_length=100, label='Restaurant Name')
     long = forms.FloatField(label='Longitud position')
     lati = forms.FloatField(label='Latitud position')
 
     def __init__(self, *args, **kwargs):
-        super(Restaurant, self).__init__(*args, **kwargs)
+        super(formRestaurant, self).__init__(*args, **kwargs)
         self.fields['name'].widget = forms.TextInput(attrs={'class':'form-control'})
         self.fields['long'].widget = forms.NumberInput(attrs={'class':'form-control', 'min':'-360', 'max':'360', 'step':'0.000001'})
         self.fields['lati'].widget = forms.NumberInput(attrs={'class':'form-control', 'min':'-360', 'max':'360', 'step':'0.000001'})
 
-class EditRestaurant(Restaurant):
+class EditRestaurant(formRestaurant):
     oid = forms.UUIDField()
 
     def __init__(self, *args, **kwargs):
         super(EditRestaurant, self).__init__(*args, **kwargs)
         self.fields['oid'].widget = forms.HiddenInput()
 
-class Plate(forms.Form):
+class formPlate(forms.Form):
+    TYPES = (
+        (1, 'Leche y derivados'),
+        (2, 'Huevos'),
+        (3, 'Frutos secos'),
+        (4, 'Marisco y pescado'),
+        (5, 'Soja'),
+        (6, 'Trigo'),
+    )
+    name = forms.CharField(max_length=100, label='Plate name')
+    deno = forms.CharField(max_length=200, label='Denomination')
+    allergens = forms.MultipleChoiceField(label='Allergens types', widget=forms.CheckboxSelectMultiple(), choices=TYPES)
+    price = forms.FloatField(label='Price')
 
     def __init__(self, *args, **kwargs):
-        super(Plate, self).__init__(*args, **kwargs)
+        super(formPlate, self).__init__(*args, **kwargs)
+        self.fields['name'].widget = forms.TextInput(attrs={'class':'form-control'})
+        self.fields['deno'].widget = forms.TextInput(attrs={'class':'form-control'})
+        self.fields['price'].widget = forms.NumberInput(attrs={'class':'form-control', 'step':'0.01'})

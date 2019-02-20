@@ -3,8 +3,8 @@
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import menu_items, Restaurants
-from .forms import MyLoginForm, MySignupForm, Restaurant, EditRestaurant, Plate
+from .models import menu_items, modelRestaurants, modelPlates
+from .forms import MyLoginForm, MySignupForm, formRestaurant, EditRestaurant, formPlate
 
 def Index(request):
     if request.user.is_authenticated:
@@ -140,7 +140,7 @@ def Maps(request):
     if request.user.is_authenticated:
         page = request.GET.get('page')
         # si queremos reducir la cantidad de restaurantes totales.
-        all_restaurants = Restaurants.objects.all()#[:9]
+        all_restaurants = modelRestaurants.objects.all()#[:9]
         paginator = Paginator(all_restaurants, 8)
         list_part_of_restaurants = paginator.get_page(page)
         context = {
@@ -156,8 +156,8 @@ def DeleteRestaurant(request, oid):
     if request.user.is_authenticated:
         # Devuelve una lista [0] es la cantidad
         # y el segundo [1] es un un diccionario
-        is_deleted = Restaurants.objects.get(_id=oid).delete()[1]
-        list_restaurants = Restaurants.objects.all()[:100]
+        is_deleted = modelRestaurant.objects.get(_id=oid).delete()[1]
+        list_restaurants = modelRestaurants.objects.all()[:100]
         context = {
             "navigation": menu_items,
             "search_result": list_restaurants,
@@ -176,7 +176,7 @@ def EditRestaurantPost(request):
         lati = request.POST.get('lati')
         result = render(request, 'index.html', {"navigation": menu_items})
         if request.method == 'POST':
-            item_select = Restaurants.objects.get(_id=oid)
+            item_select = modelRestaurants.objects.get(_id=oid)
             item_select.name = name
             item_select.location.coordinates[0] = long
             item_select.location.coordinates[1] = lati
@@ -201,7 +201,7 @@ def EditRestaurantGet(request, oid):
     if request.user.is_authenticated:
         result = render(request, 'index.html', {"navigation": menu_items})
         if request.method == 'GET':
-            item_select = Restaurants.objects.get(_id=oid)
+            item_select = modelRestaurants.objects.get(_id=oid)
             if item_select:
                 edit_form = EditRestaurant(initial={ \
                     'oid':item_select._id, \
@@ -223,12 +223,14 @@ def EditRestaurantGet(request, oid):
 def NewRestaurant(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
-            name = request.POST.get('name')
-            long = request.POST.get('long')
-            lati = request.POST.get('lati')
-            item_created = Restaurants.objects.create_restaurant(name=name,long=long,lati=lati)
+            form = formRestaurant(request.POST)
+            if form.is_valid():
+                name = form.cleaned_data.get('name')
+                long = form.cleaned_data.get('long')
+                lati = form.cleaned_data.get('lati')
+                item_created = modelRestaurants.objects.create_restaurant(name=name,long=long,lati=lati)
             if item_created:
-                search_result = Restaurants.objects.filter(_id=item_created._id)
+                search_result = modelRestaurants.objects.filter(_id=item_created._id)
             context = {
                 "navigation": menu_items,
                 "save": item_created,
@@ -238,7 +240,7 @@ def NewRestaurant(request):
         elif request.method == 'GET':
             context = {
                 "tipo": "Restaurante",
-                "newform": Restaurant(),
+                "newform": formRestaurant(),
                 "navigation": menu_items,
             }
             result = render(request, 'new.html', context)
@@ -283,6 +285,15 @@ def EditPlateGet(request, oid):
 def NewPlate(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
+            form = formPlate(request.POST)
+            if form.is_valid():
+                name = form.cleaned_data.get('name')
+                deno = form.cleaned_data.get('deno')
+                allergens = form.cleaned_data.get('allergens')
+                price = form.cleaned_data.get('price')
+                plate_created = modelPlates.objects.create_plate(name=name, deno=deno, allergens=allergens, price=price)
+            if plate_created:
+                search_result = modelPlates.objects.filter(_id=plate_created._id)
             context = {
                 "navigation": menu_items,
             }
@@ -290,7 +301,7 @@ def NewPlate(request):
         elif request.method == 'GET':
             context = {
                 "tipo": "Plato",
-                "newform": Plate(),
+                "newform": formPlate(),
                 "navigation": menu_items,
             }
             result = render(request, 'new.html', context)
@@ -301,13 +312,13 @@ def NewPlate(request):
 def Search(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
-            list_restaurants = Restaurants.objects.filter(name__icontains=request.POST.get('string'))
+            list_restaurants = modelRestaurants.objects.filter(name__icontains=request.POST.get('string'))
             context = {
                 "navigation": menu_items,
                 "search_result": list_restaurants,
             }
         elif request.method == 'GET':
-            list_restaurants = Restaurants.objects.all()[:100]
+            list_restaurants = modelRestaurants.objects.all()[:100]
             context = {
                 "navigation": menu_items,
                 "search_result": list_restaurants,

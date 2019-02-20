@@ -37,7 +37,7 @@ class RestaurantsManager(models.Manager):
         restaurant = self.create(name=name, location=location)
         return restaurant
 
-class Restaurants(models.Model):
+class modelRestaurants(models.Model):
     _id = models.ObjectIdField()
     location = models.EmbeddedModelField(model_container=Location)
     name = models.CharField(max_length=50)
@@ -51,23 +51,39 @@ class Restaurants(models.Model):
 
 class CookType(models.Model):
     TYPES = (
-        ('Point', 'Point'),
-        ('Polygon', 'Polygon'),
+        (1, 'Leche y derivados'),
+        (2, 'Huevos'),
+        (3, 'Frutos secos'),
+        (4, 'Marisco y pescado'),
+        (5, 'Soja'),
+        (6, 'Trigo'),
     )
+
     _id = models.ObjectIdField()
+    denomination = models.CharField(max_length=200)
     allergens = models.CharField(max_length=20, choices=TYPES)
-    deno = models.CharField(max_length=200)
+
+    class Meta:
+        abstract = True
 
     def __str__(self):
-        cook_string = {'_id':self._id}
+        cook_string = {'_id':self._id, 'denomination':self.denomination, 'allergens':self.allergens}
         return str(cook_string)
 
-class Plato(models.Model):
+class PlatesManager(models.Manager):
+    def create_plate(self, name, deno, allergens, price):
+        cooktype = CookType(denomination=deno, allergens=allergens)
+        plate = self.create(name=name, cooktype=cooktype, price=price)
+        return plate
+
+class modelPlates(models.Model):
     _id = models.ObjectIdField()
     name = models.CharField(max_length=200, unique=True)
-    cooktype = models.CharField(max_length=200)
+    cooktype = models.EmbeddedModelField(model_container=CookType)
     price = models.PositiveIntegerField()
 	
+    objects = PlatesManager()
+
     def __str__(self):
-        plate_string = {'_id':{'coordinates':self.location.coordinates,'type':self.location.type}}
+        plate_string = {'_id':self._id, 'name':self.name, 'cooktype':{'denmination':self.cooktype.denomination, 'allergens':self.cooktype.allergens}, 'price':self.price}
         return str(plate_string)
