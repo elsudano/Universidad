@@ -28,7 +28,13 @@
                                     </div>
                                     <!-- /.panel-heading -->
                                     <div class="panel-body">
+                                        {% if tipo == "Restaurante" %}
                                         <form action='/restaurant/new/' method='POST' role="form">
+                                        {% elif tipo == "Plato" %}
+                                        <form action='/plate/new/' method='POST' role="form">
+                                        {% else %}
+                                        <form action='#' method='POST' role="form"></form>
+                                        {% endif %}
                                             <fieldset>
                                                 {% csrf_token %}
                                                 {{ newform.as_p }}
