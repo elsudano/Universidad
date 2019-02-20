@@ -243,12 +243,12 @@ def _config_allauth():
     \"db.socialaccount_socialapp_sites.insert({'id':NumberInt(4),'socialapp_id':NumberInt(4),'site_id':NumberInt(1)})\"" % env)
 
 def _import_data_mongodb():
-    run("%(conn)s/%(name_dbapp)s --eval \"db.%(name_app)s_restaurants.drop()\"" % env)
+    run("%(conn)s/%(name_dbapp)s --eval \"db.%(name_app)s_modelrestaurants.drop()\"" % env)
     run("%(conn)s/%(name_dbapp)s --eval \"db.%(name_app)s_neighborhoods.drop()\"" % env)
-    run("mongoimport ~/src/restaurants.json --db %(name_dbapp)s --collection %(name_app)s_restaurants" % env)
+    run("mongoimport ~/src/restaurants.json --db %(name_dbapp)s --collection %(name_app)s_modelrestaurants" % env)
     run("mongoimport ~/src/neighborhoods.json --db %(name_dbapp)s --collection %(name_app)s_neighborhoods" % env)
     run("%(conn)s/%(name_dbapp)s --eval \
-    \"db.%(name_app)s_restaurants.createIndex({name: 'text'})\"" % env)
+    \"db.%(name_app)s_modelrestaurants.createIndex({name: 'text'})\"" % env)
     run("%(conn)s/%(name_dbapp)s --eval \
     \"db.%(name_app)s_neighborhoods.createIndex({name: 'text'})\"" % env)
 
